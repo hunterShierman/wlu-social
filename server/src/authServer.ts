@@ -4,11 +4,34 @@ import jwt from 'jsonwebtoken';
 import type { user } from './types/express';
 import * as bcrypt from 'bcrypt';
 import { connectDB, getDB } from './config/database';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 
 // Middleware
 app.use(express.json());
+
+// Rate limiting for login - 5 attempts per 15 minutes per IP
+const loginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per windowMs
+  message: {
+    error: 'Too many login attempts from this IP, please try again after 15 minutes.'
+  },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Rate limiting for signup - 3 attempts per 15 minutes per IP
+const signupRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 3, // Limit each IP to 3 registration attempts per windowMs
+  message: {
+    error: 'Too many registration attempts from this IP, please try again after 15 minutes.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // create new jwt token
 app.post('/token', async (req, res) => {
@@ -18,7 +41,8 @@ app.post('/token', async (req, res) => {
   // check to see if there is a matching valid refresh token in the database
   try {
     const db = getDB();
-    const result = await db.query('SELECT token FROM refresh_tokens WHERE token = $1', [refreshToken]);
+    // Check token exists AND hasn't expired
+    const result = await db.query('SELECT token, username FROM refresh_tokens WHERE token = $1 AND expires_at > NOW()', [refreshToken]);
     if (result.rows.length == 0) {
       return res.sendStatus(403);
     }
@@ -58,7 +82,7 @@ app.delete('/logout', async (req, res) => {
 });
 
 // login route and use JWT session authentication
-app.post('/login', async (req, res) => {
+app.post('/login', loginRateLimiter, async (req, res) => {
   // authenticate user 
   let user: user | null = null;
 
@@ -90,8 +114,12 @@ app.post('/login', async (req, res) => {
       console.log('user is now signed in')
       
       // Only generate tokens if password is correct
-      const accessToken = generateAccessToken({ username: user.username! })
-      const refreshToken = jwt.sign({ username: user.username! }, config.REFRESH_TOKEN_SECRET)
+      const accessToken = generateAccessToken({ username: user.username! });
+      const refreshToken = jwt.sign(
+        { username: user.username! }, 
+        config.REFRESH_TOKEN_SECRET,
+        { expiresIn: '7d' } // JWT expiration matches database expiration
+      );
       
       // after logging in create a refresh token in the database
       try {
@@ -100,7 +128,7 @@ app.post('/login', async (req, res) => {
         const curDate = new Date()
         expiresAt.setDate(expiresAt.getDate() + 7);
 
-        await db.query('INSERT INTO refresh_tokens (token, expires_at, created_at, username) VALUES ($1, $2, $3, $4)' , [refreshToken, expiresAt, curDate, user.username]);
+        await db.query('INSERT INTO refresh_tokens (token, expires_at, created_at, username) VALUES ($1, $2, $3, $4)', [refreshToken, expiresAt, curDate, user.username]);
       } 
       catch(err) {
         console.error('Database error:', err);
@@ -121,7 +149,7 @@ app.post('/login', async (req, res) => {
 })
 
 // create a new user account with password 
-app.post('/signup', async (req, res) => {
+app.post('/signup', signupRateLimiter, async (req, res) => {
   try {
 
     // Validate password before hashing
@@ -136,6 +164,28 @@ app.post('/signup', async (req, res) => {
     try {
       const db = getDB();
       await db.query('INSERT INTO users (password, username) VALUES ($1, $2)', [user.password, user.username]);
+      
+      // Auto-login: Generate tokens after successful signup
+      const accessToken = generateAccessToken({ username: user.username! });
+      const refreshToken = jwt.sign(
+        { username: user.username! }, 
+        config.REFRESH_TOKEN_SECRET,
+        { expiresIn: '7d' } // JWT expiration matches database expiration
+      );
+      
+      // Store refresh token in database
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 7);
+      const curDate = new Date();
+      
+      await db.query('INSERT INTO refresh_tokens (token, expires_at, created_at, username) VALUES ($1, $2, $3, $4)', [refreshToken, expiresAt, curDate, user.username!]);
+      
+      // Return tokens so user is automatically logged in
+      return res.json({ 
+        accessToken: accessToken, 
+        refreshToken: refreshToken,
+        message: `user ${user.username} added successfully` 
+      });
     } 
     catch(err) {
       console.error('Database error:', err);
@@ -144,8 +194,6 @@ app.post('/signup', async (req, res) => {
         error: 'Database connection failed' 
       });
     }
-
-    res.send(`user ${user.username} added succesfully`)
 
   } catch {
     res.status(500).send()
