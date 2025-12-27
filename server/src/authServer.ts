@@ -5,6 +5,7 @@ import type { user } from './types/express';
 import * as bcrypt from 'bcrypt';
 import { connectDB, getDB } from './config/database';
 import rateLimit from 'express-rate-limit';
+import type { UserPayload } from './types/express';
 
 const app = express();
 
@@ -14,18 +15,18 @@ app.use(express.json());
 // Rate limiting for login - 5 attempts per 15 minutes per IP
 const loginRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 requests per windowMs
+  max: 5, 
   message: {
     error: 'Too many login attempts from this IP, please try again after 15 minutes.'
   },
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  standardHeaders: true, 
+  legacyHeaders: false, 
 });
 
 // Rate limiting for signup - 3 attempts per 15 minutes per IP
 const signupRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 3, // Limit each IP to 3 registration attempts per windowMs
+  max: 3,
   message: {
     error: 'Too many registration attempts from this IP, please try again after 15 minutes.'
   },
@@ -41,6 +42,7 @@ app.post('/token', async (req, res) => {
   // check to see if there is a matching valid refresh token in the database
   try {
     const db = getDB();
+    
     // Check token exists AND hasn't expired
     const result = await db.query('SELECT token, username FROM refresh_tokens WHERE token = $1 AND expires_at > NOW()', [refreshToken]);
     if (result.rows.length == 0) {
@@ -110,15 +112,17 @@ app.post('/login', loginRateLimiter, async (req, res) => {
 
   // check if the password entered matches the password associated with the matching account in the database
   try {
-    if (await bcrypt.compare(req.body.password, user.password!)) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
       console.log('user is now signed in')
       
       // Only generate tokens if password is correct
-      const accessToken = generateAccessToken({ username: user.username! });
+      const payload: UserPayload = {username: user.username};
+      const accessToken = generateAccessToken(payload);
+
       const refreshToken = jwt.sign(
-        { username: user.username! }, 
+        payload, 
         config.REFRESH_TOKEN_SECRET,
-        { expiresIn: '7d' } // JWT expiration matches database expiration
+        { expiresIn: '7d' }
       );
       
       // after logging in create a refresh token in the database
@@ -205,7 +209,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Auth server is alive!' });
 }); 
 
-function generateAccessToken(user: { username: string }) {
+function generateAccessToken(user: UserPayload) {
   return jwt.sign(user, config.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
 }
 
@@ -230,9 +234,36 @@ function validPassword(password: string): string | null {
   return null; // Password is valid
 }
 
+// Clean up expired refresh tokens from database
+async function cleanupExpiredTokens(): Promise<number> {
+  try {
+    const db = getDB();
+    // Delete all tokens where expires_at is in the past
+    const result = await db.query('DELETE FROM refresh_tokens WHERE expires_at < NOW()');
+    const deletedCount = result.rowCount || 0;
+    
+    if (deletedCount > 0) {
+      console.log(` Cleaned up ${deletedCount} expired refresh token(s)`);
+    }
+    
+    return deletedCount;
+  } catch (err) {
+    console.error('Error cleaning up expired tokens:', err);
+    return 0;
+  }
+}
+
 // start server
 const startServer = async () => {
   await connectDB();
+
+  // Clean up expired tokens on server startup
+  await cleanupExpiredTokens();
+
+  // Set up periodic cleanup: every hour
+  setInterval(async () => {
+    await cleanupExpiredTokens();
+  }, 60 * 60 * 1000); // 1 hour in milliseconds
 
   app.listen(3000, () => {
     console.log(`🚀 authentication running on http://localhost:3000`);
