@@ -6,6 +6,8 @@ import postsRouter from './routes/posts';
 import usersRouter from './routes/users';
 import commentsRouter from './routes/comments';
 import likesRouter from './routes/likes';
+import clubsRouter from './routes/clubs';
+
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/', commentsRouter);
 app.use('/', likesRouter);
+app.use('/clubs', clubsRouter);
+
 
 // Connect to database and start server
 const startServer = async () => {
