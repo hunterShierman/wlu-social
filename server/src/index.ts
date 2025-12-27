@@ -4,8 +4,8 @@ import { config } from './config/env';
 import cors from 'cors';
 import postsRouter from './routes/posts';
 import usersRouter from './routes/users';
-
-
+import commentsRouter from './routes/comments';
+import likesRouter from './routes/likes';
 
 const app = express();
 
@@ -20,8 +20,8 @@ app.use(cors({
 // Mount routes
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
-
-
+app.use('/', commentsRouter);
+app.use('/', likesRouter);
 
 // Connect to database and start server
 const startServer = async () => {
