@@ -6,5 +6,5 @@ export interface Post {
     image_url: string | null;
     post_type: string;
     created_at: string;
-    profile_picture_url?: string;
+    profile_picture_url?: string | null;
   } 
