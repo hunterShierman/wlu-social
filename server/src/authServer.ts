@@ -6,8 +6,15 @@ import * as bcrypt from 'bcrypt';
 import { connectDB, getDB } from './config/database';
 import rateLimit from 'express-rate-limit';
 import type { UserPayload } from './types/express';
+import cors from 'cors';
 
 const app = express();
+
+// allow the front end to make requests to the backend
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 
 // Middleware
 app.use(express.json());
