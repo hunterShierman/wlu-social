@@ -285,7 +285,7 @@ router.get('/me/profile', authenticateToken, async (req, res) => {
     
     // req.user.username comes from the JWT token
     const result = await db.query(
-      'SELECT user_id, username, email, bio, profile_picture_url, created_at FROM users WHERE username = $1',
+      'SELECT user_id, username, email, bio, profile_picture_url, created_at, program FROM users WHERE username = $1',
       [req.user?.username]
     );
     
