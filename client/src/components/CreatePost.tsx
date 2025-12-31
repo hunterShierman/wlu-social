@@ -6,9 +6,10 @@ interface CreatePostProps {
   username: string;
   userInitial: string;
   profilePictureUrl?: string | null;
+  program: string;
 }
 
-const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl }: CreatePostProps) => {
+const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, program}: CreatePostProps) => {
   // Post creation state
   const [isExpanded, setIsExpanded] = useState(false);
   const [postContent, setPostContent] = useState('');
@@ -136,6 +137,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl }:
         post_type: selectedpostType || 'general',
         created_at: new Date().toISOString(),
         profile_picture_url: profilePictureUrl || null,
+        program: program
       };
 
       // Call parent's callback with new post

@@ -53,7 +53,7 @@ const Post = ({ post }: PostProps) => {
               <p className="font-semibold text-sm text-gray-900 hover:underline cursor-pointer">{post.username}</p>
               <span className="ml-1 text-purple-600 text-sm">✓</span>
             </div>
-            <p className="text-xs text-gray-600">CS @ Wilfrid Laurier University</p>
+            <p className="text-xs text-gray-600"> {post.program} @ Wilfrid Laurier University</p>
             <p className="text-xs text-gray-500">{formatDate(post.created_at)} • 🌎</p>
           </div>
         </div>

@@ -17,6 +17,7 @@ const Home = () => {
       post_type: 'career',
       created_at: '2025-12-25T10:30:00.000Z',
       profile_picture_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
+      program: "Student",
     },
     {
       id: 2,
@@ -27,6 +28,7 @@ const Home = () => {
       post_type: 'general',
       created_at: '2025-12-26T14:20:00.000Z',
       profile_picture_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
+      program: "Student",
     },
     {
       id: 3,
@@ -37,6 +39,7 @@ const Home = () => {
       post_type: 'club_event',
       created_at: '2025-12-27T11:45:00.000Z',
       profile_picture_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100',
+      program: "Student",
     },
   ]);
 
@@ -178,6 +181,7 @@ const Home = () => {
                 username={userData.username}
                 userInitial={userData.username[0].toUpperCase()}
                 profilePictureUrl={userData.profile_picture_url}
+                program={userData.program}
               />
             )}
   

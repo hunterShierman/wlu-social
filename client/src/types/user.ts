@@ -5,4 +5,5 @@ export interface User {
     bio: string | null;
     profile_picture_url: string | null;
     created_at: string;
+    program: string;
   }
