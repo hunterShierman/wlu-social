@@ -1,0 +1,28 @@
+{
+  "name": "laurier-study-app",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000w\u0000l\u0000u\u0000-\u0000s\u0000o\u0000c\u0000i\u0000a\u0000l\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev:auth\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:auth": "npm run devAuth --prefix server",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hunterShierman/wlu-social.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hunterShierman/wlu-social/issues"
+  },
+  "homepage": "https://github.com/hunterShierman/wlu-social#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
