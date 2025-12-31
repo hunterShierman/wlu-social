@@ -4,19 +4,19 @@ interface PostProps {
   post: PostType;
 }
 
+
+const postTypes = [
+  { emoji: '📢', label: 'general', display: 'General', color: 'bg-gray-100 text-gray-700' },
+  { emoji: '💼', label: 'career', display: 'Career', color: 'bg-blue-100 text-blue-700' },
+  { emoji: '🎉', label: 'club_event', display: 'Club/Event', color: 'bg-pink-100 text-pink-700' },
+  { emoji: '📚', label: 'academic', display: 'Academic', color: 'bg-green-100 text-green-700' },
+  { emoji: '❓', label: 'question', display: 'Question', color: 'bg-yellow-100 text-yellow-700' },
+  { emoji: '🎯', label: 'opportunity', display: 'Opportunity', color: 'bg-orange-100 text-orange-700' },
+  { emoji: '🏆', label: 'achievement', display: 'Achievement', color: 'bg-purple-100 text-purple-700' },
+  { emoji: '🤝', label: 'collaboration', display: 'Collaboration', color: 'bg-teal-100 text-teal-700' },
+];
+
 const Post = ({ post }: PostProps) => {
-
-  const postTypes = [
-    { emoji: '📢', label: 'general', display: 'General', color: 'bg-gray-100 text-gray-700' },
-    { emoji: '💼', label: 'career', display: 'Career', color: 'bg-blue-100 text-blue-700' },
-    { emoji: '🎉', label: 'club_event', display: 'Club/Event', color: 'bg-pink-100 text-pink-700' },
-    { emoji: '📚', label: 'academic', display: 'Academic', color: 'bg-green-100 text-green-700' },
-    { emoji: '❓', label: 'question', display: 'Question', color: 'bg-yellow-100 text-yellow-700' },
-    { emoji: '🎯', label: 'opportunity', display: 'Opportunity', color: 'bg-orange-100 text-orange-700' },
-    { emoji: '🏆', label: 'achievement', display: 'Achievement', color: 'bg-purple-100 text-purple-700' },
-    { emoji: '🤝', label: 'collaboration', display: 'Collaboration', color: 'bg-teal-100 text-teal-700' },
-  ];
-
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -99,9 +99,9 @@ const Post = ({ post }: PostProps) => {
             </div>
           )}
           <div className="flex items-center">
-            <span className="text-purple-600">👍</span>
-            <span className="text-red-500">❤️</span>
-            <span className="text-green-600">💡</span>
+            <span key="like" className="text-purple-600">👍</span>
+            <span key="love" className="text-red-500">❤️</span>
+            <span key="celebrate" className="text-green-600">💡</span>
           </div>
           <span className="hover:text-purple-600 hover:underline cursor-pointer">46 reactions</span>
         </div>

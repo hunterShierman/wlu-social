@@ -110,25 +110,38 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
     setError(null);
 
     try {
-      // TODO: Replace with your actual API call
-      // const formData = new FormData();
-      // formData.append('content', postContent);
-      // if (selectedImage) formData.append('image', selectedImage);
-      // if (selectedpostType) formData.append('postType', selectedpostType);
-      // const response = await fetch('/api/posts', {
-      //   method: 'POST',
-      //   headers: { Authorization: `Bearer ${token}` },
-      //   body: formData,
-      // });
-      // const newPost = await response.json();
-
-      // Simulated API call - replace with actual implementation
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const accessToken = localStorage.getItem('accessToken');
+      
+      if (!accessToken) {
+        setError('You must be logged in to post');
+        setIsPosting(false);
+        return;
+      }
+  
+      // Send POST request to backend
+      const response = await fetch('http://localhost:8000/posts', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: postContent,
+          image_url: imagePreview, // For now, this is base64 or null
+            post_type: selectedpostType || 'general',
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create post');
+      }
+  
+      const savedPost = await response.json();
 
       // Create mock post object (replace with actual response from backend)
       const newPost: PostType = {
-        id: Date.now(), // Temporary ID, backend will provide real one
-        user_id: 1, // TODO: Get from auth context
+        id: savedPost.post.id,
+        user_id: savedPost.post.post_id, 
         username: username,
         content: selectedpostType 
           ? `${postContent}`

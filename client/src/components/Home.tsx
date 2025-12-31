@@ -95,7 +95,9 @@ const Home = () => {
   }, []);
 
   const handlePostCreated = (newPost: PostType) => {
-    setPosts([newPost, ...posts]);
+    const updatedPosts = [newPost, ...posts];
+    setPosts(updatedPosts);
+
   };
 
   const handleLogout = () => {
@@ -125,7 +127,6 @@ const Home = () => {
               />
               
               {userSignedIn ? (
-                // Show logout button and profile when signed in
                 <>
                   <button
                     onClick={handleLogout}
@@ -146,7 +147,6 @@ const Home = () => {
                   </div>
                 </>
               ) : (
-                // Show sign in button when signed out
                 <button
                   onClick={handleSignIn}
                   className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
@@ -156,15 +156,16 @@ const Home = () => {
               )}
             </div>
           </div>
-          </div>
-        </nav>
+        </div>
+      </nav>
   
-        {/* Main Content */}
-        <div className="pt-20 pb-8 justify-center">
-          <div className="max-w-2xl mx-auto px-4">
-            {/* Welcome message when signed in */}
-            {userSignedIn && userData && (
-              <div className="bg-white rounded-lg shadow mb-4 p-4">
+      {/* Main Content */}
+      <div className="pt-20 pb-8 justify-center">
+
+
+      <div className="max-w-2xl mx-auto px-4">
+            {userSignedIn && userData ? (
+              <div key="welcome" className="bg-white rounded-lg shadow mb-4 p-4">
                 <h2 className="text-xl font-semibold text-gray-800">
                   Welcome back, {userData.username}! 👋
                 </h2>
@@ -172,27 +173,26 @@ const Home = () => {
                   <p className="text-gray-600 text-sm mt-1">{userData.bio}</p>
                 )}
               </div>
-            )}
-  
-            {/* Create Post Box - only show when signed in */}
-            {userSignedIn && userData && (
+            ) : null}
+
+            {userSignedIn && userData ? (
               <CreatePost 
+                key="create-post"
                 onPostCreated={handlePostCreated}
                 username={userData.username}
                 userInitial={userData.username[0].toUpperCase()}
                 profilePictureUrl={userData.profile_picture_url}
                 program={userData.program}
               />
-            )}
-  
-            {/* Posts Feed */}
+            ) : null}
+
             {posts.map((post) => (
               <Post key={post.id} post={post} />
             ))}
-          </div>
         </div>
       </div>
-    );
+    </div>
+  );
   };
   
 export default Home;

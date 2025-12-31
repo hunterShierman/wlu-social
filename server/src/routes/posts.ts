@@ -70,7 +70,7 @@ router.get('/', authenticateToken, async (req, res) => {
         'INSERT INTO posts (user_id, content, image_url, post_type) VALUES ($1, $2, $3, $4) RETURNING id, user_id, content, image_url, post_type',
         [userId, content, image_url || null, post_type]
       );
-      
+
       res.status(201).json({
         success: true,
         post: result.rows[0]
