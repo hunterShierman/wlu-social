@@ -100,14 +100,12 @@ const Home = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setUserSignedIn(false);
-    // Optionally redirect to login
     navigate('/login');
   };
 
   const handleSignIn = () => {
     navigate('/login');
   };
-
 
   return (
     <div className="min-h-screen bg-gray-100">
