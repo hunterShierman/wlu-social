@@ -5,7 +5,7 @@ import { authenticateToken } from '../middleware/auth';
 const router = express.Router();
 
 // Get all posts for the authenticated user
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/me', authenticateToken, async (req, res) => {
     try {
       const db = getDB();
       
@@ -36,6 +36,33 @@ router.get('/', authenticateToken, async (req, res) => {
       });
     }
   });
+
+
+  // get all posts to display to feed
+router.get('/all', async (req, res) => {
+  try {
+    const db = getDB();
+    const limit = parseInt(req.query.limit as string) || 30; // Default to 30
+    
+    const result = await db.query(
+      `SELECT p.id, p.user_id, p.content, p.image_url, p.post_type, p.created_at,
+              u.username, u.profile_picture_url, u.program
+       FROM posts p
+       JOIN users u ON p.user_id = u.user_id
+       ORDER BY p.created_at DESC
+       LIMIT $1`,
+      [limit]
+    );
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to retrieve posts' 
+    });
+  }
+});
   
   // Create a new post
   router.post('/', authenticateToken, async (req, res) => {

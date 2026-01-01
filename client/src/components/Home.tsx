@@ -7,41 +7,7 @@ import type { User as User } from '../types/user';
 
 
 const Home = () => {
-  const [posts, setPosts] = useState<PostType[]>([
-    {
-      id: 1,
-      user_id: 1,
-      username: 'Dev Patel',
-      content: "Excited to share that I'm moving to San Francisco for the next 8 months and joining purplejay (YC X25) as a Software Engineer! Looking forward to working on innovative solutions in the fintech space.",
-      image_url: 'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800',
-      post_type: 'career',
-      created_at: '2025-12-25T10:30:00.000Z',
-      profile_picture_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
-      program: "Student",
-    },
-    {
-      id: 2,
-      user_id: 2,
-      username: 'Sarah Johnson',
-      content: "Just wrapped up an amazing hackathon at WLU! Our team built an AI-powered study buddy that helps students prepare for exams. Huge thanks to my teammates and the organizers for making this possible. Can't wait to see where this project goes! 🚀",
-      image_url: null,
-      post_type: 'general',
-      created_at: '2025-12-26T14:20:00.000Z',
-      profile_picture_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100',
-      program: "Student",
-    },
-    {
-      id: 3,
-      user_id: 3,
-      username: 'Alex Chen',
-      content: "Really proud of our CS club for organizing the largest tech networking event in WLU history! Over 200 students connected with industry professionals from companies like Google, Microsoft, and Amazon. If you're interested in joining our club, drop me a message!",
-      image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
-      post_type: 'club_event',
-      created_at: '2025-12-27T11:45:00.000Z',
-      profile_picture_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100',
-      program: "Student",
-    },
-  ]);
+  const [posts, setPosts] = useState<PostType[]>([]);
 
   const navigate = useNavigate();
 
@@ -51,6 +17,27 @@ const Home = () => {
 
   const [userData, setUserData] = useState<User | null>(null); // save the user data in browser so we dont have to prevent unecessary API calls
 
+  useEffect(() => {
+
+    const fetchPosts = async () => {
+      
+      try {
+        // Fetch posts
+        const postsResponse = await fetch('http://localhost:8000/posts/all?limit=30');
+
+        // display all the posts, overwrite if there are new posts
+        if (postsResponse.ok) {
+          const postsData = await postsResponse.json();
+          setPosts(postsData);
+        }
+      } catch(error) {
+        console.error('Error fetching user info:', error);
+      }
+    }
+
+    fetchPosts();
+
+  }, []);
 
   // Fetch user info when component loads
   useEffect(() => {
@@ -186,9 +173,16 @@ const Home = () => {
               />
             ) : null}
 
-            {posts.map((post) => (
-              <Post key={post.id} post={post} />
-            ))}
+            {/* Posts Feed */}
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <Post key={post.id} post={post} />
+              ))
+            ) : (
+              <div className="text-center text-gray-500 mt-8">
+                No posts yet. Be the first to post!
+              </div>
+          )}
         </div>
       </div>
     </div>
