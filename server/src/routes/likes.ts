@@ -142,7 +142,7 @@ router.get('/posts/:postId/likes', authenticateToken, async (req, res) => {
 });
 
 // Get like count for a post
-router.get('/posts/:postId/likes/count', authenticateToken, async (req, res) => {
+router.get('/posts/:postId/count', async (req, res) => {
   try {
     const db = getDB();
     const postId = req.params.postId;
@@ -166,11 +166,13 @@ router.get('/posts/:postId/likes/count', authenticateToken, async (req, res) => 
 });
 
 // Check if current user has liked a post
-router.get('/posts/:postId/likes/me', authenticateToken, async (req, res) => {
+router.get('/posts/:postId/me', authenticateToken, async (req, res) => {
   try {
     const db = getDB();
     const postId = req.params.postId;
-    
+
+    console.log(postId);
+
     // Get user_id from username
     const userResult = await db.query(
       'SELECT user_id FROM users WHERE username = $1',

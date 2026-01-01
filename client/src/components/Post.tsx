@@ -1,4 +1,5 @@
 import type { Post as PostType } from '../types/post';
+import { useState, useEffect} from 'react';
 
 interface PostProps {
   post: PostType;
@@ -17,6 +18,98 @@ const postTypes = [
 ];
 
 const Post = ({ post }: PostProps) => {
+
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(46); // You'll want to get this from the post data
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Check if user has already liked the post on component mount
+  useEffect(() => {
+    const checkIfLiked = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setIsLiked(data.liked);
+        }
+      } catch (error) {
+        console.error('Error checking like status:', error);
+      }
+    };
+
+    checkIfLiked();
+  }, [post.id]);
+
+  // Get like count on component mount
+  useEffect(() => {
+    const getLikeCount = async () => {
+      try {
+        // const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/count`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setLikeCount(data.count);
+        }
+      } catch (error) {
+        console.error('Error getting like count:', error);
+      }
+    };
+
+    getLikeCount();
+  }, [post.id]);
+
+  const handleLike = async () => {
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    const token = localStorage.getItem('accessToken');
+    
+    try {
+      if (isLiked) {
+        // Unlike the post
+        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/like`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (response.ok) {
+          setIsLiked(false);
+          setLikeCount(prev => prev - 1);
+        } else {
+          console.error('Failed to unlike post');
+        }
+      } else {
+        // Like the post
+        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/like`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (response.ok) {
+          setIsLiked(true);
+          setLikeCount(prev => prev + 1);
+        } else {
+          console.error('Failed to like post');
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -100,37 +193,35 @@ const Post = ({ post }: PostProps) => {
           )}
           <div className="flex items-center">
             <span key="like" className="text-purple-600">👍</span>
-            <span key="love" className="text-red-500">❤️</span>
-            <span key="celebrate" className="text-green-600">💡</span>
+            {/* <span key="love" className="text-red-500">❤️</span>
+            <span key="celebrate" className="text-green-600">💡</span> */}
           </div>
-          <span className="hover:text-purple-600 hover:underline cursor-pointer">46 reactions</span>
+          <span className="hover:text-purple-600 hover:underline cursor-pointer">
+            {likeCount} reactions
+          </span>
         </div>
         <div className="flex items-center space-x-3">
           <span className="hover:text-purple-600 hover:underline cursor-pointer">13 comments</span>
         </div>
-
-
-
-
       </div>
 
       {/* Action Buttons */}
       <div className="border-t border-gray-300 px-2 py-2 flex items-center justify-around">
-        <button className="bg-white text-black flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded flex-1 justify-center transition">
-          <span className="text-xl">👍</span>
-          <span className="text-sm font-semibold">Like</span>
+        <button 
+          onClick={handleLike}
+          disabled={isLoading}
+          className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition ${
+            isLiked 
+              ? 'bg-purple-50 text-purple-600' 
+              : 'bg-white text-black hover:bg-gray-100'
+          } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          <span className="text-xl">{isLiked ? '👍' : '👍'}</span>
+          <span className="text-sm font-semibold">{isLiked ? 'Liked' : 'Like'}</span>
         </button>
         <button className="bg-white text-black flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded flex-1 justify-center transition">
           <span className="text-xl">💬</span>
           <span className="text-sm font-semibold">Comment</span>
-        </button>
-        <button className="bg-white text-black flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded flex-1 justify-center transition">
-          <span className="text-xl">🔄</span>
-          <span className="text-sm font-semibold">Repost</span>
-        </button>
-        <button className="bg-white text-black flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded flex-1 justify-center transition">
-          <span className="text-xl">📤</span>
-          <span className="text-sm font-semibold">Send</span>
         </button>
       </div>
     </div>

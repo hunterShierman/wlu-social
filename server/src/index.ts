@@ -25,7 +25,7 @@ app.use(cors({
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/', commentsRouter);
-app.use('/', likesRouter);
+app.use('/likes', likesRouter);
 app.use('/clubs', clubsRouter);
 app.use('/study-groups', studyGroupsRouter);
 
