@@ -1,6 +1,7 @@
 import type { Post as PostType } from '../types/post';
 import { useState, useEffect} from 'react';
 
+
 interface PostProps {
   post: PostType;
 }
@@ -192,7 +193,7 @@ const Post = ({ post }: PostProps) => {
             </div>
           )}
           <div className="flex items-center">
-            <span key="like" className="text-purple-600">👍</span>
+            <span key="like" className="text-purple-600">❤️</span>
             {/* <span key="love" className="text-red-500">❤️</span>
             <span key="celebrate" className="text-green-600">💡</span> */}
           </div>
@@ -212,11 +213,11 @@ const Post = ({ post }: PostProps) => {
           disabled={isLoading}
           className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition ${
             isLiked 
-              ? 'bg-purple-50 text-purple-600' 
+              ? 'bg-white text-red-600' 
               : 'bg-white text-black hover:bg-gray-100'
           } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          <span className="text-xl">{isLiked ? '👍' : '👍'}</span>
+          <span className="text-xl">{isLiked ? '❤️' : '♡'}</span>
           <span className="text-sm font-semibold">{isLiked ? 'Liked' : 'Like'}</span>
         </button>
         <button className="bg-white text-black flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded flex-1 justify-center transition">
