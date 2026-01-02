@@ -1,0 +1,73 @@
+// components/Comment.tsx
+import { useState } from 'react';
+import type { Comment as CommentType } from '../types/comment.ts';
+
+interface CommentProps {
+  comment: CommentType;
+  currentUsername: string;
+  onDelete: (commentId: number) => void;
+}
+
+const Comment = ({ comment, currentUsername, onDelete }: CommentProps) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h`;
+    if (diffInHours < 48) return '1d';
+    return `${Math.floor(diffInHours / 24)}d`;
+  };
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+    
+    setIsDeleting(true);
+    try {
+      await onDelete(comment.id);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <div className="flex items-start space-x-2">
+      <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
+        {comment.profile_picture_url ? (
+          <img 
+            src={comment.profile_picture_url} 
+            alt={comment.username} 
+            className="w-full h-full object-cover" 
+          />
+        ) : (
+          <span className="text-gray-700 font-semibold text-xs">
+            {comment.username[0].toUpperCase()}
+          </span>
+        )}
+      </div>
+      <div className="flex-1">
+        <div className="bg-gray-100 rounded-lg px-3 py-2">
+          <p className="font-semibold text-xs text-gray-900">{comment.username}</p>
+          <p className="text-sm text-gray-800">{comment.content}</p>
+        </div>
+        <div className="flex items-center space-x-3 mt-1 px-2">
+          <span className="text-xs text-gray-500">{formatDate(comment.created_at)}</span>
+          {comment.username === currentUsername && (
+            <button 
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="text-xs text-red-600 hover:underline disabled:opacity-50"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Comment;

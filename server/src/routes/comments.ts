@@ -5,7 +5,7 @@ import { authenticateToken } from '../middleware/auth';
 const router = express.Router();
 
 // Get all comments for a specific post
-router.get('/posts/:postId/comments', authenticateToken, async (req, res) => {
+router.get('/posts/:postId/comments', async (req, res) => {
   try {
     const db = getDB();
     const postId = req.params.postId;
@@ -234,7 +234,7 @@ router.delete('/comments/:id', authenticateToken, async (req, res) => {
 });
 
 // Get comment count for a post
-router.get('/posts/:postId/comments/count', authenticateToken, async (req, res) => {
+router.get('/posts/:postId/comments/count', async (req, res) => {
   try {
     const db = getDB();
     const postId = req.params.postId;

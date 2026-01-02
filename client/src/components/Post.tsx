@@ -1,5 +1,7 @@
 import type { Post as PostType } from '../types/post';
 import { useState, useEffect} from 'react';
+import Comment from './Comment';
+import type { Comment as CommentType } from '../types/comment';
 
 
 interface PostProps {
@@ -23,12 +25,23 @@ const Post = ({ post }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(46); // You'll want to get this from the post data
   const [isLoading, setIsLoading] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
+  const [allComments, setAllComments] = useState<CommentType[]>([]);
+  const [displayedComments, setDisplayedComments] = useState(1);
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentUsername, setCurrentUsername] = useState('');
 
   // Check if user has already liked the post on component mount
   useEffect(() => {
     const checkIfLiked = async () => {
       try {
         const token = localStorage.getItem('accessToken');
+        if (!token) {
+          return;
+        }
+
         const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/me`, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -64,6 +77,47 @@ const Post = ({ post }: PostProps) => {
     };
 
     getLikeCount();
+  }, [post.id]);
+
+  // Get comments and current user
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        
+        // Get comment count
+        const countResponse = await fetch(`http://localhost:8000/posts/${post.id}/comments/count`);
+        
+        if (countResponse.ok) {
+          const countData = await countResponse.json();
+          setCommentCount(countData.count);
+        }
+
+        // Get all comments
+        const commentsResponse = await fetch(`http://localhost:8000/posts/${post.id}/comments`);
+        
+        if (commentsResponse.ok) {
+          const commentsData = await commentsResponse.json();
+          setAllComments(commentsData.reverse());
+        }
+
+        // Get current user
+        const userResponse = await fetch('http://localhost:8000/users/me/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          setCurrentUsername(userData.username);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, [post.id]);
 
   const handleLike = async () => {
@@ -112,6 +166,81 @@ const Post = ({ post }: PostProps) => {
     }
   };
 
+
+  const handleCommentClick = () => {
+    setShowCommentInput(!showCommentInput);
+  };
+
+  const handleLoadMoreComments = () => {
+    setDisplayedComments(prev => Math.min(prev + 4, allComments.length));
+  };
+
+  const refreshComments = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const commentsResponse = await fetch(`http://localhost:8000/posts/${post.id}/comments`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (commentsResponse.ok) {
+        const commentsData = await commentsResponse.json();
+        setAllComments(commentsData.reverse());
+        setCommentCount(commentsData.length);
+      }
+    } catch (error) {
+      console.error('Error refreshing comments:', error);
+    }
+  };
+
+  const handleSubmitComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newComment.trim() || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`http://localhost:8000/posts/${post.id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: newComment }),
+      });
+      
+      if (response.ok) {
+        setNewComment('');
+        await refreshComments();
+      }
+    } catch (error) {
+      console.error('Error posting comment:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`http://localhost:8000/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (response.ok) {
+        await refreshComments();
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -128,10 +257,11 @@ const Post = ({ post }: PostProps) => {
   };
 
   const postTypeInfo = getPostTypeInfo();
+  const visibleComments = allComments.slice(0, displayedComments);
+  const hasMoreComments = displayedComments < allComments.length;
 
   return (
     <div className="bg-white rounded-lg border border-gray-300 mb-4">
-
       {/* Post Header */}
       <div className="p-4 flex items-start justify-between">
         <div className="flex items-start">
@@ -147,7 +277,7 @@ const Post = ({ post }: PostProps) => {
               <p className="font-semibold text-sm text-gray-900 hover:underline cursor-pointer">{post.username}</p>
               <span className="ml-1 text-purple-600 text-sm">✓</span>
             </div>
-            <p className="text-xs text-gray-600"> {post.program} @ Wilfrid Laurier University</p>
+            <p className="text-xs text-gray-600">{post.program} @ Wilfrid Laurier University</p>
             <p className="text-xs text-gray-500">{formatDate(post.created_at)} • 🌎</p>
           </div>
         </div>
@@ -185,7 +315,6 @@ const Post = ({ post }: PostProps) => {
       {/* Engagement Stats */}
       <div className="px-4 py-2 flex items-center justify-between text-xs text-gray-600">
         <div className="flex items-center space-x-2">
-          {/* Post Type Badge */}
           {postTypeInfo && (
             <div className={`flex items-center space-x-1 px-3 py-1 rounded-full ${postTypeInfo.color}`}>
               <span className="text-sm">{postTypeInfo.emoji}</span>
@@ -193,16 +322,16 @@ const Post = ({ post }: PostProps) => {
             </div>
           )}
           <div className="flex items-center">
-            <span key="like" className="text-purple-600">❤️</span>
-            {/* <span key="love" className="text-red-500">❤️</span>
-            <span key="celebrate" className="text-green-600">💡</span> */}
+            <span key="love" className="text-red-500">❤️</span>
           </div>
           <span className="hover:text-purple-600 hover:underline cursor-pointer">
             {likeCount} reactions
           </span>
         </div>
         <div className="flex items-center space-x-3">
-          <span className="hover:text-purple-600 hover:underline cursor-pointer">13 comments</span>
+          <span className="hover:text-purple-600 hover:underline cursor-pointer">
+            {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+          </span>
         </div>
       </div>
 
@@ -213,18 +342,72 @@ const Post = ({ post }: PostProps) => {
           disabled={isLoading}
           className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition ${
             isLiked 
-              ? 'bg-white text-red-600' 
+              ? 'bg-white-50 text-red-600' 
               : 'bg-white text-black hover:bg-gray-100'
           } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <span className="text-xl">{isLiked ? '❤️' : '♡'}</span>
           <span className="text-sm font-semibold">{isLiked ? 'Liked' : 'Like'}</span>
         </button>
-        <button className="bg-white text-black flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded flex-1 justify-center transition">
-          <span className="text-xl">💬</span>
+        <button 
+          onClick={handleCommentClick}
+          className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition ${
+            showCommentInput ? 'bg-gray-100' : 'bg-white hover:bg-gray-100'
+          } text-black`}
+        >
+          <span className="text-xl">🗨</span>
           <span className="text-sm font-semibold">Comment</span>
         </button>
       </div>
+
+      {/* Comments Section */}
+      {allComments.length > 0 && (
+        <div className="px-4 pb-3 border-t border-gray-200">
+          <div className="space-y-3 mt-3">
+            {visibleComments.map((comment) => (
+              <Comment
+                key={comment.id}
+                comment={comment}
+                currentUsername={currentUsername}
+                onDelete={handleDeleteComment}
+              />
+            ))}
+          </div>
+
+          {/* Load More Comments Button */}
+          {hasMoreComments && (
+            <button 
+              onClick={handleLoadMoreComments}
+              className="text-sm text-purple-600 hover:underline font-semibold mt-3"
+            >
+              Load more comments
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Comment Input */}
+      {showCommentInput && (
+        <div className="px-4 pb-4 border-t border-gray-200">
+          <form onSubmit={handleSubmitComment} className="flex items-center space-x-2 mt-3">
+            <input
+              type="text"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write a comment..."
+              className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              disabled={isSubmitting}
+            />
+            <button
+              type="submit"
+              disabled={isSubmitting || !newComment.trim()}
+              className="bg-purple-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+            >
+              {isSubmitting ? 'Posting...' : 'Post'}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
