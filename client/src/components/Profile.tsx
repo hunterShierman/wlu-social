@@ -12,72 +12,56 @@ const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [stats, setStats] = useState<ProfileStats>({ followers: 0, following: 0 });
   const [posts, setPosts] = useState<PostType[]>([]);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const [currentUsername, setCurrentUsername] = useState('');
   const [isSignedIn, setIsSignedIn] = useState(false);
 
+  // load in all the necessary data to populate the page for specific user
   useEffect(() => {
     const fetchProfileData = async () => {
       setIsLoading(true);
       const token = localStorage.getItem('accessToken');
       setIsSignedIn(!!token);
-
+  
       try {
-        // Fetch current user to check if viewing own profile (only if signed in)
+        // Fetch current user (only if signed in)
         if (token) {
           const currentUserResponse = await fetch('http://localhost:8000/users/me/profile', {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
           });
-
+  
           if (currentUserResponse.ok) {
             const currentUserData = await currentUserResponse.json();
             setCurrentUsername(currentUserData.username);
           }
         }
-
-        // Fetch user profile data (works with or without token)
-        const userResponse = await fetch(`http://localhost:8000/users/${username}`, {
+  
+        // Single API call for all profile data
+        const response = await fetch(`http://localhost:8000/users/${username}/complete?limit=2&offset=0`, {
           headers: token ? {
             'Authorization': `Bearer ${token}`,
           } : {},
         });
-
-        if (!userResponse.ok) {
+  
+        if (!response.ok) {
           setError('User not found');
           setIsLoading(false);
           return;
         }
-
-        const userData = await userResponse.json();
-        setUser(userData);
-
-        // Fetch follower/following stats
-        const statsResponse = await fetch(`http://localhost:8000/users/${username}/stats`, {
-          headers: token ? {
-            'Authorization': `Bearer ${token}`,
-          } : {},
-        });
-
-        if (statsResponse.ok) {
-          const statsData = await statsResponse.json();
-          setStats(statsData);
-        }
-
-        // Fetch user's posts
-        const postsResponse = await fetch(`http://localhost:8000/users/${username}/posts`, {
-          headers: token ? {
-            'Authorization': `Bearer ${token}`,
-          } : {},
-        });
-
-        if (postsResponse.ok) {
-          const postsData = await postsResponse.json();
-          setPosts(postsData);
-        }
-
+  
+        const data = await response.json();
+        setUser(data.user);
+        setStats(data.stats);
+        setPosts(data.posts);
+        setTotalPosts(data.totalPosts);
+        setHasMore(data.hasMore);
+  
       } catch (error) {
         console.error('Error fetching profile data:', error);
         setError('Failed to load profile');
@@ -85,11 +69,40 @@ const Profile = () => {
         setIsLoading(false);
       }
     };
-
+  
     if (username) {
       fetchProfileData();
     }
   }, [username]);
+
+  // Load more posts (5 at a time)
+  const loadMorePosts = async () => {
+    if (isLoadingMore || !hasMore) return;
+
+    setIsLoadingMore(true);
+    const token = localStorage.getItem('accessToken');
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/users/${username}/posts/paginated?limit=5&offset=${posts.length}`,
+        {
+          headers: token ? {
+            'Authorization': `Bearer ${token}`,
+          } : {},
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setPosts(prev => [...prev, ...data.posts]);
+        setHasMore(data.hasMore);
+      }
+    } catch (error) {
+      console.error('Error loading more posts:', error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
 
   const handleFollowClick = () => {
     if (!isSignedIn) {
@@ -107,8 +120,33 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-gray-600 text-lg">Loading profile...</div>
+      <div className="min-h-screen bg-gray-100">
+        {/* Navigation */}
+        <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-center justify-between h-14">
+              <button onClick={() => navigate('/')} className="text-2xl font-bold text-purple-800">
+                WLU Connect
+              </button>
+            </div>
+          </div>
+        </nav>
+  
+        {/* Skeleton Loader */}
+        <div className="pt-20 pb-8">
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6 animate-pulse">
+              <div className="h-32 bg-gray-300"></div>
+              <div className="px-6 pb-6">
+                <div className="w-32 h-32 rounded-full bg-gray-300 -mt-16 mb-4"></div>
+                <div className="h-6 bg-gray-300 rounded w-1/3 mb-2"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/2 mb-4"></div>
+                <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+                <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -224,7 +262,7 @@ const Profile = () => {
                   <span className="text-gray-600 ml-1">following</span>
                 </div>
                 <div className="cursor-pointer hover:underline">
-                  <span className="font-bold text-gray-900">{posts.length}</span>
+                  <span className="font-bold text-gray-900">{totalPosts}</span>
                   <span className="text-gray-600 ml-1">posts</span>
                 </div>
               </div>
@@ -250,11 +288,26 @@ const Profile = () => {
           <div className="mb-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Posts</h2>
             {posts.length > 0 ? (
-              <div className="space-y-4">
-                {posts.map((post) => (
-                  <Post key={post.id} post={post} />
-                ))}
-              </div>
+              <>
+                <div className="space-y-4">
+                  {posts.map((post) => (
+                    <Post key={post.id} post={post} />
+                  ))}
+                </div>
+
+                {/* Load More Button */}
+                {hasMore && (
+                  <div className="mt-6 text-center">
+                    <button
+                      onClick={loadMorePosts}
+                      disabled={isLoadingMore}
+                      className="bg-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                      {isLoadingMore ? 'Loading...' : `Load More Posts (${totalPosts - posts.length} remaining)`}
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="bg-white rounded-lg shadow p-8 text-center">
                 <p className="text-gray-500">

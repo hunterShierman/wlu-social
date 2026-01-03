@@ -399,4 +399,128 @@ router.get('/:username/follow/status', authenticateToken, async (req, res) => {
   }
 });
 
+// Get complete user profile data (profile + stats + posts) in one call to speed up profile load time
+router.get('/:username/complete', async (req, res) => {
+  try {
+    const db = getDB();
+    const username = req.params.username;
+    const limit = parseInt(req.query.limit as string) || 2; // Default to 2
+    const offset = parseInt(req.query.offset as string) || 0;    
+
+    // Get user profile
+    const userResult = await db.query(
+      'SELECT user_id, username, email, bio, profile_picture_url, program, created_at FROM users WHERE username = $1',
+      [username]
+    );
+    
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const user = userResult.rows[0];
+    const userId = user.user_id;
+
+    // Get total post count
+    const totalPostsResult = await db.query(
+      'SELECT COUNT(*) FROM posts WHERE user_id = $1',
+      [userId]
+    );
+
+    const totalPosts = parseInt(totalPostsResult.rows[0].count, 10);
+
+    
+    // Get stats (followers and following count)
+    const statsResult = await db.query(
+      `SELECT 
+        (SELECT COUNT(*) FROM follows WHERE following_id = $1) as followers,
+        (SELECT COUNT(*) FROM follows WHERE follower_id = $1) as following`,
+      [userId]
+    );
+    
+    // Get the two posts
+    const postsResult = await db.query(
+      `SELECT p.id, p.user_id, p.content, p.image_url, p.post_type, p.created_at,
+              u.username, u.profile_picture_url, u.program
+       FROM posts p
+       JOIN users u ON p.user_id = u.user_id
+       WHERE p.user_id = $1 
+       ORDER BY p.created_at DESC
+       LIMIT $2 OFFSET $3`,
+      [userId, limit, offset]
+    );
+
+    res.json({
+      user,
+      stats: {
+        followers: parseInt(statsResult.rows[0].followers),
+        following: parseInt(statsResult.rows[0].following)
+      },
+      posts: postsResult.rows,
+      totalPosts: totalPosts,
+      hasMore: offset + postsResult.rows.length < totalPosts
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to retrieve profile data' 
+    });
+  }
+});
+
+// Add a separate endpoint for loading more posts
+router.get('/:username/posts/paginated', async (req, res) => {
+  try {
+    const db = getDB();
+    const username = req.params.username;
+    const limit = parseInt(req.query.limit as string) || 5;
+    const offset = parseInt(req.query.offset as string) || 0;
+    
+    // Get user_id
+    const userResult = await db.query(
+      'SELECT user_id FROM users WHERE username = $1',
+      [username]
+    );
+    
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userId = userResult.rows[0].user_id;
+    
+    // Get total post count
+    const totalPostsResult = await db.query(
+      'SELECT COUNT(*) as total FROM posts WHERE user_id = $1',
+      [userId]
+    );
+    
+    // Get posts
+    const postsResult = await db.query(
+      `SELECT p.id, p.user_id, p.content, p.image_url, p.post_type, p.created_at,
+              u.username, u.profile_picture_url, u.program
+       FROM posts p
+       JOIN users u ON p.user_id = u.user_id
+       WHERE p.user_id = $1 
+       ORDER BY p.created_at DESC
+       LIMIT $2 OFFSET $3`,
+      [userId, limit, offset]
+    );
+    
+    const total = parseInt(totalPostsResult.rows[0].total);
+    
+    
+    res.json({
+      posts: postsResult.rows,
+      totalPosts: total,
+      hasMore: offset + postsResult.rows.length < total
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to retrieve posts' 
+    });
+  }
+});
+
 export default router;
