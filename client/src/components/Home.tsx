@@ -79,7 +79,7 @@ const Home = () => {
     };
 
     fetchUserInfo();
-  }, []);
+  }, [userSignedIn]);
 
   const handlePostCreated = (newPost: PostType) => {
     const updatedPosts = [newPost, ...posts];

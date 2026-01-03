@@ -27,7 +27,7 @@ const Post = ({ post }: PostProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [allComments, setAllComments] = useState<CommentType[]>([]);
-  const [displayedComments, setDisplayedComments] = useState(1);
+  const [displayedComments, setDisplayedComments] = useState(2);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -79,46 +79,79 @@ const Post = ({ post }: PostProps) => {
     getLikeCount();
   }, [post.id]);
 
-  // Get comments and current user
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        
-        // Get comment count
-        const countResponse = await fetch(`http://localhost:8000/posts/${post.id}/comments/count`);
-        
-        if (countResponse.ok) {
-          const countData = await countResponse.json();
-          setCommentCount(countData.count);
-        }
-
-        // Get all comments
-        const commentsResponse = await fetch(`http://localhost:8000/posts/${post.id}/comments`);
-        
-        if (commentsResponse.ok) {
-          const commentsData = await commentsResponse.json();
-          setAllComments(commentsData.reverse());
-        }
-
-        // Get current user
-        const userResponse = await fetch('http://localhost:8000/users/me/profile', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          setCurrentUsername(userData.username);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+// Get comment count on component mount
+useEffect(() => {
+  const getCommentCount = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`http://localhost:8000/posts/${post.id}/comments/count`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (response.ok) {
+        const countData = await response.json();
+        setCommentCount(countData.count);
       }
-    };
+    } catch (error) {
+      console.error('Error getting comment count:', error);
+    }
+  };
 
-    fetchData();
-  }, [post.id]);
+  getCommentCount();
+}, [post.id]);
+
+// Get all comments on component mount
+useEffect(() => {
+  const fetchComments = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`http://localhost:8000/posts/${post.id}/comments`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (response.ok) {
+        const commentsData = await response.json();
+        setAllComments(commentsData);
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
+  };
+
+  fetchComments();
+}, [post.id]);
+
+// Get current user - ONLY runs if user is signed in
+useEffect(() => {
+  const fetchCurrentUser = async () => {
+    const token = localStorage.getItem('accessToken');
+    
+    if (!token) {
+      return; // Exit early if no token
+    }
+
+    try {
+      const userResponse = await fetch('http://localhost:8000/users/me/profile', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        setCurrentUsername(userData.username);
+      }
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+    }
+  };
+
+  fetchCurrentUser();
+}, []); // Only runs once on mount
 
   const handleLike = async () => {
     if (isLoading) return;
@@ -186,7 +219,7 @@ const Post = ({ post }: PostProps) => {
       
       if (commentsResponse.ok) {
         const commentsData = await commentsResponse.json();
-        setAllComments(commentsData.reverse());
+        setAllComments(commentsData);
         setCommentCount(commentsData.length);
       }
     } catch (error) {
