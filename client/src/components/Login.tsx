@@ -51,6 +51,16 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
+        {/* Back to Home Button */}
+        <button
+          onClick={() => navigate('/')}
+          className="mb-4 text-purple-600 hover:text-purple-700 flex items-center space-x-1 font-semibold">
+          <span>←</span>
+          <span>Back to Home</span>
+        </button>
+
+
+
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h1 className="text-3xl font-bold text-purple-800 text-center mb-2">WLU Connect</h1>
           <p className="text-gray-600 text-center mb-8">Sign in to your account</p>

@@ -5,13 +5,13 @@ import { authenticateToken } from '../middleware/auth';
 const router = express.Router();
 
 // Get user profile by username
-router.get('/:username', authenticateToken, async (req, res) => {
+router.get('/:username', async (req, res) => {
   try {
     const db = getDB();
     const username = req.params.username;
     
     const result = await db.query(
-      'SELECT user_id, username, email, bio, profile_picture_url, created_at FROM users WHERE username = $1',
+      'SELECT user_id, username, email, bio, profile_picture_url, created_at, program FROM users WHERE username = $1',
       [username]
     );
     
@@ -25,6 +25,49 @@ router.get('/:username', authenticateToken, async (req, res) => {
     res.status(500).json({ 
       success: false, 
       error: 'Failed to retrieve user profile' 
+    });
+  }
+});
+
+// Get user stats (followers count, following count)
+router.get('/:username/stats', async (req, res) => {
+  try {
+    const db = getDB();
+    const username = req.params.username;
+    
+    // Get user_id
+    const userResult = await db.query(
+      'SELECT user_id FROM users WHERE username = $1',
+      [username]
+    );
+    
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userId = userResult.rows[0].user_id;
+    
+    // Get followers count
+    const followersResult = await db.query(
+      'SELECT COUNT(*) as count FROM follows WHERE following_id = $1',
+      [userId]
+    );
+    
+    // Get following count
+    const followingResult = await db.query(
+      'SELECT COUNT(*) as count FROM follows WHERE follower_id = $1',
+      [userId]
+    );
+    
+    res.json({
+      followers: parseInt(followersResult.rows[0].count),
+      following: parseInt(followingResult.rows[0].count)
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to retrieve user stats' 
     });
   }
 });
@@ -245,7 +288,7 @@ router.get('/:username/following', authenticateToken, async (req, res) => {
 });
 
 // Get user's posts
-router.get('/:username/posts', authenticateToken, async (req, res) => {
+router.get('/:username/posts', async (req, res) => {
   try {
     const db = getDB();
     const username = req.params.username;
@@ -262,9 +305,14 @@ router.get('/:username/posts', authenticateToken, async (req, res) => {
     
     const userId = userResult.rows[0].user_id;
     
-    // Get all posts for this user
+    // JOIN with users table to get username, profile_picture_url, and program
     const result = await db.query(
-      'SELECT id, user_id, content, image_url, post_type, created_at FROM posts WHERE user_id = $1 ORDER BY created_at DESC',
+      `SELECT p.id, p.user_id, p.content, p.image_url, p.post_type, p.created_at,
+              u.username, u.profile_picture_url, u.program
+       FROM posts p
+       JOIN users u ON p.user_id = u.user_id
+       WHERE p.user_id = $1 
+       ORDER BY p.created_at DESC`,
       [userId]
     );
     
@@ -299,6 +347,54 @@ router.get('/me/profile', authenticateToken, async (req, res) => {
     res.status(500).json({ 
       success: false, 
       error: 'Failed to retrieve user profile' 
+    });
+  }
+});
+
+// Check if current user is following a specific user
+router.get('/:username/follow/status', authenticateToken, async (req, res) => {
+  try {
+    const db = getDB();
+    const usernameToCheck = req.params.username;
+    
+    // Get current user's user_id
+    const currentUserResult = await db.query(
+      'SELECT user_id FROM users WHERE username = $1',
+      [req.user?.username]
+    );
+    
+    if (currentUserResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Current user not found' });
+    }
+    
+    const currentUserId = currentUserResult.rows[0].user_id;
+    
+    // Get target user's user_id
+    const targetUserResult = await db.query(
+      'SELECT user_id FROM users WHERE username = $1',
+      [usernameToCheck]
+    );
+    
+    if (targetUserResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const targetUserId = targetUserResult.rows[0].user_id;
+    
+    // Check if follow relationship exists
+    const followResult = await db.query(
+      'SELECT id FROM follows WHERE follower_id = $1 AND following_id = $2',
+      [currentUserId, targetUserId]
+    );
+    
+    res.json({
+      isFollowing: followResult.rows.length > 0
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to check follow status' 
     });
   }
 });

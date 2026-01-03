@@ -180,7 +180,7 @@ const Home = () => {
               ))
             ) : (
               <div className="text-center text-gray-500 mt-8">
-                No posts yet. Be the first to post!
+                Loading posts...
               </div>
           )}
         </div>

@@ -2,7 +2,7 @@ import type { Post as PostType } from '../types/post';
 import { useState, useEffect} from 'react';
 import Comment from './Comment';
 import type { Comment as CommentType } from '../types/comment';
-
+import { useNavigate } from 'react-router-dom';
 
 interface PostProps {
   post: PostType;
@@ -32,6 +32,7 @@ const Post = ({ post }: PostProps) => {
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentUsername, setCurrentUsername] = useState('');
+  const navigate = useNavigate();
 
   // Check if user has already liked the post on component mount
   useEffect(() => {
@@ -158,6 +159,11 @@ useEffect(() => {
     
     setIsLoading(true);
     const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+      alert('Sign in to like this post');
+      navigate('/login');
+    }
     
     try {
       if (isLiked) {
@@ -201,6 +207,11 @@ useEffect(() => {
 
 
   const handleCommentClick = () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert('Sign in to join the conversation');
+      navigate('/login');
+    }
     setShowCommentInput(!showCommentInput);
   };
 
@@ -298,7 +309,9 @@ useEffect(() => {
       {/* Post Header */}
       <div className="p-4 flex items-start justify-between">
         <div className="flex items-start">
-          <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
+          <div 
+             onClick={() => navigate(`/profile/${post.username}`)}
+            className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
             {post.profile_picture_url ? (
               <img src={post.profile_picture_url} alt={post.username} className="w-full h-full object-cover" />
             ) : (
@@ -307,7 +320,9 @@ useEffect(() => {
           </div>
           <div className="ml-3">
             <div className="flex items-center">
-              <p className="font-semibold text-sm text-gray-900 hover:underline cursor-pointer">{post.username}</p>
+              <p 
+                onClick={() => navigate(`/profile/${post.username}`)}
+                className="font-semibold text-sm text-gray-900 hover:underline cursor-pointer">{post.username}</p>
               <span className="ml-1 text-purple-600 text-sm">✓</span>
             </div>
             <p className="text-xs text-gray-600">{post.program} @ Wilfrid Laurier University</p>
