@@ -294,7 +294,7 @@ const Profile = () => {
                 </div>
 
                 {isOwnProfile ? (
-                  <button className="mt-4 px-4 py-2 border border-purple-600 text-purple-600 rounded-full font-semibold hover:bg-purple-50 transition">
+                  <button className="mt-4 px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition">
                     Edit Profile
                   </button>
                 ) : (

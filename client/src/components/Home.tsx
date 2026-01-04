@@ -166,9 +166,6 @@ const Home = () => {
                 <h2 className="text-xl font-semibold text-gray-800">
                   Welcome back, {userData.username}! 👋
                 </h2>
-                {userData.bio && (
-                  <p className="text-gray-600 text-sm mt-1">{userData.bio}</p>
-                )}
               </div>
             ) : null}
 
