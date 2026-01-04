@@ -36,6 +36,7 @@ const Post = ({ post, onPostDeleted  }: PostProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
   const navigate = useNavigate();
 
   // Close dropdown when clicking outside
@@ -383,9 +384,7 @@ useEffect(() => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <button className="bg-white text-black font-semibold text-sm hover:bg-purple-50 px-4 py-1 rounded-full transition border border-purple-600">
-            + Follow
-          </button>
+
           {/* Three dots menu */}
           <div className="relative" ref={dropdownRef}>
             <button 

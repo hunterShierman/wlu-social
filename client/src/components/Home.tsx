@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import Post from '../components/Post';
 import type { Post as PostType } from '../types/post';
 import CreatePost from './CreatePost';
@@ -10,6 +10,7 @@ const Home = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   const navigate = useNavigate();
+
 
   const [userSignedIn, setUserSignedIn] = useState(() => {
     return Boolean(localStorage.getItem('accessToken'));

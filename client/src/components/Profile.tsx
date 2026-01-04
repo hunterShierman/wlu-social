@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { User } from '../types/user';
 import type { ProfileStats } from '../types/profile';
 import type { Post as PostType } from '../types/post';
-import Post from '../components/Post';
+import Post from '../components/Post'
 
 const Profile = () => {
   const { username } = useParams<{ username: string }>();
@@ -19,6 +19,8 @@ const Profile = () => {
   const [error, setError] = useState('');
   const [currentUsername, setCurrentUsername] = useState('');
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
 
   // load in all the necessary data to populate the page for specific user
   useEffect(() => {
@@ -61,6 +63,23 @@ const Profile = () => {
         setPosts(data.posts);
         setTotalPosts(data.totalPosts);
         setHasMore(data.hasMore);
+
+        // Check follow status (only if signed in and not own profile)
+        if (token && currentUsername && currentUsername !== username) {
+          const followStatusResponse = await fetch(
+            `http://localhost:8000/users/${username}/follow/status`,
+            {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              },
+            }
+          );
+          
+          if (followStatusResponse.ok) {
+            const followData = await followStatusResponse.json();
+            setIsFollowing(followData.isFollowing);
+          }
+        }
   
       } catch (error) {
         console.error('Error fetching profile data:', error);
@@ -73,7 +92,7 @@ const Profile = () => {
     if (username) {
       fetchProfileData();
     }
-  }, [username]);
+  }, [username, currentUsername]);
 
   // Load more posts (5 at a time)
   const loadMorePosts = async () => {
@@ -104,13 +123,55 @@ const Profile = () => {
     }
   };
 
-  const handleFollowClick = () => {
+  const handleFollowClick = async () => {
     if (!isSignedIn) {
       alert('Please sign in to follow users');
       navigate('/login');
       return;
     }
-    // TODO: Implement follow functionality
+
+    if (isFollowLoading) return;
+
+    setIsFollowLoading(true);
+    const token = localStorage.getItem('accessToken');
+
+    try {
+      if (isFollowing) {
+        // Unfollow
+        const response = await fetch(`http://localhost:8000/users/${username}/follow`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          setIsFollowing(false);
+          setStats(prev => ({ ...prev, followers: prev.followers - 1 }));
+        } else {
+          console.error('Failed to unfollow user');
+        }
+      } else {
+        // Follow
+        const response = await fetch(`http://localhost:8000/users/${username}/follow`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          setIsFollowing(true);
+          setStats(prev => ({ ...prev, followers: prev.followers + 1 }));
+        } else {
+          console.error('Failed to follow user');
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+    } finally {
+      setIsFollowLoading(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -169,12 +230,10 @@ const Profile = () => {
 
   const handlePostDeleted = (postId: number) => {
     setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
-    setTotalPosts(prev => prev - 1); // Add this line
-
+    setTotalPosts(prev => prev - 1);
   };
 
   const isOwnProfile = isSignedIn && currentUsername === username;
-  
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -214,7 +273,7 @@ const Profile = () => {
           {/* Profile Top Card */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
             {/* Cover Image/Background */}
-            <div className="h-32 bg-linear-to-r from-purple-600 to-purple-800"></div>
+            <div className="h-32 bg-gradient-to-r from-purple-600 to-purple-800"></div>
 
             {/* Profile Info */}
             <div className="px-6 pb-6">
@@ -234,9 +293,21 @@ const Profile = () => {
                   )}
                 </div>
 
-                {isOwnProfile && (
+                {isOwnProfile ? (
                   <button className="mt-4 px-4 py-2 border border-purple-600 text-purple-600 rounded-full font-semibold hover:bg-purple-50 transition">
                     Edit Profile
+                  </button>
+                ) : (
+                  <button 
+                    onClick={handleFollowClick}
+                    disabled={isFollowLoading}
+                    className={`mt-4 px-6 py-2 rounded-full font-semibold transition ${
+                      isFollowing 
+                        ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200' 
+                        : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+                    } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    {isFollowLoading ? '...' : isFollowing ? 'Following' : 'Follow'}
                   </button>
                 )}
               </div>
@@ -278,16 +349,6 @@ const Profile = () => {
               <p className="text-gray-500 text-sm">
                 Member since {formatDate(user.created_at)}
               </p>
-
-              {/* Follow Button (if not own profile) */}
-              {!isOwnProfile && (
-                <button 
-                  onClick={handleFollowClick}
-                  className="mt-4 w-full bg-purple-600 text-white py-2 rounded-full font-semibold hover:bg-purple-700 transition"
-                >
-                  {isSignedIn ? 'Follow' : 'Sign in to Follow'}
-                </button>
-              )}
             </div>
           </div>
 
