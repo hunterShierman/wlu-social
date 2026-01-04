@@ -1,6 +1,7 @@
 // components/Comment.tsx
 import { useState } from 'react';
 import type { Comment as CommentType } from '../types/comment.ts';
+import { useNavigate } from 'react-router-dom';
 
 interface CommentProps {
   comment: CommentType;
@@ -10,6 +11,7 @@ interface CommentProps {
 
 const Comment = ({ comment, currentUsername, onDelete }: CommentProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -35,7 +37,9 @@ const Comment = ({ comment, currentUsername, onDelete }: CommentProps) => {
 
   return (
     <div className="flex items-start space-x-2">
-      <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
+      <div 
+        onClick={() => navigate(`/profile/${comment.username}`)}
+        className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer">
         {comment.profile_picture_url ? (
           <img 
             src={comment.profile_picture_url} 
@@ -50,7 +54,9 @@ const Comment = ({ comment, currentUsername, onDelete }: CommentProps) => {
       </div>
       <div className="flex-1">
         <div className="bg-gray-100 rounded-lg px-3 py-2">
-          <p className="font-semibold text-xs text-gray-900">{comment.username}</p>
+          <p 
+            onClick={() => navigate(`/profile/${comment.username}`)}
+            className="font-semibold text-xs text-gray-900 cursor-pointer hover:underline">{comment.username}</p>
           <p className="text-sm text-gray-800">{comment.content}</p>
         </div>
         <div className="flex items-center space-x-3 mt-1 px-2">

@@ -364,7 +364,7 @@ useEffect(() => {
         <div className="flex items-start">
           <div 
              onClick={() => navigate(`/profile/${post.username}`)}
-            className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
+            className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer">
             {post.profile_picture_url ? (
               <img src={post.profile_picture_url} alt={post.username} className="w-full h-full object-cover" />
             ) : (

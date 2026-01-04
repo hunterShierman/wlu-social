@@ -214,7 +214,7 @@ const Profile = () => {
           {/* Profile Top Card */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
             {/* Cover Image/Background */}
-            <div className="h-32 bg-gradient-to-r from-purple-600 to-purple-800"></div>
+            <div className="h-32 bg-linear-to-r from-purple-600 to-purple-800"></div>
 
             {/* Profile Info */}
             <div className="px-6 pb-6">
