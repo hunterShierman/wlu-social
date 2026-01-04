@@ -167,7 +167,14 @@ const Profile = () => {
     );
   }
 
+  const handlePostDeleted = (postId: number) => {
+    setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+    setTotalPosts(prev => prev - 1); // Add this line
+
+  };
+
   const isOwnProfile = isSignedIn && currentUsername === username;
+  
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -291,7 +298,7 @@ const Profile = () => {
               <>
                 <div className="space-y-4">
                   {posts.map((post) => (
-                    <Post key={post.id} post={post} />
+                    <Post key={post.id} post={post} onPostDeleted={handlePostDeleted}/>
                   ))}
                 </div>
 

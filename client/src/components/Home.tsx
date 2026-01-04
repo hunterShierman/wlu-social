@@ -99,6 +99,10 @@ const Home = () => {
     navigate('/login');
   };
 
+  const handlePostDeleted = (postId: number) => {
+    setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navigation Bar */}
@@ -122,15 +126,20 @@ const Home = () => {
                     Logout
                   </button>
                   <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden">
-                    {userData?.profile_picture_url ? (
-                      <img 
-                        src={userData.profile_picture_url} 
-                        alt={userData.username}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span>{userData?.username?.[0].toUpperCase() || 'U'}</span>
-                    )}
+                    <button 
+                      onClick={() => navigate(`/profile/${userData?.username}`)}
+                      className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      {userData?.profile_picture_url ? (
+                        <img
+                          src={userData.profile_picture_url} 
+                          alt={userData.username}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>{userData?.username?.[0].toUpperCase() || 'U'}</span>
+                      )}
+                    </button>
                   </div>
                 </>
               ) : (
@@ -176,7 +185,7 @@ const Home = () => {
             {/* Posts Feed */}
             {posts.length > 0 ? (
               posts.map((post) => (
-                <Post key={post.id} post={post} />
+                <Post key={post.id} post={post} onPostDeleted={handlePostDeleted}/>
               ))
             ) : (
               <div className="text-center text-gray-500 mt-8">

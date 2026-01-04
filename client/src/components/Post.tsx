@@ -1,11 +1,12 @@
 import type { Post as PostType } from '../types/post';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useRef} from 'react';
 import Comment from './Comment';
 import type { Comment as CommentType } from '../types/comment';
 import { useNavigate } from 'react-router-dom';
 
 interface PostProps {
   post: PostType;
+  onPostDeleted?: (postId: number) => void; // Callback to notify parent when post is deleted
 }
 
 
@@ -20,7 +21,7 @@ const postTypes = [
   { emoji: '🤝', label: 'collaboration', display: 'Collaboration', color: 'bg-teal-100 text-teal-700' },
 ];
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post, onPostDeleted  }: PostProps) => {
 
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(46); // You'll want to get this from the post data
@@ -32,7 +33,24 @@ const Post = ({ post }: PostProps) => {
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentUsername, setCurrentUsername] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Check if user has already liked the post on component mount
   useEffect(() => {
@@ -285,6 +303,40 @@ useEffect(() => {
     }
   };
 
+  const handleDeletePost = async () => {
+    if (!window.confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    const token = localStorage.getItem('accessToken');
+
+    try {
+      const response = await fetch(`http://localhost:8000/posts/${post.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Notify parent component that post was deleted
+        if (onPostDeleted) {
+          onPostDeleted(post.id);
+        }
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to delete post');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post');
+    } finally {
+      setIsDeleting(false);
+      setShowDropdown(false);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -303,6 +355,7 @@ useEffect(() => {
   const postTypeInfo = getPostTypeInfo();
   const visibleComments = allComments.slice(0, displayedComments);
   const hasMoreComments = displayedComments < allComments.length;
+  const isOwnPost = currentUsername === post.username;
 
   return (
     <div className="bg-white rounded-lg border border-gray-300 mb-4">
@@ -333,9 +386,48 @@ useEffect(() => {
           <button className="bg-white text-black font-semibold text-sm hover:bg-purple-50 px-4 py-1 rounded-full transition border border-purple-600">
             + Follow
           </button>
-          <button className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg">
-            ⋮
-          </button>
+          {/* Three dots menu */}
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg"
+            >
+              ⋮
+            </button>
+            
+            {/* Popup overlay */}
+            {showDropdown && (
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 rounded-lg">
+                <div className="bg-white rounded-lg shadow-xl p-4 min-w-[200px]">
+                  {isOwnPost ? (
+                    <button
+                      onClick={handleDeletePost}
+                      disabled={isDeleting}
+                      className="w-full px-3 py-2 text-xs text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold"
+                    >
+                      {isDeleting ? 'Deleting...' : 'Delete Post'}
+                    </button>
+                  ) : (
+                    <button
+                    onClick={() => {
+                      alert("Post Reported");
+                      setShowDropdown(false);
+                    }}
+                    className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold"
+                    >
+                      Report Post
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setShowDropdown(false)}
+                    className="w-full px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 rounded-lg transition mt-2"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
