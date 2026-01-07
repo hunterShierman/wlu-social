@@ -8,6 +8,7 @@ import commentsRouter from './routes/comments';
 import likesRouter from './routes/likes';
 import clubsRouter from './routes/clubs';
 import studyGroupsRouter from './routes/studyGroups';
+import eventRoutes from './routes/events';
 
 
 const app = express();
@@ -28,6 +29,8 @@ app.use('/', commentsRouter);
 app.use('/likes', likesRouter);
 app.use('/clubs', clubsRouter);
 app.use('/study-groups', studyGroupsRouter);
+app.use('/events', eventRoutes);
+
 
 // Connect to database and start server
 const startServer = async () => {
