@@ -8,12 +8,14 @@ import type { User } from '../types/user';
 const Events = () => {
   const navigate = useNavigate();
   const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const [displayedEvents, setDisplayedEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFaculty, setSelectedFaculty] = useState<string>('All');
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [userData, setUserData] = useState<User | null>(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
-
+  const [currentLimit, setCurrentLimit] = useState(8);
 
   const faculties = ['All', 'Science', 'Music', 'Business', 'Arts', 'General'];
 
@@ -44,6 +46,7 @@ const Events = () => {
         if (response.ok) {
           const events = await response.json();
           setAllEvents(events);
+          setDisplayedEvents(events.slice(0, 8)); // Show first 10
         }
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -55,7 +58,31 @@ const Events = () => {
     fetchEvents();
   }, []);
 
-  // Filter events
+  // Update displayed events when filters change
+  useEffect(() => {
+    const filtered = allEvents.filter(event => {
+      const matchesSearch = event.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           event.username.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesFaculty = selectedFaculty === 'All' || event.department === selectedFaculty;
+      
+      return matchesSearch && matchesFaculty;
+    });
+
+    setDisplayedEvents(filtered.slice(0, currentLimit));
+  }, [searchQuery, selectedFaculty, allEvents, currentLimit]);
+
+  const loadMoreEvents = () => {
+    setIsLoadingMore(true);
+    
+    // Simulate a slight delay for better UX
+    setTimeout(() => {
+      setCurrentLimit(prev => prev + 8);
+      setIsLoadingMore(false);
+    }, 300);
+  };
+
+  // Filter events based on current search and faculty
   const filteredEvents = allEvents.filter(event => {
     const matchesSearch = event.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          event.username.toLowerCase().includes(searchQuery.toLowerCase());
@@ -64,6 +91,9 @@ const Events = () => {
     
     return matchesSearch && matchesFaculty;
   });
+
+  const hasMore = displayedEvents.length < filteredEvents.length;
+  const remainingCount = filteredEvents.length - displayedEvents.length;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -129,7 +159,10 @@ const Events = () => {
                 type="text"
                 placeholder="Search events..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentLimit(8); // Reset to 10 when searching
+                }}
                 className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white shadow-sm"
               />
               <svg
@@ -152,7 +185,10 @@ const Events = () => {
               {faculties.map((faculty) => (
                 <button
                   key={faculty}
-                  onClick={() => setSelectedFaculty(faculty)}
+                  onClick={() => {
+                    setSelectedFaculty(faculty);
+                    setCurrentLimit(8); // Reset to 10 when filtering
+                  }}
                   className={`px-4 py-2 rounded-full font-medium transition ${
                     selectedFaculty === faculty
                       ? 'bg-purple-600 text-white'
@@ -168,7 +204,7 @@ const Events = () => {
           {/* Results Count */}
           <div className="mb-6">
             <p className="text-gray-600">
-              {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'} found
+              Showing {displayedEvents.length} of {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
             </p>
           </div>
 
@@ -181,25 +217,37 @@ const Events = () => {
           ) : (
             <>
               {/* Events Grid */}
-              {filteredEvents.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredEvents.map((event) => (
-                    <EventCard 
-                      key={event.id} 
-                      event={event} 
-                    />
+              {displayedEvents.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {displayedEvents.map((event) => (
+                      <EventCard key={event.id} event={event} />
                     ))}
-                </div>
+                  </div>
+
+                  {/* Load More Button */}
+                  {hasMore && (
+                    <div className="mt-8 text-center">
+                      <button
+                        onClick={loadMoreEvents}
+                        disabled={isLoadingMore}
+                        className="bg-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      >
+                        {isLoadingMore ? 'Loading...' : `Load More Events (${remainingCount} remaining)`}
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center py-16 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                <span className="text-6xl mb-4 block">📅</span>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No events found</h3>
-                <p className="text-gray-600">
-                  {searchQuery || selectedFaculty !== 'All'
-                    ? 'Try adjusting your search or filters'
-                    : 'Check back soon for upcoming events!'}
-                </p>
-              </div>
+                  <span className="text-6xl mb-4 block">📅</span>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No events found</h3>
+                  <p className="text-gray-600">
+                    {searchQuery || selectedFaculty !== 'All'
+                      ? 'Try adjusting your search or filters'
+                      : 'Check back soon for upcoming events!'}
+                  </p>
+                </div>
               )}
             </>
           )}
