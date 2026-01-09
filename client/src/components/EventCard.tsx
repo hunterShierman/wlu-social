@@ -2,9 +2,8 @@
 import { useNavigate } from 'react-router-dom';
 import type { Event } from '../types/event';
 
-
 interface EventCardProps {
-    event: Event;
+  event: Event;
 }
 
 const EventCard = ({ event }: EventCardProps) => {
@@ -18,9 +17,8 @@ const EventCard = ({ event }: EventCardProps) => {
     return { month, day, time };
   };
 
-  const { month, day, time } = formatDate(event.created_at);
+  const { month, day, time } = formatDate(event.event_date || event.created_at);
 
-  // Extract faculty from program
   const getFacultyInfo = (department: string) => {
     switch(department) {
       case 'Science':
@@ -39,7 +37,10 @@ const EventCard = ({ event }: EventCardProps) => {
   const faculty = getFacultyInfo(event.department);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+    <div 
+      onClick={() => navigate(`/events/${event.id}`)} // navigate to event page with info
+      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+    >
       {/* Event Image */}
       {event.image_url ? (
         <div className="w-full h-48 bg-gray-200 overflow-hidden">
@@ -82,7 +83,7 @@ const EventCard = ({ event }: EventCardProps) => {
         {/* Host Info */}
         <div 
           onClick={(e) => {
-            e.stopPropagation();
+            e.stopPropagation();  // Prevent modal from opening
             navigate(`/profile/${event.username}`);
           }}
           className="flex items-center space-x-2 mb-4 hover:opacity-70 transition"
@@ -106,8 +107,11 @@ const EventCard = ({ event }: EventCardProps) => {
         </div>
 
         {/* Action Button */}
-        <button className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition">
-          Interested
+        <button 
+          onClick={() => navigate(`/events/${event.id}`)} // navigate to event page with info
+          className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
+        >
+          View Details
         </button>
       </div>
     </div>

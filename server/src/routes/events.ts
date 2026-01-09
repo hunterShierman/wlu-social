@@ -59,35 +59,6 @@ router.get('/department/:department', async (req, res) => {
   }
 });
 
-// Get event by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const db = getDB();
-    const eventId = req.params.id;
-    
-    const result = await db.query(
-      `SELECT e.id, e.user_id, e.content, e.image_url, e.department, e.event_date, e.location, e.created_at,
-              u.username, u.profile_picture_url, u.program
-       FROM events e
-       JOIN users u ON e.user_id = u.user_id
-       WHERE e.id = $1`,
-      [eventId]
-    );
-    
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Event not found' });
-    }
-    
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to retrieve event' 
-    });
-  }
-});
-
 // Create new event
 router.post('/', authenticateToken, async (req, res) => {
   try {
@@ -261,6 +232,170 @@ router.get('/user/:username', async (req, res) => {
     res.status(500).json({ 
       success: false, 
       error: 'Failed to retrieve user events' 
+    });
+  }
+});
+
+// Get event by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const db = getDB();
+    const eventId = req.params.id;
+    
+    const result = await db.query(
+      `SELECT e.id, e.user_id, e.content, e.image_url, e.department, e.event_date, e.location, e.created_at,
+              u.username, u.profile_picture_url, u.program
+       FROM events e
+       JOIN users u ON e.user_id = u.user_id
+       WHERE e.id = $1`,
+      [eventId]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to retrieve event' 
+    });
+  }
+});
+
+// Register for an event
+router.post('/:id/register', authenticateToken, async (req, res) => {
+  try {
+    const db = getDB();
+    const eventId = req.params.id;
+    
+    // Get user_id from username
+    const userResult = await db.query(
+      'SELECT user_id FROM users WHERE username = $1',
+      [req.user?.username]
+    );
+    
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userId = userResult.rows[0].user_id;
+    
+    // Check if event exists
+    const eventCheck = await db.query(
+      'SELECT id FROM events WHERE id = $1',
+      [eventId]
+    );
+    
+    if (eventCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    
+    // Insert registration (UNIQUE constraint prevents duplicates)
+    const result = await db.query(
+      `INSERT INTO event_registrations (event_id, user_id)
+       VALUES ($1, $2)
+       ON CONFLICT (event_id, user_id) DO NOTHING
+       RETURNING id, event_id, user_id, registered_at`,
+      [eventId, userId]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(409).json({ 
+        success: false,
+        error: 'Already registered for this event' 
+      });
+    }
+    
+    res.status(201).json({
+      success: true,
+      message: 'Successfully registered for event',
+      registration: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to register for event' 
+    });
+  }
+});
+
+// Unregister from an event
+router.delete('/:id/register', authenticateToken, async (req, res) => {
+  try {
+    const db = getDB();
+    const eventId = req.params.id;
+    
+    // Get user_id from username
+    const userResult = await db.query(
+      'SELECT user_id FROM users WHERE username = $1',
+      [req.user?.username]
+    );
+    
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userId = userResult.rows[0].user_id;
+    
+    // Delete registration
+    const result = await db.query(
+      'DELETE FROM event_registrations WHERE event_id = $1 AND user_id = $2 RETURNING id',
+      [eventId, userId]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Registration not found' });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Successfully unregistered from event'
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to unregister from event' 
+    });
+  }
+});
+
+// Check if current user is registered for an event
+router.get('/:id/register/status', authenticateToken, async (req, res) => {
+  try {
+    const db = getDB();
+    const eventId = req.params.id;
+    
+    // Get user_id from username
+    const userResult = await db.query(
+      'SELECT user_id FROM users WHERE username = $1',
+      [req.user?.username]
+    );
+    
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userId = userResult.rows[0].user_id;
+    
+    // Check if registered
+    const result = await db.query(
+      'SELECT id FROM event_registrations WHERE event_id = $1 AND user_id = $2',
+      [eventId, userId]
+    );
+    
+    res.json({
+      isRegistered: result.rows.length > 0
+    });
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to check registration status' 
     });
   }
 });

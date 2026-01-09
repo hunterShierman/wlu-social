@@ -26,12 +26,10 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
   const postTypes = [
     { emoji: '📢', label: 'general', display: 'General', color: 'bg-gray-100 text-gray-700' },
     { emoji: '💼', label: 'career', display: 'Career', color: 'bg-blue-100 text-blue-700' },
-    { emoji: '🎉', label: 'club_event', display: 'Club/Event', color: 'bg-pink-100 text-pink-700' },
     { emoji: '📚', label: 'academic', display: 'Academic', color: 'bg-green-100 text-green-700' },
     { emoji: '❓', label: 'question', display: 'Question', color: 'bg-yellow-100 text-yellow-700' },
     { emoji: '🎯', label: 'opportunity', display: 'Opportunity', color: 'bg-orange-100 text-orange-700' },
     { emoji: '🏆', label: 'achievement', display: 'Achievement', color: 'bg-purple-100 text-purple-700' },
-    { emoji: '🤝', label: 'collaboration', display: 'Collaboration', color: 'bg-teal-100 text-teal-700' },
   ];
 
   const MAX_CHARS = 500;

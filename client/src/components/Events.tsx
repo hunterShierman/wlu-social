@@ -14,6 +14,7 @@ const Events = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
+
   const faculties = ['All', 'Science', 'Music', 'Business', 'Arts', 'General'];
 
   useEffect(() => {
@@ -183,19 +184,22 @@ const Events = () => {
               {filteredEvents.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredEvents.map((event) => (
-                    <EventCard key={event.id} event={event} />
-                  ))}
+                    <EventCard 
+                      key={event.id} 
+                      event={event} 
+                    />
+                    ))}
                 </div>
               ) : (
                 <div className="text-center py-16 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                  <span className="text-6xl mb-4 block">📅</span>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No events found</h3>
-                  <p className="text-gray-600">
-                    {searchQuery || selectedFaculty !== 'All'
-                      ? 'Try adjusting your search or filters'
-                      : 'Check back soon for upcoming events!'}
-                  </p>
-                </div>
+                <span className="text-6xl mb-4 block">📅</span>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No events found</h3>
+                <p className="text-gray-600">
+                  {searchQuery || selectedFaculty !== 'All'
+                    ? 'Try adjusting your search or filters'
+                    : 'Check back soon for upcoming events!'}
+                </p>
+              </div>
               )}
             </>
           )}
