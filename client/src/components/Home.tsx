@@ -110,7 +110,7 @@ const Home = () => {
       <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
-            <h1 className="text-2xl font-bold text-purple-800">WLU Connect</h1>
+            <h1 className="text-2xl font-bold text-purple-800 cursor-pointer">WLU Connect</h1>
             <div className="flex items-center space-x-4">
               <input
                 type="text"
@@ -119,7 +119,7 @@ const Home = () => {
               />
               <button
                 onClick={() => navigate('/events')}
-                className="text-gray-700 hover:text-purple-600 font-semibold"
+                className="text-gray-700 hover:text-purple-600 font-semibold cursor-pointer"
               >
                 Events
               </button>
@@ -128,7 +128,7 @@ const Home = () => {
                 <>
                   <button
                     onClick={handleLogout}
-                    className="bg-white text-purple-600 border border-purple-600 px-4 py-2 rounded-full font-semibold hover:bg-purple-50 transition"
+                    className="bg-white text-purple-600 border border-purple-600 px-4 py-2 rounded-full font-semibold hover:bg-purple-50 transition cursor-pointer"
                   >
                     Logout
                   </button>
@@ -152,7 +152,7 @@ const Home = () => {
               ) : (
                 <button
                   onClick={handleSignIn}
-                  className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
+                  className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition cursor-pointer"
                 >
                   Sign In
                 </button>

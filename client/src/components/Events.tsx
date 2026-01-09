@@ -103,21 +103,21 @@ const Events = () => {
           <div className="flex items-center justify-between h-16">
             <button
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition"
+              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition cursor-pointer"
             >
               WLU Connect
             </button>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/')}
-                className="text-gray-700 hover:text-purple-600 font-semibold transition"
+                className="text-gray-700 hover:text-purple-600 font-semibold transition cursor-pointer"
               >
                 Home
               </button>
               {isSignedIn && userData ? (
                 <button
                   onClick={() => navigate(`/profile/${userData.username}`)}
-                  className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-8 h-8 rounded-full cursor-pointer bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   {userData?.profile_picture_url ? (
                     <img
@@ -132,7 +132,7 @@ const Events = () => {
               ) : (
                 <button
                   onClick={() => navigate('/login')}
-                  className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
+                  className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold cursor-text hover:bg-purple-700 transition"
                 >
                   Sign In
                 </button>
@@ -191,8 +191,8 @@ const Events = () => {
                   }}
                   className={`px-4 py-2 rounded-full font-medium transition ${
                     selectedFaculty === faculty
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-white text-gray-700 border border-gray-300 hover:border-purple-600 hover:text-purple-600'
+                      ? 'bg-purple-600 text-white cursor-pointer'
+                      : 'bg-white text-gray-700 border cursor-pointer border-gray-300 hover:border-purple-600 hover:text-purple-600'
                   }`}
                 >
                   {faculty}

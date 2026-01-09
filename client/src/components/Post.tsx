@@ -463,12 +463,12 @@ useEffect(() => {
           <div className="flex items-center">
             <span key="love" className="text-red-500">❤️</span>
           </div>
-          <span className="hover:text-purple-600 hover:underline cursor-pointer">
+          <span className="hover:text-purple-600">
             {likeCount} reactions
           </span>
         </div>
         <div className="flex items-center space-x-3">
-          <span className="hover:text-purple-600 hover:underline cursor-pointer">
+          <span className="hover:text-purple-600">
             {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
           </span>
         </div>
@@ -479,7 +479,7 @@ useEffect(() => {
         <button 
           onClick={handleLike}
           disabled={isLoading}
-          className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition ${
+          className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition cursor-pointer ${
             isLiked 
               ? 'bg-white-50 text-red-600' 
               : 'bg-white text-black hover:bg-gray-100'
@@ -490,7 +490,7 @@ useEffect(() => {
         </button>
         <button 
           onClick={handleCommentClick}
-          className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition ${
+          className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition cursor-pointer ${
             showCommentInput ? 'bg-gray-100' : 'bg-white hover:bg-gray-100'
           } text-black`}
         >
@@ -517,7 +517,7 @@ useEffect(() => {
           {hasMoreComments && (
             <button 
               onClick={handleLoadMoreComments}
-              className="text-sm text-purple-600 hover:underline font-semibold mt-3"
+              className="text-sm text-purple-600 hover:underline font-semibold mt-3 cursor-pointer"
             >
               Load more comments
             </button>

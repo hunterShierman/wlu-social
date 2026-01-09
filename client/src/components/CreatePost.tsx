@@ -191,7 +191,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
             <input
               type="text"
               placeholder={`What's on your mind, ${username}?`}
-              className="w-full bg-gray-100 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
+              className="w-full bg-gray-100 rounded-full px-4 cursor-text py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               onClick={handleExpand}
               readOnly
             />
@@ -262,7 +262,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
         <div className="flex items-center space-x-2">
           <button 
             onClick={handlePhotoClick}
-            className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition"
+            className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
           >
             <span className="text-2xl">📷</span>
             <span className="text-gray-600 font-medium">Photo</span>
@@ -274,7 +274,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
               className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition"
             >
               <span className="text-2xl">📄</span>
-              <span className="text-gray-600 font-medium">Post Type</span>
+              <span className="text-gray-600 font-medium cursor-pointer">Post Type</span>
             </button>
 
             {/* postType Dropdown */}

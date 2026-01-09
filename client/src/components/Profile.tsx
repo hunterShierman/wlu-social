@@ -186,7 +186,7 @@ const Profile = () => {
         <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-14">
-              <button onClick={() => navigate('/')} className="text-2xl font-bold text-purple-800">
+              <button onClick={() => navigate('/')} className="text-2xl font-bold text-purple-800 cursor-pointer">
                 WLU Connect
               </button>
             </div>
@@ -219,7 +219,7 @@ const Profile = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{error || 'User not found'}</h2>
           <button
             onClick={() => navigate('/')}
-            className="text-purple-600 hover:underline"
+            className="text-purple-600 hover:underline cursor-pointer"
           >
             Go back home
           </button>
@@ -243,21 +243,21 @@ const Profile = () => {
           <div className="flex items-center justify-between h-14">
             <button
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition"
+              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition cursor-pointer"
             >
               WLU Connect
             </button>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/')}
-                className="text-purple-600 hover:underline font-semibold"
+                className="text-purple-600 hover:underline font-semibold cursor-pointer"
               >
                 Back to Home
               </button>
               {!isSignedIn && (
                 <button
                   onClick={() => navigate('/login')}
-                  className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
+                  className="bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
                 >
                   Sign In
                 </button>
@@ -294,14 +294,14 @@ const Profile = () => {
                 </div>
 
                 {isOwnProfile ? (
-                  <button className="mt-4 px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition">
+                  <button className="cursor-pointer mt-4 px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition">
                     Edit Profile
                   </button>
                 ) : (
                   <button 
                     onClick={handleFollowClick}
                     disabled={isFollowLoading}
-                    className={`mt-4 px-6 py-2 rounded-full font-semibold transition ${
+                    className={`mt-4 px-6 py-2 rounded-full font-semibold cursor-pointer ${
                       isFollowing 
                         ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200' 
                         : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'

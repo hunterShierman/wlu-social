@@ -82,11 +82,7 @@ const EventCard = ({ event }: EventCardProps) => {
 
         {/* Host Info */}
         <div 
-          onClick={(e) => {
-            e.stopPropagation();  // Prevent modal from opening
-            navigate(`/profile/${event.club_name}`);
-          }}
-          className="flex items-center space-x-2 mb-4 hover:opacity-70 transition"
+          className="flex items-center space-x-2 mb-4  transition"
         >
           <div className="w-6 h-6 rounded-full bg-gray-300 overflow-hidden">
             {event.profile_picture_url ? (
@@ -109,7 +105,7 @@ const EventCard = ({ event }: EventCardProps) => {
         {/* Action Button */}
         <button 
           onClick={() => navigate(`/events/${event.id}`)} // navigate to event page with info
-          className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
+          className="w-full cursor-pointer bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
         >
           View Details
         </button>
