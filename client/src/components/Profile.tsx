@@ -183,7 +183,7 @@ const Profile = () => {
     return (
       <div className="min-h-screen bg-gray-100">
         {/* Navigation */}
-        <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
+        <nav className="bg-purple-300 shadow-md fixed top-0 left-0 right-0 z-10">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-14">
               <button onClick={() => navigate('/')} className="text-2xl font-bold text-purple-800 cursor-pointer">
@@ -236,9 +236,9 @@ const Profile = () => {
   const isOwnProfile = isSignedIn && currentUsername === username;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
+      <nav className="bg-purple-300 shadow-md fixed top-0 left-0 right-0 z-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-14">
             <button
@@ -250,14 +250,14 @@ const Profile = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/')}
-                className="text-purple-600 hover:underline font-semibold cursor-pointer"
+                className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
               >
-                Back to Home
+                Home
               </button>
               {!isSignedIn && (
                 <button
                   onClick={() => navigate('/login')}
-                  className="bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
+                  className="bg-purple-400 cursor-pointer text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
                 >
                   Sign In
                 </button>

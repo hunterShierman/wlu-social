@@ -171,11 +171,11 @@ const EventInfo = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-purple-50">
         {/* Navigation Bar */}
-        <nav className="bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+        <nav className="bg-purple-300 shadow-sm fixed top-0 left-0 right-0 z-10">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
+            <div className="flex items-center justify-between h-14">
               <button
                 onClick={() => navigate('/')}
                 className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition"
@@ -198,11 +198,11 @@ const EventInfo = () => {
 
   if (error || !event) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-purple-50">
         {/* Navigation Bar */}
-        <nav className="bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+        <nav className="bg-purple-300 shadow-sm fixed top-0 left-0 right-0 z-10">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
+            <div className="flex items-center justify-between h-14">
               <button
                 onClick={() => navigate('/')}
                 className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition"
@@ -232,27 +232,27 @@ const EventInfo = () => {
   const faculty = getFacultyInfo(event.department);
 
 return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <nav className="bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+      <nav className="bg-purple-300 shadow-sm fixed top-0 left-0 right-0 z-10">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14">
             <button
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition"
+              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition cursor-pointer"
             >
               WLU Connect
             </button>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/events')}
-                className="text-gray-700 hover:text-purple-600 font-semibold transition"
+                className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
               >
-                Events
+                Club Events
               </button>
               <button
                 onClick={() => navigate('/')}
-                className="text-gray-700 hover:text-purple-600 font-semibold transition"
+                className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
               >
                 Home
               </button>

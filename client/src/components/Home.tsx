@@ -105,62 +105,77 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
-            <h1 className="text-2xl font-bold text-purple-800 cursor-pointer">WLU Connect</h1>
-            <div className="flex items-center space-x-4">
-              <input
-                type="text"
-                placeholder="Search"
-                className="bg-gray-100 rounded-full px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <button
-                onClick={() => navigate('/events')}
-                className="text-gray-700 hover:text-purple-600 font-semibold cursor-pointer"
-              >
-                Events
-              </button>
-              
-              {userSignedIn ? (
-                <>
+      <nav className="bg-purple-300 shadow-md fixed top-0 left-0 right-0 z-10">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="flex items-center justify-between h-14">
+                <h1 className="text-2xl font-bold text-purple-800 cursor-pointer">WLU Connect</h1>
+                <div className="flex items-center space-x-4">
+                  {/* Club Events Button */}
                   <button
-                    onClick={handleLogout}
-                    className="bg-white text-purple-600 border border-purple-600 px-4 py-2 rounded-full font-semibold hover:bg-purple-50 transition cursor-pointer"
+                    onClick={() => navigate('/events')}
+                    className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
                   >
-                    Logout
+                    Club Events
                   </button>
-                  <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden">
-                    <button 
-                      onClick={() => navigate(`/profile/${userData?.username}`)}
-                      className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    >
-                      {userData?.profile_picture_url ? (
-                        <img
-                          src={userData.profile_picture_url} 
-                          alt={userData.username}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span>{userData?.username?.[0].toUpperCase() || 'U'}</span>
-                      )}
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <button
-                  onClick={handleSignIn}
-                  className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition cursor-pointer"
-                >
-                  Sign In
-                </button>
-              )}
+                  
+                  {userSignedIn ? (
+                    <>
+                      {/* Logout Button */}
+                      <button
+                        onClick={handleLogout}
+                        className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
+                      >
+                        Logout
+                      </button>
+
+                      {/* Search Bar */}
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        className="bg-white rounded-full px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-text"
+                      />
+
+                      {/* User Profile */}
+                      <button 
+                        onClick={() => navigate(`/profile/${userData?.username}`)}
+                        className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        {userData?.profile_picture_url ? (
+                          <img
+                            src={userData.profile_picture_url} 
+                            alt={userData.username}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span>{userData?.username?.[0].toUpperCase() || 'U'}</span>
+                        )}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+    
+
+                      {/* Sign In Button */}
+                      <button
+                        onClick={handleSignIn}
+                        className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
+                      >
+                        Sign In
+                      </button>
+                      {/* Search Bar (when not signed in) */}
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        className="bg-white rounded-full px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-text"
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </nav>
+        </nav>
   
       {/* Main Content */}
       <div className="pt-20 pb-8 justify-center">

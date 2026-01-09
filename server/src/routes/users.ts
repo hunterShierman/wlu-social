@@ -77,7 +77,7 @@ router.put('/:username', authenticateToken, async (req, res) => {
   try {
     const db = getDB();
     const username = req.params.username;
-    const { email, bio, profile_picture_url } = req.body;
+    const { email, bio, profile_picture_url, program } = req.body;
     
     // Check if user is updating their own profile
     if (req.user?.username !== username) {
@@ -85,8 +85,8 @@ router.put('/:username', authenticateToken, async (req, res) => {
     }
     
     const result = await db.query(
-      'UPDATE users SET email = $1, bio = $2, profile_picture_url = $3 WHERE username = $4 RETURNING user_id, username, email, bio, profile_picture_url, created_at',
-      [email, bio, profile_picture_url || null, username]
+      'UPDATE users SET email = $1, bio = $2, profile_picture_url = $3, program = $4 WHERE username = $5 RETURNING user_id, username, email, bio, profile_picture_url, program, created_at',
+      [email, bio, profile_picture_url || null, program || null, username]
     );
     
     if (result.rows.length === 0) {
