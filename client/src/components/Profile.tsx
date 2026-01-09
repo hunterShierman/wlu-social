@@ -294,7 +294,9 @@ const Profile = () => {
                 </div>
 
                 {isOwnProfile ? (
-                  <button className="cursor-pointer mt-4 px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition">
+                  <button 
+                    onClick={() => navigate('/profile/edit')}
+                    className="cursor-pointer mt-4 px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition">
                     Edit Profile
                   </button>
                 ) : (

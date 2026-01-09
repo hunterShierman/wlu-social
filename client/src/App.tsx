@@ -5,6 +5,7 @@ import Signup from './components/Signup';
 import Profile from './components/Profile';
 import Events from './components/Events';
 import EventInfo from './components/EventInfo'
+import EditProfile from './components/EditProfile';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/events" element={<Events />} />
         <Route path="/events/:eventId" element={<EventInfo />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
       </Routes>
     </Router>
   );
