@@ -1,6 +1,6 @@
 export interface Event {
     id: number;
-    user_id: number;
+    club_name: string;
     content: string;
     image_url: string | null;
     department: string;

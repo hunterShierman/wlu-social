@@ -84,7 +84,7 @@ const EventCard = ({ event }: EventCardProps) => {
         <div 
           onClick={(e) => {
             e.stopPropagation();  // Prevent modal from opening
-            navigate(`/profile/${event.username}`);
+            navigate(`/profile/${event.club_name}`);
           }}
           className="flex items-center space-x-2 mb-4 hover:opacity-70 transition"
         >
@@ -92,17 +92,17 @@ const EventCard = ({ event }: EventCardProps) => {
             {event.profile_picture_url ? (
               <img 
                 src={event.profile_picture_url} 
-                alt={event.username} 
+                alt={event.club_name} 
                 className="w-full h-full object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-xs font-semibold text-gray-700">
-                {event.username[0].toUpperCase()}
+                {event.club_name[0].toUpperCase()}
               </div>
             )}
           </div>
           <div className="text-sm text-gray-600">
-            Hosted by <span className="font-semibold text-gray-900">{event.username}</span>
+            Hosted by <span className="font-semibold text-gray-900">{event.club_name}</span>
           </div>
         </div>
 

@@ -12,10 +12,8 @@ router.get('/all', async (req, res) => {
     const offset = parseInt(req.query.offset as string) || 0;
     
     const result = await db.query(
-      `SELECT e.id, e.user_id, e.content, e.image_url, e.department, e.event_date, e.location, e.created_at,
-              u.username, u.profile_picture_url, u.program
+      `SELECT e.id, e.club_name, e.content, e.image_url, e.department, e.event_date, e.location, e.created_at
        FROM events e
-       JOIN users u ON e.user_id = u.user_id
        ORDER BY e.event_date DESC
        LIMIT $1 OFFSET $2`,
       [limit, offset]
@@ -243,10 +241,8 @@ router.get('/:id', async (req, res) => {
     const eventId = req.params.id;
     
     const result = await db.query(
-      `SELECT e.id, e.user_id, e.content, e.image_url, e.department, e.event_date, e.location, e.created_at,
-              u.username, u.profile_picture_url, u.program
+      `SELECT e.id, e.club_name, e.content, e.image_url, e.department, e.event_date, e.location, e.created_at
        FROM events e
-       JOIN users u ON e.user_id = u.user_id
        WHERE e.id = $1`,
       [eventId]
     );

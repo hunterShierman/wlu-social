@@ -366,24 +366,24 @@ return (
                   <div>
                     <p className="text-xs text-gray-500 font-semibold uppercase">Hosted by</p>
                     <div 
-                      onClick={() => navigate(`/profile/${event.username}`)}
+                      onClick={() => navigate(`/profile/${event.club_name}`)}
                       className="flex items-center space-x-2 mt-1 cursor-pointer hover:opacity-70 transition"
                     >
                       <div className="w-8 h-8 rounded-full bg-gray-300 overflow-hidden">
                         {event.profile_picture_url ? (
                           <img 
                             src={event.profile_picture_url} 
-                            alt={event.username} 
+                            alt={event.club_name} 
                             className="w-full h-full object-cover"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-xs font-semibold text-gray-700">
-                            {event.username[0].toUpperCase()}
+                            {event.club_name[0].toUpperCase()}
                           </div>
                         )}
                       </div>
                       <span className="text-sm text-purple-600 font-semibold hover:underline">
-                        {event.username}
+                        {event.club_name}
                       </span>
                     </div>
                   </div>
