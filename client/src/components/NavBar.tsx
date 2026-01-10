@@ -49,12 +49,11 @@ const NavBar = () => {
             {/* Logo and Title */}
             <div className="flex items-center space-x-3">
                 <Icon
-                    className="h-12 w-10 mt-3 cursor-pointer text-white hover:text-purple-900 transition"
-                    onClick={() => navigate("/")}
+                    className="h-12 w-10 mt-3 mr-3 text-white transition"
                 />
                 <button
                 onClick={() => navigate('/')}
-                className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition cursor-pointer"
+                className="text-2xl font-bold text-purple-800 hover:text-white transition cursor-pointer"
                 >
                 WLU Connect
                 </button>

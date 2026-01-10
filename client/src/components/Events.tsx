@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import type { Event } from '../types/event';
 import EventCard from '../components/EventCard';
-import NavBar from './NavBar';
 
 const Events = () => {
   const [allEvents, setAllEvents] = useState<Event[]>([]);
@@ -77,7 +76,6 @@ const Events = () => {
   return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <NavBar />
 
       {/* Main Content */}
       <div className="pt-24 pb-12">

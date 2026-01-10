@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './components/Home'
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -7,23 +7,41 @@ import Events from './components/Events';
 import EventInfo from './components/EventInfo'
 import EditProfile from './components/EditProfile';
 import StudyGroups from './components/GroupStudy'
+import NavBar from './components/NavBar';
+
+
+function AppContent() {
+  const location = useLocation();
+
+    // pages that do not show the nav bar
+    const hideNavBarPaths = ['/login', '/signup'];
+    const shouldShowNavBar = !hideNavBarPaths.includes(location.pathname);
+  
+
+  return (
+    <>
+      {shouldShowNavBar && <NavBar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/events/:eventId" element={<EventInfo />} />
+        <Route path="/study-groups" element={<StudyGroups />} />
+      </Routes>
+    </>
+  );
+}
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<Navigate to="/" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/profile/:username" element={<Profile />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/events/:eventId" element={<EventInfo />} />
-        <Route path="/profile/edit" element={<EditProfile />} />
-        <Route path="/study-groups" element={<StudyGroups />} />
-      </Routes>
+      <AppContent />
     </Router>
   );
 }
+
 
 export default App;

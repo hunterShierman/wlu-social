@@ -3,7 +3,6 @@ import Post from '../components/Post';
 import type { Post as PostType } from '../types/post';
 import CreatePost from './CreatePost';
 import type { User as User } from '../types/user';
-import NavBar from './NavBar';
 
 const Home = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -91,7 +90,6 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <NavBar />
       {/* Main Content */}
       <div className="pt-20 pb-8 justify-center">
 

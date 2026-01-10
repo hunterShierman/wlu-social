@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../types/user';
-import NavBar from './NavBar';
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -122,7 +121,6 @@ const EditProfile = () => {
   return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <NavBar />
 
       {/* Main Content */}
       <div className="pt-24 pb-12">

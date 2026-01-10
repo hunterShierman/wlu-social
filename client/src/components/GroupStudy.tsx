@@ -1,7 +1,6 @@
 // pages/StudyGroups.tsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavBar from './NavBar';
 
 interface StudyGroup {
   group_id: number;
@@ -159,7 +158,6 @@ const StudyGroups = () => {
   return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <NavBar />
 
       {/* Main Content */}
       <div className="pt-24 pb-12">

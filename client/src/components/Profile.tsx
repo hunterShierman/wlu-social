@@ -5,7 +5,6 @@ import type { User } from '../types/user';
 import type { ProfileStats } from '../types/profile';
 import type { Post as PostType } from '../types/post';
 import Post from '../components/Post'
-import NavBar from './NavBar';
 
 const Profile = () => {
   const { username } = useParams<{ username: string }>();
@@ -184,7 +183,6 @@ const Profile = () => {
     return (
       <div className="min-h-screen bg-gray-100">
         {/* Navigation */}
-        <NavBar />
   
         {/* Skeleton Loader */}
         <div className="pt-20 pb-8">
@@ -231,7 +229,6 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <NavBar />
 
       {/* Main Content */}
       <div className="pt-20 pb-8">

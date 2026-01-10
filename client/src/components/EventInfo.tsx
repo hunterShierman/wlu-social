@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Event } from '../types/event';
-import NavBar from './NavBar';
 
 const EventInfo = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -156,7 +155,6 @@ const EventInfo = () => {
     return (
       <div className="min-h-screen bg-purple-50">
         {/* Navigation Bar */}
-        <NavBar />
 
         <div className="pt-24 flex items-center justify-center min-h-screen">
           <div className="text-center">
@@ -172,7 +170,6 @@ const EventInfo = () => {
     return (
       <div className="min-h-screen bg-purple-50">
         {/* Navigation Bar */}
-        <NavBar />
 
         <div className="pt-24 flex items-center justify-center min-h-screen">
           <div className="text-center">
@@ -195,7 +192,6 @@ const EventInfo = () => {
 return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <NavBar />
 
       {/* Main Content */}
       <div className="pt-20 pb-12">
