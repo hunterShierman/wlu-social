@@ -6,6 +6,7 @@ import Profile from './components/Profile';
 import Events from './components/Events';
 import EventInfo from './components/EventInfo'
 import EditProfile from './components/EditProfile';
+import StudyGroups from './components/GroupStudy'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/events/:eventId" element={<EventInfo />} />
         <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/study-groups" element={<StudyGroups />} />
       </Routes>
     </Router>
   );

@@ -119,6 +119,12 @@ const Home = () => {
                   >
                     Club Events
                   </button>
+                  <button
+                    onClick={() => navigate('/study-groups')}
+                    className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-900 transition cursor-pointer"
+                  >
+                    Study Groups
+                  </button>
                   
                   {userSignedIn ? (
                     <>

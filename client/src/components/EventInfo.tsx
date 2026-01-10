@@ -293,7 +293,7 @@ return (
             className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 font-semibold mb-4"
           >
             <span>←</span>
-            <span>Back to Events</span>
+            <span>Back to Club Events</span>
           </button>
 
           {/* Event Card */}
