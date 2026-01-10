@@ -94,7 +94,7 @@ const Home = () => {
       <div className="pt-20 pb-8 justify-center">
 
 
-      <div className="max-w-2xl mx-auto px-4">
+      <div className="max-w-xl mx-auto px-4">
             {userSignedIn && userData ? (
               <div key="welcome" className="bg-white rounded-lg shadow mb-4 p-4">
                 <h2 className="text-xl font-semibold text-gray-800">

@@ -28,7 +28,7 @@ const Post = ({ post, onPostDeleted  }: PostProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [allComments, setAllComments] = useState<CommentType[]>([]);
-  const [displayedComments, setDisplayedComments] = useState(2);
+  const [displayedComments, setDisplayedComments] = useState(1);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
