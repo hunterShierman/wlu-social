@@ -1,7 +1,7 @@
 // pages/StudyGroups.tsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { User } from '../types/user';
+import NavBar from './NavBar';
 
 interface StudyGroup {
   group_id: number;
@@ -26,47 +26,31 @@ const StudyGroups = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'my'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState<User | null>(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   // Fetch data on mount
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const token = localStorage.getItem('accessToken');
-      setIsSignedIn(!!token);
+      const token = localStorage.getItem('accessToken')
 
       try {
-        // Fetch current user
-        if (token) {
-          const userResponse = await fetch('http://localhost:8000/users/me/profile', {
-            headers: { 'Authorization': `Bearer ${token}` },
-          });
-          if (userResponse.ok) {
-            setUserData(await userResponse.json());
-          }
-        }
-
         // Fetch all study groups
-        if (token) {
-          const groupsResponse = await fetch('http://localhost:8000/study-groups', {
-            headers: { 'Authorization': `Bearer ${token}` },
-          });
-          if (groupsResponse.ok) {
-            const groups = await groupsResponse.json();
-            setAllGroups(groups);
-            setDisplayedGroups(groups);
-          }
-
-          // Fetch my groups
-          const myGroupsResponse = await fetch('http://localhost:8000/study-groups/me/memberships', {
-            headers: { 'Authorization': `Bearer ${token}` },
-          });
-          if (myGroupsResponse.ok) {
-            setMyGroups(await myGroupsResponse.json());
-          }
+        const groupsResponse = await fetch('http://localhost:8000/study-groups');
+        if (groupsResponse.ok) {
+        const groups = await groupsResponse.json();
+        setAllGroups(groups);
+        setDisplayedGroups(groups);
         }
+
+        // Fetch my groups
+        const myGroupsResponse = await fetch('http://localhost:8000/study-groups/me/memberships', {
+        headers: { 'Authorization': `Bearer ${token}` },
+        });
+        if (myGroupsResponse.ok) {
+        setMyGroups(await myGroupsResponse.json());
+        }
+        
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -175,44 +159,7 @@ const StudyGroups = () => {
   return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <nav className="bg-purple-300 shadow-md fixed top-0 left-0 right-0 z-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <button
-              onClick={() => navigate('/')}
-              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition cursor-pointer"
-            >
-              WLU Connect
-            </button>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/')}
-                className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-900 transition cursor-pointer"
-              >
-                Home
-              </button>
-              <button
-                onClick={() => navigate('/events')}
-                className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-900 transition cursor-pointer"
-              >
-                Events
-              </button>
-              {isSignedIn && userData && (
-                <button
-                  onClick={() => navigate(`/profile/${userData.username}`)}
-                  className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition"
-                >
-                  {userData?.profile_picture_url ? (
-                    <img src={userData.profile_picture_url} alt={userData.username} className="w-full h-full object-cover" />
-                  ) : (
-                    <span>{userData?.username?.[0].toUpperCase() || 'U'}</span>
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <NavBar />
 
       {/* Main Content */}
       <div className="pt-24 pb-12">

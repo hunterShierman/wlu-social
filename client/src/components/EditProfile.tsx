@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../types/user';
+import NavBar from './NavBar';
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -121,24 +122,7 @@ const EditProfile = () => {
   return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <nav className="bg-purple-300 shadow-sm fixed top-0 left-0 right-0 z-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <button
-              onClick={() => navigate('/')}
-              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition cursor-pointer"
-            >
-              WLU Connect
-            </button>
-            <button
-              onClick={handleCancel}
-              className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </nav>
+      <NavBar />
 
       {/* Main Content */}
       <div className="pt-24 pb-12">

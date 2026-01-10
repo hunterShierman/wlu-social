@@ -5,7 +5,7 @@ import { authenticateToken } from '../middleware/auth';
 const router = express.Router();
 
 // Get all study groups
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const db = getDB();
     

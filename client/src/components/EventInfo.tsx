@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Event } from '../types/event';
-import type { User } from '../types/user';
+import NavBar from './NavBar';
 
 const EventInfo = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -10,8 +10,6 @@ const EventInfo = () => {
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [userData, setUserData] = useState<User | null>(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [isRegistrationLoading, setIsRegistrationLoading] = useState(false);
 
@@ -20,23 +18,8 @@ const EventInfo = () => {
       setIsLoading(true);
       setError('');
       const token = localStorage.getItem('accessToken');
-      setIsSignedIn(!!token);
 
       try {
-        // Fetch current user if signed in
-        if (token) {
-          const userResponse = await fetch('http://localhost:8000/users/me/profile', {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-
-          if (userResponse.ok) {
-            const userData = await userResponse.json();
-            setUserData(userData);
-          }
-        }
-
         // Fetch event details
         const response = await fetch(`http://localhost:8000/events/${eventId}`);
 
@@ -173,18 +156,7 @@ const EventInfo = () => {
     return (
       <div className="min-h-screen bg-purple-50">
         {/* Navigation Bar */}
-        <nav className="bg-purple-300 shadow-sm fixed top-0 left-0 right-0 z-10">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-14">
-              <button
-                onClick={() => navigate('/')}
-                className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition"
-              >
-                WLU Connect
-              </button>
-            </div>
-          </div>
-        </nav>
+        <NavBar />
 
         <div className="pt-24 flex items-center justify-center min-h-screen">
           <div className="text-center">
@@ -200,18 +172,7 @@ const EventInfo = () => {
     return (
       <div className="min-h-screen bg-purple-50">
         {/* Navigation Bar */}
-        <nav className="bg-purple-300 shadow-sm fixed top-0 left-0 right-0 z-10">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-14">
-              <button
-                onClick={() => navigate('/')}
-                className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition"
-              >
-                WLU Connect
-              </button>
-            </div>
-          </div>
-        </nav>
+        <NavBar />
 
         <div className="pt-24 flex items-center justify-center min-h-screen">
           <div className="text-center">
@@ -234,55 +195,7 @@ const EventInfo = () => {
 return (
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
-      <nav className="bg-purple-300 shadow-sm fixed top-0 left-0 right-0 z-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
-            <button
-              onClick={() => navigate('/')}
-              className="text-2xl font-bold text-purple-800 hover:text-purple-900 transition cursor-pointer"
-            >
-              WLU Connect
-            </button>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/events')}
-                className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
-              >
-                Club Events
-              </button>
-              <button
-                onClick={() => navigate('/')}
-                className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
-              >
-                Home
-              </button>
-              {isSignedIn && userData ? (
-                <button
-                  onClick={() => navigate(`/profile/${userData.username}`)}
-                  className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition focus:outline-none focus:ring-2 focus:ring-purple-500"
-                >
-                  {userData?.profile_picture_url ? (
-                    <img
-                      src={userData.profile_picture_url}
-                      alt={userData.username}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span>{userData?.username?.[0].toUpperCase() || 'U'}</span>
-                  )}
-                </button>
-              ) : (
-                <button
-                  onClick={() => navigate('/login')}
-                  className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition"
-                >
-                  Sign In
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <NavBar />
 
       {/* Main Content */}
       <div className="pt-20 pb-12">
