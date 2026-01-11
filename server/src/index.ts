@@ -9,6 +9,7 @@ import likesRouter from './routes/likes';
 import clubsRouter from './routes/clubs';
 import studyGroupsRouter from './routes/studyGroups';
 import eventRoutes from './routes/events';
+import uploadRoutes from './routes/upload';
 
 
 const app = express();
@@ -30,6 +31,7 @@ app.use('/likes', likesRouter);
 app.use('/clubs', clubsRouter);
 app.use('/study-groups', studyGroupsRouter);
 app.use('/events', eventRoutes);
+app.use('/upload', uploadRoutes);
 
 
 // Connect to database and start server

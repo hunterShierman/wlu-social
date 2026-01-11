@@ -115,7 +115,29 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
         setIsPosting(false);
         return;
       }
-  
+
+      // upload image to cloudinary and return the link in imageURL to store in database
+      let imageUrl = null;
+      if (selectedImage) {
+        const formData = new FormData();
+        formData.append('image', selectedImage);
+
+        const uploadResponse = await fetch('http://localhost:8000/upload/image', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload image');
+        }
+
+        const uploadData = await uploadResponse.json();
+        imageUrl = uploadData.url; // Cloudinary URL!
+      }
+    
       // Send POST request to backend
       const response = await fetch('http://localhost:8000/posts', {
         method: 'POST',
@@ -125,8 +147,8 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
         },
         body: JSON.stringify({
           content: postContent,
-          image_url: imagePreview, // For now, this is base64 or null
-            post_type: selectedpostType || 'general',
+          image_url: imageUrl, // store the cloudinary url in the PostGreSQL database instead of the raw file for better performance
+          post_type: selectedpostType || 'general',
         }),
       });
   
@@ -139,12 +161,12 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
       // Create mock post object (replace with actual response from backend)
       const newPost: PostType = {
         id: savedPost.post.id,
-        user_id: savedPost.post.post_id, 
+        user_id: savedPost.post.user_id, 
         username: username,
         content: selectedpostType 
           ? `${postContent}`
           : postContent,
-        image_url: imagePreview,
+        image_url: imageUrl,
         post_type: selectedpostType || 'general',
         created_at: new Date().toISOString(),
         profile_picture_url: profilePictureUrl || null,
