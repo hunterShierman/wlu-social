@@ -232,86 +232,95 @@ const Profile = () => {
 
           {/* Main Content */}
       <div className="pt-20 pb-8">
-        <div className="max-w-3xl mx-auto px-4">
+        <div className="max-w-2xl mx-auto px-4">
           {/* Profile Top Card */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
             {/* Profile Info */}
             <div className="p-6">
-              {/* Profile Picture and Button Row */}
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-24 h-24 rounded-full border-4 border-purple-200 bg-gray-300 flex items-center justify-center overflow-hidden">
-                  {user.profile_picture_url ? (
-                    <img
-                      src={user.profile_picture_url}
-                      alt={user.username}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-gray-700 font-bold text-3xl">
-                      {user.username[0].toUpperCase()}
-                    </span>
+              <div className="flex gap-6">
+                {/* Left Side - Profile Picture */}
+                <div className="flex-shrink-0">
+                  <div className="w-32 h-32 rounded-full border-4 border-purple-200 bg-gray-300 flex items-center justify-center overflow-hidden">
+                    {user.profile_picture_url ? (
+                      <img
+                        src={user.profile_picture_url}
+                        alt={user.username}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-gray-700 font-bold text-4xl">
+                        {user.username[0].toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right Side - All Info */}
+                <div className="flex-1">
+                  {/* Name and Button Row */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-2">
+                      <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
+                      <span className="text-purple-600 text-lg">✓</span>
+                    </div>
+
+                    {isOwnProfile ? (
+                      <button 
+                        onClick={() => navigate('/profile/edit')}
+                        className="cursor-pointer px-6 py-2 bg-purple-600 text-white border-purple-600 hover:bg-purple-700 transition-colors rounded-full"
+                      >
+                        Edit Profile
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={handleFollowClick}
+                        disabled={isFollowLoading}
+                        className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
+                          isFollowing 
+                            ? 'bg-purple-600 text-white border border-purple-600 hover:bg-purple-700 transition-colors' 
+                            : 'bg-white text-purple-700 border border-purple-600 hover:bg-purple-50 transition-colors'
+                        } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {isFollowLoading ? '...' : isFollowing ? 'Following' : 'Follow'}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Program and University */}
+                  <div className="mb-3">
+                    {user.program && (
+                      <p className="text-gray-700 font-medium">{user.program}</p>
+                    )}
+                    <p className="text-gray-600 text-sm">Wilfrid Laurier University</p>
+                  </div>
+
+                  {/* Bio */}
+                  {user.bio && (
+                    <p className="text-gray-700 mb-3">{user.bio}</p>
                   )}
-                </div>
 
-                {isOwnProfile ? (
-                  <button 
-                    onClick={() => navigate('/profile/edit')}
-                    className="cursor-pointer px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition"
-                  >
-                    Edit Profile
-                  </button>
-                ) : (
-                  <button 
-                    onClick={handleFollowClick}
-                    disabled={isFollowLoading}
-                    className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
-                      isFollowing 
-                        ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200' 
-                        : 'bg-purple-600 text-white hover:bg-purple-700'
-                    } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    {isFollowLoading ? '...' : isFollowing ? 'Following' : 'Follow'}
-                  </button>
-                )}
-              </div>
+                  {/* Stats */}
+                  <div className="flex items-center space-x-6 mb-3">
+                    <div className="cursor-pointer hover:underline">
+                      <span className="font-bold text-gray-900">{stats.followers}</span>
+                      <span className="text-gray-600 ml-1 text-sm">followers</span>
+                    </div>
+                    <div className="cursor-pointer hover:underline">
+                      <span className="font-bold text-gray-900">{stats.following}</span>
+                      <span className="text-gray-600 ml-1 text-sm">following</span>
+                    </div>
+                    <div className="cursor-pointer hover:underline">
+                      <span className="font-bold text-gray-900">{totalPosts}</span>
+                      <span className="text-gray-600 ml-1 text-sm">posts</span>
+                    </div>
+                  </div>
 
-              {/* Name and Info */}
-              <div className="mb-4">
-                <div className="flex items-center space-x-2 mb-1">
-                  <h1 className="text-2xl font-bold text-gray-900">{user.username}</h1>
-                  <span className="text-purple-600 text-lg">✓</span>
-                </div>
-                {user.program && (
-                  <p className="text-gray-700 font-medium">{user.program}</p>
-                )}
-                <p className="text-gray-600 text-sm">Wilfrid Laurier University</p>
-              </div>
-
-              {/* Bio */}
-              {user.bio && (
-                <p className="text-gray-700 mb-4">{user.bio}</p>
-              )}
-
-              {/* Stats */}
-              <div className="flex items-center space-x-6 mb-4">
-                <div className="cursor-pointer hover:underline">
-                  <span className="font-bold text-gray-900">{stats.followers}</span>
-                  <span className="text-gray-600 ml-1 text-sm">followers</span>
-                </div>
-                <div className="cursor-pointer hover:underline">
-                  <span className="font-bold text-gray-900">{stats.following}</span>
-                  <span className="text-gray-600 ml-1 text-sm">following</span>
-                </div>
-                <div className="cursor-pointer hover:underline">
-                  <span className="font-bold text-gray-900">{totalPosts}</span>
-                  <span className="text-gray-600 ml-1 text-sm">posts</span>
+                  {/* Member Since */}
+                  <p className="text-gray-500 text-sm">
+                    Member since {formatDate(user.created_at)}
+                  </p>
                 </div>
               </div>
-
-              {/* Member Since */}
-              <p className="text-gray-500 text-sm">
-                Member since {formatDate(user.created_at)}
-              </p>
             </div>
           </div>
 
