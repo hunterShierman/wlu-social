@@ -230,19 +230,16 @@ const Profile = () => {
     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
 
-      {/* Main Content */}
+          {/* Main Content */}
       <div className="pt-20 pb-8">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-3xl mx-auto px-4">
           {/* Profile Top Card */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
-            {/* Cover Image/Background */}
-            <div className="h-32 bg-linear-to-r from-purple-600 to-purple-800"></div>
-
             {/* Profile Info */}
-            <div className="px-6 pb-6">
-              {/* Profile Picture */}
-              <div className="flex justify-between items-start -mt-16 mb-4">
-                <div className="w-32 h-32 rounded-full border-4 border-white bg-gray-300 flex items-center justify-center overflow-hidden">
+            <div className="p-6">
+              {/* Profile Picture and Button Row */}
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-24 h-24 rounded-full border-4 border-purple-200 bg-gray-300 flex items-center justify-center overflow-hidden">
                   {user.profile_picture_url ? (
                     <img
                       src={user.profile_picture_url}
@@ -250,7 +247,7 @@ const Profile = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-gray-700 font-bold text-4xl">
+                    <span className="text-gray-700 font-bold text-3xl">
                       {user.username[0].toUpperCase()}
                     </span>
                   )}
@@ -259,17 +256,18 @@ const Profile = () => {
                 {isOwnProfile ? (
                   <button 
                     onClick={() => navigate('/profile/edit')}
-                    className="cursor-pointer mt-4 px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition">
+                    className="cursor-pointer px-6 py-2 bg-gray-100 text-black border border-gray-300 rounded-full font-semibold hover:bg-gray-200 transition"
+                  >
                     Edit Profile
                   </button>
                 ) : (
                   <button 
                     onClick={handleFollowClick}
                     disabled={isFollowLoading}
-                    className={`mt-4 px-6 py-2 rounded-full font-semibold cursor-pointer ${
+                    className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
                       isFollowing 
                         ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200' 
-                        : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+                        : 'bg-purple-600 text-white hover:bg-purple-700'
                     } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {isFollowLoading ? '...' : isFollowing ? 'Following' : 'Follow'}
@@ -298,15 +296,15 @@ const Profile = () => {
               <div className="flex items-center space-x-6 mb-4">
                 <div className="cursor-pointer hover:underline">
                   <span className="font-bold text-gray-900">{stats.followers}</span>
-                  <span className="text-gray-600 ml-1">followers</span>
+                  <span className="text-gray-600 ml-1 text-sm">followers</span>
                 </div>
                 <div className="cursor-pointer hover:underline">
                   <span className="font-bold text-gray-900">{stats.following}</span>
-                  <span className="text-gray-600 ml-1">following</span>
+                  <span className="text-gray-600 ml-1 text-sm">following</span>
                 </div>
                 <div className="cursor-pointer hover:underline">
                   <span className="font-bold text-gray-900">{totalPosts}</span>
-                  <span className="text-gray-600 ml-1">posts</span>
+                  <span className="text-gray-600 ml-1 text-sm">posts</span>
                 </div>
               </div>
 

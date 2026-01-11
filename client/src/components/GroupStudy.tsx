@@ -26,6 +26,8 @@ const StudyGroups = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [loadingGroupId, setLoadingGroupId] = useState<number | null>(null); // Changed name to be more generic
+
 
   // Fetch data on mount
   useEffect(() => {
@@ -98,6 +100,8 @@ const StudyGroups = () => {
       return;
     }
 
+    setLoadingGroupId(groupId);
+
     try {
       const response = await fetch(`http://localhost:8000/study-groups/${groupId}/join`, {
         method: 'POST',
@@ -113,6 +117,8 @@ const StudyGroups = () => {
     } catch (error) {
       console.error('Error joining group:', error);
       alert('Failed to join group');
+    } finally {
+      setLoadingGroupId(null);
     }
   };
 
@@ -125,6 +131,8 @@ const StudyGroups = () => {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 
+      setLoadingGroupId(groupId);
+
       if (response.ok) {
         await refreshGroups();
       } else {
@@ -134,6 +142,8 @@ const StudyGroups = () => {
     } catch (error) {
       console.error('Error leaving group:', error);
       alert('Failed to leave group');
+    } finally {
+      setLoadingGroupId(null);
     }
   };
 
@@ -290,8 +300,17 @@ const StudyGroups = () => {
                             onClick={() => handleLeaveGroup(group.group_id)}
                             className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition cursor-pointer border-2flex items-center justify-center"
                           >
-                            <span className="mr-2">✓</span>
-                            Member of Group
+                            {loadingGroupId === group.group_id ? (
+                              <>
+                                <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                Leaving...
+                              </>
+                            ) : (
+                              <>
+                                <span className="mr-2">✓</span>
+                                Member of Group
+                              </>
+                            )}
                           </button>
                         ) : isFull ? (
                           <button
@@ -301,12 +320,20 @@ const StudyGroups = () => {
                             Full
                           </button>
                         ) : (
-                          <button
-                            onClick={() => handleJoinGroup(group.group_id)}
-                            className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
-                          >
-                            Join Group
-                          </button>
+                            <button
+                              onClick={() => handleJoinGroup(group.group_id)}
+                              disabled={loadingGroupId === group.group_id}  // Disables button while loading
+                              className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
+                            >
+                              {loadingGroupId === group.group_id ? (  // Shows loading when this group is being joined
+                                <>
+                                  <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                  Joining...
+                                </>
+                              ) : (
+                                'Join Group'
+                              )}
+                            </button>
                         )}
                       </div>
                     );
