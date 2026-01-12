@@ -1,5 +1,5 @@
 // pages/EditProfile.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../types/user';
 
@@ -7,6 +7,7 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   
@@ -16,6 +17,10 @@ const EditProfile = () => {
   const [bio, setBio] = useState('');
   const [program, setProgram] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -49,6 +54,7 @@ const EditProfile = () => {
         setBio(userData.bio || '');
         setProgram(userData.program || '');
         setProfilePictureUrl(userData.profile_picture_url || '');
+        setImagePreview(userData.profile_picture_url || null);
       } catch (error) {
         console.error('Error fetching user data:', error);
         setError('Failed to load profile');
@@ -60,6 +66,43 @@ const EditProfile = () => {
     fetchUserData();
   }, [navigate]);
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        setError('Please select an image file');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size must be less than 5MB');
+        return;
+      }
+      
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setError('');
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    setProfilePictureUrl('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
@@ -69,6 +112,32 @@ const EditProfile = () => {
     const token = localStorage.getItem('accessToken');
 
     try {
+      // Step 1: Upload image to Cloudinary if user selected a new one
+      let finalImageUrl = profilePictureUrl;
+      
+      if (selectedImage) {
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append('image', selectedImage);
+
+        const uploadResponse = await fetch('http://localhost:8000/upload/image', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload image');
+        }
+
+        const uploadData = await uploadResponse.json();
+        finalImageUrl = uploadData.url; // Cloudinary URL
+        setIsUploading(false);
+      }
+
+      // Step 2: Update profile with Cloudinary URL
       const response = await fetch(`http://localhost:8000/users/${username}`, {
         method: 'PUT',
         headers: {
@@ -78,7 +147,7 @@ const EditProfile = () => {
         body: JSON.stringify({
           email: email || null,
           bio: bio || null,
-          profile_picture_url: profilePictureUrl || null,
+          profile_picture_url: finalImageUrl || null,
           program: program || null
         }),
       });
@@ -98,6 +167,7 @@ const EditProfile = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       setError('Failed to update profile');
+      setIsUploading(false);
     } finally {
       setIsSaving(false);
     }
@@ -209,52 +279,75 @@ const EditProfile = () => {
               <p className="text-xs text-gray-500 mt-1">{bio.length}/500 characters</p>
             </div>
 
-            {/* Profile Picture URL */}
+            {/* Profile Picture Upload */}
             <div className="mb-6">
-              <label htmlFor="profilePicture" className="block text-sm font-semibold text-gray-700 mb-2">
-                Profile Picture URL
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Profile Picture
               </label>
-              <input
-                type="url"
-                id="profilePicture"
-                value={profilePictureUrl}
-                onChange={(e) => setProfilePictureUrl(e.target.value)}
-                placeholder="https://example.com/your-image.jpg"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent cursor-text"
-              />
-              <p className="text-xs text-gray-500 mt-1">Enter a URL to an image hosted online</p>
               
               {/* Preview */}
-              {profilePictureUrl && (
-                <div className="mt-3">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">Preview:</p>
-                  <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-2 border-gray-300">
+              <div className="flex items-center space-x-4 mb-3">
+                <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-4 border-purple-200 flex items-center justify-center">
+                  {imagePreview ? (
                     <img
-                      src={profilePictureUrl}
+                      src={imagePreview}
                       alt="Profile preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}
                     />
-                  </div>
+                  ) : (
+                    <span className="text-gray-400 text-3xl">{username[0]?.toUpperCase()}</span>
+                  )}
                 </div>
-              )}
+                <div className="flex flex-col space-y-2">
+                  <button
+                    type="button"
+                    onClick={handleUploadClick}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+                  >
+                    {isUploading ? 'Uploading...' : 'Upload Photo'}
+                  </button>
+                  {imagePreview && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer"
+                    >
+                      Remove Photo
+                    </button>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">
+                Max size: 5MB. Supported formats: JPG, PNG, GIF, WebP
+              </p>
+              
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageSelect}
+                className="hidden"
+              />
             </div>
 
             {/* Action Buttons */}
             <div className="flex space-x-4">
               <button
                 type="submit"
-                disabled={isSaving}
+                disabled={isSaving || isUploading}
                 className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isSaving ? 'Saving...' : 'Save Changes'}
+                {isUploading ? 'Uploading Image...' : isSaving ? 'Saving...' : 'Save Changes'}
               </button>
               <button
                 type="button"
                 onClick={handleCancel}
-                className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer"
+                disabled={isSaving || isUploading}
+                className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
