@@ -3,6 +3,7 @@ import express from 'express';
 import multer from 'multer';
 import cloudinary from '../config/cloudinary';
 import { authenticateToken } from '../middleware/auth';
+import { uploadLimiter } from '../middleware/rateLimit';
 
 const router = express.Router();
 
@@ -13,10 +14,16 @@ const upload = multer({
 });
 
 // Upload image endpoint
-router.post('/image', authenticateToken, upload.single('image'), async (req, res) => {
+router.post('/image', authenticateToken, uploadLimiter, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(req.file.mimetype)) {
+        return res.status(400).json({ error: 'Invalid file type. Only JPEG, PNG, GIF, and WebP allowed.' });
     }
 
     // Upload to Cloudinary
@@ -24,7 +31,12 @@ router.post('/image', authenticateToken, upload.single('image'), async (req, res
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'wlu-connect',
-          resource_type: 'image'
+          resource_type: 'image',
+          transformation: [
+            { width: 2000, height: 2000, crop: 'limit' }, // Max dimensions
+            { quality: 'auto' }, // Auto quality
+            { fetch_format: 'auto' } // Auto format (WebP when supported)
+          ]
         },
         (error, result) => {
           if (error) reject(error);
