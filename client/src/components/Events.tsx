@@ -19,7 +19,7 @@ const Events = () => {
       setIsLoading(true);
       try {
         // Fetch all events from events table
-        const response = await fetch('http://localhost:8080/events/all?limit=100');
+        const response = await fetch('process.env.VITE_API_URL/events/all?limit=100');
 
         if (response.ok) {
           const events = await response.json();
