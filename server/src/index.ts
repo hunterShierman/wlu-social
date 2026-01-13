@@ -18,8 +18,16 @@ const app = express();
 app.use(express.json());
 
 // allow the frontend to make requests to the backend
+const allowedOrigins = [
+  'https://wlu-social.vercel.app',
+  'https://wlu-social-git-main-hunters-projects-213982fd.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://wlu-social-git-main-hunters-projects-213982fd.vercel.app',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
+    else callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 
