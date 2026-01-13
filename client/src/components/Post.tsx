@@ -62,7 +62,7 @@ const Post = ({ post, onPostDeleted  }: PostProps) => {
           return;
         }
 
-        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/me`, {
+        const response = await fetch(`http://localhost:8080/likes/posts/${post.id}/me`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -85,7 +85,7 @@ const Post = ({ post, onPostDeleted  }: PostProps) => {
     const getLikeCount = async () => {
       try {
         // const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/count`);
+        const response = await fetch(`http://localhost:8080/likes/posts/${post.id}/count`);
         
         if (response.ok) {
           const data = await response.json();
@@ -104,7 +104,7 @@ useEffect(() => {
   const getCommentCount = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`http://localhost:8000/posts/${post.id}/comments/count`, {
+      const response = await fetch(`http://localhost:8080/posts/${post.id}/comments/count`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -127,7 +127,7 @@ useEffect(() => {
   const fetchComments = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`http://localhost:8000/posts/${post.id}/comments`, {
+      const response = await fetch(`http://localhost:8080/posts/${post.id}/comments`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -155,7 +155,7 @@ useEffect(() => {
     }
 
     try {
-      const userResponse = await fetch('http://localhost:8000/users/me/profile', {
+      const userResponse = await fetch('http://localhost:8080/users/me/profile', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -187,7 +187,7 @@ useEffect(() => {
     try {
       if (isLiked) {
         // Unlike the post
-        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/like`, {
+        const response = await fetch(`http://localhost:8080/likes/posts/${post.id}/like`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -202,7 +202,7 @@ useEffect(() => {
         }
       } else {
         // Like the post
-        const response = await fetch(`http://localhost:8000/likes/posts/${post.id}/like`, {
+        const response = await fetch(`http://localhost:8080/likes/posts/${post.id}/like`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -241,7 +241,7 @@ useEffect(() => {
   const refreshComments = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const commentsResponse = await fetch(`http://localhost:8000/posts/${post.id}/comments`, {
+      const commentsResponse = await fetch(`http://localhost:8080/posts/${post.id}/comments`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -266,7 +266,7 @@ useEffect(() => {
     
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`http://localhost:8000/posts/${post.id}/comments`, {
+      const response = await fetch(`http://localhost:8080/posts/${post.id}/comments`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -289,7 +289,7 @@ useEffect(() => {
   const handleDeleteComment = async (commentId: number) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`http://localhost:8000/comments/${commentId}`, {
+      const response = await fetch(`http://localhost:8080/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -313,7 +313,7 @@ useEffect(() => {
     const token = localStorage.getItem('accessToken');
 
     try {
-      const response = await fetch(`http://localhost:8000/posts/${post.id}`, {
+      const response = await fetch(`http://localhost:8080/posts/${post.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

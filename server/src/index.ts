@@ -10,6 +10,8 @@ import clubsRouter from './routes/clubs';
 import studyGroupsRouter from './routes/studyGroups';
 import eventRoutes from './routes/events';
 import uploadRoutes from './routes/upload';
+import authRouter, { cleanupExpiredTokens } from './routes/auth';
+
 
 
 const app = express();
@@ -24,6 +26,7 @@ app.use(cors({
 }));
 
 // Mount routes
+app.use('/auth', authRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/', commentsRouter);
@@ -33,10 +36,23 @@ app.use('/study-groups', studyGroupsRouter);
 app.use('/events', eventRoutes);
 app.use('/upload', uploadRoutes);
 
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 
 // Connect to database and start server
 const startServer = async () => {
   await connectDB();
+
+  // Clean up expired tokens on startup
+  await cleanupExpiredTokens();
+
+  // Set up periodic cleanup: every hour
+  setInterval(async () => {
+    await cleanupExpiredTokens();
+  }, 60 * 60 * 1000); // 1 hour
   
   app.listen(config.PORT, () => {
     console.log(`🚀 Server running on http://localhost:${config.PORT}`);

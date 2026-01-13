@@ -32,7 +32,7 @@ const Profile = () => {
       try {
         // Fetch current user (only if signed in)
         if (token) {
-          const currentUserResponse = await fetch('http://localhost:8000/users/me/profile', {
+          const currentUserResponse = await fetch('http://localhost:8080/users/me/profile', {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
@@ -45,7 +45,7 @@ const Profile = () => {
         }
   
         // Single API call for all profile data
-        const response = await fetch(`http://localhost:8000/users/${username}/complete?limit=2&offset=0`, {
+        const response = await fetch(`http://localhost:8080/users/${username}/complete?limit=2&offset=0`, {
           headers: token ? {
             'Authorization': `Bearer ${token}`,
           } : {},
@@ -67,7 +67,7 @@ const Profile = () => {
         // Check follow status (only if signed in and not own profile)
         if (token && currentUsername && currentUsername !== username) {
           const followStatusResponse = await fetch(
-            `http://localhost:8000/users/${username}/follow/status`,
+            `http://localhost:8080/users/${username}/follow/status`,
             {
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -103,7 +103,7 @@ const Profile = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/users/${username}/posts/paginated?limit=5&offset=${posts.length}`,
+        `http://localhost:8080/users/${username}/posts/paginated?limit=5&offset=${posts.length}`,
         {
           headers: token ? {
             'Authorization': `Bearer ${token}`,
@@ -138,7 +138,7 @@ const Profile = () => {
     try {
       if (isFollowing) {
         // Unfollow
-        const response = await fetch(`http://localhost:8000/users/${username}/follow`, {
+        const response = await fetch(`http://localhost:8080/users/${username}/follow`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -153,7 +153,7 @@ const Profile = () => {
         }
       } else {
         // Follow
-        const response = await fetch(`http://localhost:8000/users/${username}/follow`, {
+        const response = await fetch(`http://localhost:8080/users/${username}/follow`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

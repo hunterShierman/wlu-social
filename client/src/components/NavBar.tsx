@@ -16,7 +16,7 @@ const NavBar = () => {
 
       if (token) {
         try {
-          const response = await fetch('http://localhost:8000/users/me/profile', {
+          const response = await fetch('http://localhost:8080/users/me/profile', {
             headers: { 'Authorization': `Bearer ${token}` },
           });
           if (response.ok) {

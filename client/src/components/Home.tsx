@@ -19,7 +19,7 @@ const Home = () => {
       
       try {
         // Fetch posts
-        const postsResponse = await fetch('http://localhost:8000/posts/all?limit=30');
+        const postsResponse = await fetch('http://localhost:8080/posts/all?limit=30');
 
         // display all the posts, overwrite if there are new posts
         if (postsResponse.ok) {
@@ -47,7 +47,7 @@ const Home = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:8000/users/me/profile', {
+        const response = await fetch('http://localhost:8080/users/me/profile', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,

@@ -122,7 +122,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
         const formData = new FormData();
         formData.append('image', selectedImage);
 
-        const uploadResponse = await fetch('http://localhost:8000/upload/image', {
+        const uploadResponse = await fetch('http://localhost:8080/upload/image', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -139,7 +139,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
       }
     
       // Send POST request to backend
-      const response = await fetch('http://localhost:8000/posts', {
+      const response = await fetch('http://localhost:8080/posts', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
