@@ -32,7 +32,7 @@ const Profile = () => {
       try {
         // Fetch current user (only if signed in)
         if (token) {
-          const currentUserResponse = await fetch('${import.meta.env.VITE_API_URL}/users/me/profile', {
+          const currentUserResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },

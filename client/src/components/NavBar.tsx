@@ -16,7 +16,7 @@ const NavBar = () => {
 
       if (token) {
         try {
-          const response = await fetch('${import.meta.env.VITE_API_URL}/users/me/profile', {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });
           if (response.ok) {

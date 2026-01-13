@@ -155,7 +155,7 @@ useEffect(() => {
     }
 
     try {
-      const userResponse = await fetch('${import.meta.env.VITE_API_URL}/users/me/profile', {
+      const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
