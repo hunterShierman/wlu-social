@@ -1,8 +1,8 @@
 // middleware/auth.ts
 import jwt from 'jsonwebtoken';
-import { config } from '../config/env';
+import { config } from '../config/env.js';
 import type { Request, Response, NextFunction } from 'express';
-import type { UserPayload } from '../types/express';
+import type { UserPayload } from '../types/express.js';
 
 export function authenticateToken(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers['authorization'];

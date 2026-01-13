@@ -2,11 +2,11 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
-import { getDB } from '../config/database';
+import { getDB } from '../config/database.js';
 import rateLimit from 'express-rate-limit';
-import { config } from '../config/env';
-import type { user } from '../types/express';
-import type { UserPayload } from '../types/express';
+import { config } from '../config/env.js';
+import type { user } from '../types/express.js';
+import type { UserPayload } from '../types/express.js';
 
 const router = express.Router();
 

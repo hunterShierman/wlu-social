@@ -1,9 +1,9 @@
 // server/routes/upload.ts
 import express from 'express';
 import multer from 'multer';
-import cloudinary from '../config/cloudinary';
-import { authenticateToken } from '../middleware/auth';
-import { uploadLimiter } from '../middleware/rateLimit';
+import cloudinary from '../config/cloudinary.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { uploadLimiter } from '../middleware/rateLimit.js';
 
 const router = express.Router();
 

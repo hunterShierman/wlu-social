@@ -1,18 +1,16 @@
 import express from 'express';
-import { connectDB, getDB } from './config/database';
-import { config } from './config/env';
+import { connectDB, getDB } from './config/database.js';
+import { config } from './config/env.js';
 import cors from 'cors';
-import postsRouter from './routes/posts';
-import usersRouter from './routes/users';
-import commentsRouter from './routes/comments';
-import likesRouter from './routes/likes';
-import clubsRouter from './routes/clubs';
-import studyGroupsRouter from './routes/studyGroups';
-import eventRoutes from './routes/events';
-import uploadRoutes from './routes/upload';
-import authRouter, { cleanupExpiredTokens } from './routes/auth';
-
-
+import postsRouter from './routes/posts.js';
+import usersRouter from './routes/users.js';
+import commentsRouter from './routes/comments.js';
+import likesRouter from './routes/likes.js';
+import clubsRouter from './routes/clubs.js';
+import studyGroupsRouter from './routes/studyGroups.js';
+import eventRoutes from './routes/events.js';
+import uploadRoutes from './routes/upload.js';
+import authRouter, { cleanupExpiredTokens } from './routes/auth.js';
 
 const app = express();
 
