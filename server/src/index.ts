@@ -19,7 +19,7 @@ app.use(express.json());
 
 // allow the frontend to make requests to the backend
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://wlu-social-git-main-hunters-projects-213982fd.vercel.app',
   credentials: true
 }));
 
