@@ -37,7 +37,7 @@ const StudyGroups = () => {
 
       try {
         // Fetch all study groups
-        const groupsResponse = await fetch('process.env.VITE_API_URL/study-groups');
+        const groupsResponse = await fetch('${import.meta.env.VITE_API_URL}/study-groups');
         if (groupsResponse.ok) {
         const groups = await groupsResponse.json();
         setAllGroups(groups);
@@ -45,7 +45,7 @@ const StudyGroups = () => {
         }
 
         // Fetch my groups
-        const myGroupsResponse = await fetch('process.env.VITE_API_URL/study-groups/me/memberships', {
+        const myGroupsResponse = await fetch('${import.meta.env.VITE_API_URL}/study-groups/me/memberships', {
         headers: { 'Authorization': `Bearer ${token}` },
         });
         if (myGroupsResponse.ok) {
@@ -76,14 +76,14 @@ const StudyGroups = () => {
   const refreshGroups = async () => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      const groupsResponse = await fetch('process.env.VITE_API_URL/study-groups', {
+      const groupsResponse = await fetch('${import.meta.env.VITE_API_URL}/study-groups', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (groupsResponse.ok) {
         setAllGroups(await groupsResponse.json());
       }
 
-      const myGroupsResponse = await fetch('process.env.VITE_API_URL/study-groups/me/memberships', {
+      const myGroupsResponse = await fetch('${import.meta.env.VITE_API_URL}/study-groups/me/memberships', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (myGroupsResponse.ok) {
@@ -103,7 +103,7 @@ const StudyGroups = () => {
     setLoadingGroupId(groupId);
 
     try {
-      const response = await fetch(`process.env.VITE_API_URL/study-groups/${groupId}/join`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/study-groups/${groupId}/join`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -126,7 +126,7 @@ const StudyGroups = () => {
     const token = localStorage.getItem('accessToken');
 
     try {
-      const response = await fetch(`process.env.VITE_API_URL/study-groups/${groupId}/leave`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/study-groups/${groupId}/leave`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -407,7 +407,7 @@ const CreateGroupModal = ({ onClose, onSuccess }: CreateGroupModalProps) => {
     }
 
     try {
-      const response = await fetch('process.env.VITE_API_URL/study-groups', {
+      const response = await fetch('${import.meta.env.VITE_API_URL}/study-groups', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -122,7 +122,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
         const formData = new FormData();
         formData.append('image', selectedImage);
 
-        const uploadResponse = await fetch('process.env.VITE_API_URL/upload/image', {
+        const uploadResponse = await fetch('${import.meta.env.VITE_API_URL}/upload/image', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -139,7 +139,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
       }
     
       // Send POST request to backend
-      const response = await fetch('process.env.VITE_API_URL/posts', {
+      const response = await fetch('${import.meta.env.VITE_API_URL}/posts', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,

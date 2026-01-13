@@ -3,8 +3,9 @@ import os
 # Change this to your client folder path
 root_dir = "./client"  
 
-old_url = "http://localhost:8080"
-new_url = "process.env.VITE_API_URL"
+old_url = "process.env.VITE_API_URL"
+# Use backticks and template string syntax for Vite
+new_url = r"`\${import.meta.env.VITE_API_URL}`"
 
 # Walk through files
 for subdir, dirs, files in os.walk(root_dir):
@@ -17,9 +18,10 @@ for subdir, dirs, files in os.walk(root_dir):
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
             if old_url in content:
+                # Replace old URL with template string version
                 content = content.replace(old_url, new_url)
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
                 print(f"Updated: {file_path}")
 
-print("✅ Done replacing localhost URLs with VITE_API_URL")
+print("✅ Done replacing localhost URLs with VITE_API_URL template string")

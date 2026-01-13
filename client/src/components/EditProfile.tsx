@@ -48,7 +48,7 @@ const EditProfile = () => {
       }
 
       try {
-        const response = await fetch('process.env.VITE_API_URL/users/me/profile', {
+        const response = await fetch('${import.meta.env.VITE_API_URL}/users/me/profile', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -183,7 +183,7 @@ const EditProfile = () => {
         const formData = new FormData();
         formData.append('image', selectedImage);
 
-        const uploadResponse = await fetch('process.env.VITE_API_URL/upload/image', {
+        const uploadResponse = await fetch('${import.meta.env.VITE_API_URL}/upload/image', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -201,7 +201,7 @@ const EditProfile = () => {
       }
 
       // Step 2: Update profile with Cloudinary URL
-      const response = await fetch(`process.env.VITE_API_URL/users/${username}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${username}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

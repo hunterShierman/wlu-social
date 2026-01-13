@@ -20,7 +20,7 @@ const EventInfo = () => {
 
       try {
         // Fetch event details
-        const response = await fetch(`process.env.VITE_API_URL/events/${eventId}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/events/${eventId}`);
 
         if (response.ok) {
           const eventData = await response.json();
@@ -32,7 +32,7 @@ const EventInfo = () => {
         // Check registration status if signed in
         if (token) {
           const statusResponse = await fetch(
-            `process.env.VITE_API_URL/events/${eventId}/register/status`,
+            `${import.meta.env.VITE_API_URL}/events/${eventId}/register/status`,
             {
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -75,7 +75,7 @@ const EventInfo = () => {
       if (isRegistered) {
         // Unregister
         const response = await fetch(
-          `process.env.VITE_API_URL/events/${eventId}/register`,
+          `${import.meta.env.VITE_API_URL}/events/${eventId}/register`,
           {
             method: 'DELETE',
             headers: {
@@ -93,7 +93,7 @@ const EventInfo = () => {
       } else {
         // Register
         const response = await fetch(
-          `process.env.VITE_API_URL/events/${eventId}/register`,
+          `${import.meta.env.VITE_API_URL}/events/${eventId}/register`,
           {
             method: 'POST',
             headers: {
