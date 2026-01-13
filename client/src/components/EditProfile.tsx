@@ -107,7 +107,7 @@ const EditProfile = () => {
     }
   };
 
-  const onCropComplete = useCallback((croppedArea: CropArea, croppedAreaPixels: CropArea) => {
+  const onCropComplete = useCallback((croppedAreaPixels: CropArea) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 

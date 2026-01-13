@@ -191,7 +191,7 @@ const Profile = () => {
               <div className="p-6">
                 <div className="flex gap-6">
                   {/* Left Side - Profile Picture Skeleton */}
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="w-32 h-32 rounded-full bg-gray-300"></div>
                   </div>
   
@@ -270,7 +270,7 @@ const Profile = () => {
             <div className="p-6">
               <div className="flex gap-6">
                 {/* Left Side - Profile Picture */}
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <div className="w-32 h-32 rounded-full border-4 border-purple-200 bg-gray-300 flex items-center justify-center overflow-hidden">
                     {user.profile_picture_url ? (
                       <img
