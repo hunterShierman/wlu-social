@@ -1,5 +1,5 @@
 // pages/StudyGroups.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface StudyGroup {
@@ -26,7 +26,53 @@ const StudyGroups = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [loadingGroupId, setLoadingGroupId] = useState<number | null>(null); // Changed name to be more generic
+  const [loadingGroupId, setLoadingGroupId] = useState<number | null>(null);
+  const [currentUsername, setCurrentUsername] = useState('');
+  const [showDropdown, setShowDropdown] = useState<number | null>(null); // Track which dropdown is open
+  const [isDeleting, setIsDeleting] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+    // Get current user
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        return;
+      }
+
+      try {
+        const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          setCurrentUsername(userData.username);
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
 
   // Fetch data on mount
@@ -147,6 +193,37 @@ const StudyGroups = () => {
     }
   };
 
+  const handleDeleteGroup = async (groupId: number) => {
+    if (!window.confirm('Are you sure you want to delete this study group? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    const token = localStorage.getItem('accessToken');
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/study-groups/${groupId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        await refreshGroups();
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to delete group');
+      }
+    } catch (error) {
+      console.error('Error deleting group:', error);
+      alert('Failed to delete group');
+    } finally {
+      setIsDeleting(false);
+      setShowDropdown(null);
+    }
+  };
+
   const isInGroup = (groupId: number) => {
     return myGroups.some(g => g.group_id === groupId);
   };
@@ -154,6 +231,10 @@ const StudyGroups = () => {
   const isGroupFull = (group: StudyGroup) => {
     if (!group.max_members) return false;
     return parseInt(group.current_members) >= group.max_members;
+  };
+
+  const isOwnGroup = (group: StudyGroup) => {
+    return currentUsername === group.created_by_username;
   };
 
   const formatDateTime = (dateTimeString: string | null) => {
@@ -166,9 +247,7 @@ const StudyGroups = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-50">
-      {/* Navigation Bar */}
-
+      <div className="min-h-screen bg-purple-50">
       {/* Main Content */}
       <div className="pt-24 pb-12">
         <div className="max-w-6xl mx-auto px-4">
@@ -241,10 +320,52 @@ const StudyGroups = () => {
                   {displayedGroups.map((group) => {
                     const isMember = isInGroup(group.group_id);
                     const isFull = isGroupFull(group);
+                    const isOwner = isOwnGroup(group);
                     const dateTime = formatDateTime(group.date_time);
 
                     return (
-                      <div key={group.group_id} className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-lg transition">
+                      <div key={group.group_id} className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-lg transition relative">
+                        {/* Three dots menu - Top right corner */}
+                        <div className="absolute top-3 right-3" ref={showDropdown === group.group_id ? dropdownRef : null}>
+                          <button 
+                            onClick={() => setShowDropdown(showDropdown === group.group_id ? null : group.group_id)}
+                            className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg"
+                          >
+                            ⋮
+                          </button>
+                          
+                          {/* Dropdown overlay */}
+                          {showDropdown === group.group_id && (
+                            <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-2 min-w-[150px] z-10">
+                              {isOwner ? (
+                                <button
+                                  onClick={() => handleDeleteGroup(group.group_id)}
+                                  disabled={isDeleting}
+                                  className="w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold text-left"
+                                >
+                                  {isDeleting ? 'Deleting...' : 'Delete Group'}
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    alert("Group Reported");
+                                    setShowDropdown(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold text-left"
+                                >
+                                  Report Group
+                                </button>
+                              )}
+                              <button
+                                onClick={() => setShowDropdown(null)}
+                                className="w-full px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 rounded-lg transition mt-1"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
                         {/* Course Code Badge */}
                         <div className="mb-3">
                           <span className="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">
@@ -253,7 +374,7 @@ const StudyGroups = () => {
                         </div>
 
                         {/* Group Name */}
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">{group.name}</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 pr-8">{group.name}</h3>
 
                         {/* Description */}
                         {group.description && (
@@ -298,7 +419,7 @@ const StudyGroups = () => {
                         {isMember ? (
                           <button
                             onClick={() => handleLeaveGroup(group.group_id)}
-                            className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition cursor-pointer border-2flex items-center justify-center"
+                            className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition cursor-pointer flex items-center justify-center"
                           >
                             {loadingGroupId === group.group_id ? (
                               <>
@@ -320,20 +441,20 @@ const StudyGroups = () => {
                             Full
                           </button>
                         ) : (
-                            <button
-                              onClick={() => handleJoinGroup(group.group_id)}
-                              disabled={loadingGroupId === group.group_id}  // Disables button while loading
-                              className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
-                            >
-                              {loadingGroupId === group.group_id ? (  // Shows loading when this group is being joined
-                                <>
-                                  <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                  Joining...
-                                </>
-                              ) : (
-                                'Join Group'
-                              )}
-                            </button>
+                          <button
+                            onClick={() => handleJoinGroup(group.group_id)}
+                            disabled={loadingGroupId === group.group_id}
+                            className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
+                          >
+                            {loadingGroupId === group.group_id ? (
+                              <>
+                                <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                Joining...
+                              </>
+                            ) : (
+                              'Join Group'
+                            )}
+                          </button>
                         )}
                       </div>
                     );
