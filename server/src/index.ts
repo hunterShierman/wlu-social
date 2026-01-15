@@ -20,7 +20,8 @@ app.use(express.json());
 // allow the frontend to make requests to the backend
 const allowedOrigins = [
   'https://wlu-social.vercel.app',
-  'https://wlu-social-git-main-hunters-projects-213982fd.vercel.app'
+  'https://wlu-social-git-main-hunters-projects-213982fd.vercel.app',
+  'http://localhost:5173'
 ];
 
 app.use(cors({
