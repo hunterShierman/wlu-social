@@ -11,6 +11,7 @@ import studyGroupsRouter from './routes/studyGroups.js';
 import eventRoutes from './routes/events.js';
 import uploadRoutes from './routes/upload.js';
 import authRouter, { cleanupExpiredTokens } from './routes/auth.js';
+import searchRoutes from './routes/search.js'
 
 const app = express();
 
@@ -42,6 +43,8 @@ app.use('/clubs', clubsRouter);
 app.use('/study-groups', studyGroupsRouter);
 app.use('/events', eventRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/search', searchRoutes);
+
 
 // Health check
 app.get('/health', (req, res) => {
