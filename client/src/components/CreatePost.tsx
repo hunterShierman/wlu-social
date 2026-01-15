@@ -1,5 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import type { Post as PostType } from '../types/post';
+import Cropper from 'react-easy-crop';
+import { getCroppedImg } from '../utils/cropImage';
 
 interface CreatePostProps {
   onPostCreated: (newPost: PostType) => void;
@@ -7,6 +9,13 @@ interface CreatePostProps {
   userInitial: string;
   profilePictureUrl?: string | null;
   program: string;
+}
+
+interface CropArea {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, program}: CreatePostProps) => {
@@ -19,6 +28,13 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
   const [showpostTypeDropdown, setShowpostTypeDropdown] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Crop state
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -57,13 +73,58 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
         return;
       }
       
-      setSelectedImage(file);
+      // Create preview for cropping
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageToCrop(reader.result as string);
+        setShowCropModal(true);
+      };
+      reader.readAsDataURL(file);
+      setError(null);
+    }
+  };
+
+  const onCropComplete = useCallback((_croppedArea: CropArea, croppedAreaPixels: CropArea) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCropConfirm = async () => {
+    if (!imageToCrop || !croppedAreaPixels) return;
+
+    try {
+      // Get cropped image as blob
+      const croppedBlob = await getCroppedImg(imageToCrop, croppedAreaPixels);
+      
+      // Convert blob to File
+      const croppedFile = new File([croppedBlob], 'post-image.jpg', {
+        type: 'image/jpeg',
+      });
+
+      setSelectedImage(croppedFile);
+
+      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
-      setError(null);
+      reader.readAsDataURL(croppedFile);
+
+      // Close modal
+      setShowCropModal(false);
+      setImageToCrop(null);
+    } catch (error) {
+      console.error('Error cropping image:', error);
+      setError('Failed to crop image');
+    }
+  };
+
+  const handleCropCancel = () => {
+    setShowCropModal(false);
+    setImageToCrop(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -196,6 +257,62 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
 
   return (
     <div className="bg-white rounded-lg shadow mb-4 p-4">
+      {/* Crop Modal */}
+      {showCropModal && imageToCrop && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Crop Your Photo</h2>
+            
+            {/* Cropper Container */}
+            <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden mb-4">
+              <Cropper
+                image={imageToCrop}
+                crop={crop}
+                zoom={zoom}
+                aspect={16 / 9}
+                cropShape="rect"
+                showGrid={true}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+
+            {/* Zoom Slider */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Zoom
+              </label>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.1}
+                value={zoom}
+                onChange={(e) => setZoom(Number(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex space-x-3">
+              <button
+                onClick={handleCropConfirm}
+                className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+              >
+                Crop & Continue
+              </button>
+              <button
+                onClick={handleCropCancel}
+                className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-start space-x-3">
         {profilePictureUrl ? (
           <img 
