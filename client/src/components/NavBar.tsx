@@ -12,7 +12,6 @@ const NavBar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('accessToken');
-      setUserSignedIn(!!token);
 
       if (token) {
         try {
@@ -21,6 +20,12 @@ const NavBar = () => {
           });
           if (response.ok) {
             setUserData(await response.json());
+            setUserSignedIn(true);
+          } else {
+            // if token is invalid, clean it up
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            setUserSignedIn(false)
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -35,6 +40,7 @@ const NavBar = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setUserSignedIn(false);
+    setUserData(null);
     navigate('/login');
   };
 
@@ -79,7 +85,7 @@ const NavBar = () => {
               Study Groups
             </button>
 
-            {userSignedIn ? (
+            {userSignedIn && userData? (
               <>
                 <button
                   onClick={handleLogout}
