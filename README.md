@@ -47,7 +47,6 @@ WLU Connect is a university-focused social media platform that enables students 
 - **Event registration** with capacity management
 - **Event details** including date, time, location, and club organizer
 - **Registration tracking** showing current capacity and member list
-- **Pagination** for browsing large event catalogs
 
 ### 📚 Study Groups
 - **Course-based organization** using course codes
@@ -57,20 +56,6 @@ WLU Connect is a university-focused social media platform that enables students 
 - **Join/leave functionality** with instant updates
 - **Search and filter** by course code, group name, or creator
 - **Group tabs** to view all available groups or just your memberships
-
-### 🔍 Search & Discovery
-- **Global search** across posts, events, and study groups
-- **Faculty filtering** for events by department
-- **Course code filtering** for study groups
-- **Real-time search** with instant results
-
-### 🎨 User Experience
-- **Responsive design** optimized for desktop and mobile
-- **Loading states** with skeleton screens and spinners
-- **Error handling** with user-friendly messages
-- **Toast notifications** for action feedback
-- **Infinite scroll** with "Load More" pagination
-- **Image optimization** via Cloudinary CDN
 
 ## 🛠 Tech Stack
 
@@ -299,3 +284,4 @@ It is not affiliated with, endorsed by, or associated with Wilfrid Laurier
 University. Any reference to "WLU" or "Wilfrid Laurier University" is for 
 descriptive purposes only to indicate the target audience and inspiration 
 for the platform.
+
