@@ -4,9 +4,10 @@ import type { Event } from '../types/event';
 
 interface EventCardProps {
   event: Event;
+  isRegistered?: boolean;  // Add this
 }
 
-const EventCard = ({ event }: EventCardProps) => {
+const EventCard = ({ event, isRegistered = false }: EventCardProps) => {  // Add isRegistered
   const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
@@ -38,9 +39,17 @@ const EventCard = ({ event }: EventCardProps) => {
 
   return (
     <div 
-      onClick={() => navigate(`/events/${event.id}`)} // navigate to event page with info
-      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+      onClick={() => navigate(`/events/${event.id}`)}
+      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer relative"
     >
+      {/* Registration Badge - Top Right */}
+      {isRegistered && (
+        <div className="absolute top-2 right-2 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1 z-10 shadow-lg">
+          <span>✓</span>
+          <span>Registered</span>
+        </div>
+      )}
+
       {/* Event Image */}
       {event.image_url ? (
         <div className="w-full h-48 bg-gray-200 overflow-hidden">
@@ -81,9 +90,7 @@ const EventCard = ({ event }: EventCardProps) => {
         </h3>
 
         {/* Host Info */}
-        <div 
-          className="flex items-center space-x-2 mb-4  transition"
-        >
+        <div className="flex items-center space-x-2 mb-4 transition">
           <div className="w-6 h-6 rounded-full bg-gray-300 overflow-hidden">
             {event.profile_picture_url ? (
               <img 
@@ -102,12 +109,12 @@ const EventCard = ({ event }: EventCardProps) => {
           </div>
         </div>
 
-        {/* Action Button */}
+        {/* Action Button - Changes based on registration status */}
         <button 
-          onClick={() => navigate(`/events/${event.id}`)} // navigate to event page with info
-          className="w-full cursor-pointer bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
+          onClick={() => navigate(`/events/${event.id}`)}
+          className={`w-full cursor-pointer py-2 rounded-lg font-semibold transition bg-purple-600 text-white hover:bg-purple-700`}
         >
-          View Details
+          {'View Details'}
         </button>
       </div>
     </div>

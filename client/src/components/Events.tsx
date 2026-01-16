@@ -11,20 +11,49 @@ const Events = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [currentLimit, setCurrentLimit] = useState(8);
+  const [registeredEventIds, setRegisteredEventIds] = useState<Set<number>>(new Set());
 
   const faculties = ['All', 'Science', 'Music', 'Business', 'Arts', 'General'];
 
   useEffect(() => {
     const fetchEvents = async () => {
       setIsLoading(true);
+      const token = localStorage.getItem('accessToken');
+
       try {
         // Fetch all events from events table
         const response = await fetch(`${import.meta.env.VITE_API_URL}/events/all?limit=100`);
 
         if (response.ok) {
-          const events = await response.json();
-          setAllEvents(events);
-          setDisplayedEvents(events.slice(0, 8)); // Show first 10
+          const events: Event[] = await response.json();
+          
+          // Filter out any null/undefined events
+          const validEvents = events.filter(event => event && event.id);
+          
+          setAllEvents(validEvents);
+          setDisplayedEvents(validEvents.slice(0, 8));
+
+          // Fetch registration status for all events if user is signed in
+          if (token && validEvents.length > 0) {
+            const registrationPromises = validEvents.map((event) =>
+              fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/register/status`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              })
+                .then(res => res.ok ? res.json() : { isRegistered: false })
+                .then(data => ({ eventId: event.id, isRegistered: data?.isRegistered || false }))
+                .catch(() => ({ eventId: event.id, isRegistered: false }))
+            );
+
+            const registrationStatuses = await Promise.all(registrationPromises);
+            const registeredIds = new Set(
+              registrationStatuses
+                .filter(status => status.isRegistered)
+                .map(status => status.eventId)
+            );
+            setRegisteredEventIds(registeredIds);
+          }
         }
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -40,7 +69,7 @@ const Events = () => {
   useEffect(() => {
     const filtered = allEvents.filter(event => {
       const matchesSearch = event.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           event.username.toLowerCase().includes(searchQuery.toLowerCase());
+                           event.club_name?.toLowerCase().includes(searchQuery.toLowerCase());
       
       const matchesFaculty = selectedFaculty === 'All' || event.department === selectedFaculty;
       
@@ -53,17 +82,15 @@ const Events = () => {
   const loadMoreEvents = () => {
     setIsLoadingMore(true);
     
-    // Simulate a slight delay for better UX
     setTimeout(() => {
       setCurrentLimit(prev => prev + 8);
       setIsLoadingMore(false);
     }, 300);
   };
 
-  // Filter events based on current search and faculty
   const filteredEvents = allEvents.filter(event => {
     const matchesSearch = event.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         event.username.toLowerCase().includes(searchQuery.toLowerCase());
+                         event.club_name?.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesFaculty = selectedFaculty === 'All' || event.department === selectedFaculty;
     
@@ -75,9 +102,6 @@ const Events = () => {
 
   return (
     <div className="min-h-screen bg-purple-50">
-      {/* Navigation Bar */}
-
-      {/* Main Content */}
       <div className="pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
@@ -96,7 +120,7 @@ const Events = () => {
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
-                  setCurrentLimit(8); // Reset to 10 when searching
+                  setCurrentLimit(8);
                 }}
                 className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white shadow-sm"
               />
@@ -122,7 +146,7 @@ const Events = () => {
                   key={faculty}
                   onClick={() => {
                     setSelectedFaculty(faculty);
-                    setCurrentLimit(8); // Reset to 10 when filtering
+                    setCurrentLimit(8);
                   }}
                   className={`px-4 py-2 rounded-full font-medium transition ${
                     selectedFaculty === faculty
@@ -156,7 +180,11 @@ const Events = () => {
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {displayedEvents.map((event) => (
-                      <EventCard key={event.id} event={event} />
+                      <EventCard 
+                        key={event.id} 
+                        event={event} 
+                        isRegistered={registeredEventIds.has(event.id)}
+                      />
                     ))}
                   </div>
 
