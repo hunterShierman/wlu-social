@@ -5,6 +5,7 @@ import type { User } from '../types/user';
 import type { ProfileStats } from '../types/profile';
 import type { Post as PostType } from '../types/post';
 import Post from '../components/Post'
+import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
   const { username } = useParams<{ username: string }>();
@@ -17,32 +18,21 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState('');
-  const [currentUsername, setCurrentUsername] = useState('');
-  const [isSignedIn, setIsSignedIn] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
+
+  // fetch global user information
+  const { userData, userSignedIn } = useAuth();
+  const currentUsername = userData?.username || '';
+
 
   // load in all the necessary data to populate the page for specific user
   useEffect(() => {
     const fetchProfileData = async () => {
       setIsLoading(true);
       const token = localStorage.getItem('accessToken');
-      setIsSignedIn(!!token);
   
       try {
-        // Fetch current user (only if signed in)
-        if (token) {
-          const currentUserResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-  
-          if (currentUserResponse.ok) {
-            const currentUserData = await currentUserResponse.json();
-            setCurrentUsername(currentUserData.username);
-          }
-        }
   
         // Single API call for all profile data
         const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${username}/complete?limit=2&offset=0`, {
@@ -124,7 +114,7 @@ const Profile = () => {
   };
 
   const handleFollowClick = async () => {
-    if (!isSignedIn) {
+    if (!userSignedIn) {
       alert('Please sign in to follow users');
       navigate('/login');
       return;
@@ -255,7 +245,7 @@ const Profile = () => {
     setTotalPosts(prev => prev - 1);
   };
 
-  const isOwnProfile = isSignedIn && currentUsername === username;
+  const isOwnProfile = userSignedIn && currentUsername === username;
 
   return (
     <div className="min-h-screen bg-purple-50">
