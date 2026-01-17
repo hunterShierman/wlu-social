@@ -2,6 +2,9 @@
 
 A modern social networking platform designed specifically for Wilfrid Laurier University students to connect, share updates, and collaborate academically.
 
+
+ Check it out here: https://wlu-social.vercel.app
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -284,4 +287,7 @@ It is not affiliated with, endorsed by, or associated with Wilfrid Laurier
 University. Any reference to "WLU" or "Wilfrid Laurier University" is for 
 descriptive purposes only to indicate the target audience and inspiration 
 for the platform.
+
+
+
 
