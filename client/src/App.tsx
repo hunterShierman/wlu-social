@@ -8,6 +8,8 @@ import EventInfo from './components/EventInfo'
 import EditProfile from './components/EditProfile';
 import StudyGroups from './components/GroupStudy'
 import NavBar from './components/NavBar';
+import FollowList from './components/FollowList';
+
 
 
 function AppContent() {
@@ -30,6 +32,7 @@ function AppContent() {
         <Route path="/events" element={<Events />} />
         <Route path="/events/:eventId" element={<EventInfo />} />
         <Route path="/study-groups" element={<StudyGroups />} />
+        <Route path="/profile/:username/connections" element={<FollowList />} />
       </Routes>
     </>
   );

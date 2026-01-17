@@ -332,15 +332,21 @@ const Profile = () => {
 
                   {/* Stats */}
                   <div className="flex items-center space-x-6 mb-3">
-                    <div className="cursor-pointer hover:underline">
+                    <div 
+                      className="cursor-pointer hover:underline"
+                      onClick={() => navigate(`/profile/${username}/connections?type=followers`)}
+                    >
                       <span className="font-bold text-gray-900">{stats.followers}</span>
                       <span className="text-gray-600 ml-1 text-sm">followers</span>
                     </div>
-                    <div className="cursor-pointer hover:underline">
+                    <div 
+                      className="cursor-pointer hover:underline"
+                      onClick={() => navigate(`/profile/${username}/connections?type=following`)}
+                    >
                       <span className="font-bold text-gray-900">{stats.following}</span>
                       <span className="text-gray-600 ml-1 text-sm">following</span>
                     </div>
-                    <div className="cursor-pointer hover:underline">
+                    <div className="">
                       <span className="font-bold text-gray-900">{totalPosts}</span>
                       <span className="text-gray-600 ml-1 text-sm">posts</span>
                     </div>
