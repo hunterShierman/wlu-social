@@ -34,7 +34,7 @@ const signupRateLimiter = rateLimit({
 
 // Helper function
 function generateAccessToken(user: UserPayload) {
-  return jwt.sign(user, config.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+  return jwt.sign(user, config.ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
 }
 
 function validPassword(password: string): string | null {
