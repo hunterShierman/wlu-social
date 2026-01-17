@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Home from './components/Home'
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Profile from './components/Profile';
-import Events from './components/Events';
-import EventInfo from './components/EventInfo'
-import EditProfile from './components/EditProfile';
-import StudyGroups from './components/GroupStudy'
+import Home from './pages/Home'
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import Events from './pages/Events';
+import EventInfo from './pages/EventInfo'
+import EditProfile from './pages/EditProfile';
+import StudyGroups from './pages/GroupStudy'
 import NavBar from './components/NavBar';
-import FollowList from './components/FollowList';
+import FollowList from './pages/FollowList';
 
 
 

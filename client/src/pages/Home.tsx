@@ -1,7 +1,7 @@
 import { useState, useEffect} from 'react';
 import Post from '../components/Post';
 import type { Post as PostType } from '../types/post';
-import CreatePost from './CreatePost';
+import CreatePost from '../components/CreatePost';
 import type { User as User } from '../types/user';
 
 const Home = () => {

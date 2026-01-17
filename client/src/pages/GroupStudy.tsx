@@ -1,8 +1,8 @@
 // pages/StudyGroups.tsx
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateGroupModal from '../components/CreateGroupModal';
-import GroupMembersModal from '../components/GroupMembersModal';
+import CreateGroupModal from '../modals/CreateGroupModal';
+import GroupMembersModal from '../modals/GroupMembersModal';
 
 interface StudyGroup {
   group_id: number;
