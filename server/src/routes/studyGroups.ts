@@ -452,7 +452,7 @@ router.get('/me/memberships', authenticateToken, async (req, res) => {
 });
 
 // Get members of a study group
-router.get('/:groupId/members', authenticateToken, async (req, res) => {
+router.get('/:groupId/members', async (req, res) => {
   try {
     const db = getDB();
     const groupId = req.params.groupId;
