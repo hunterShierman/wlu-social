@@ -12,13 +12,15 @@ const Events = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [currentLimit, setCurrentLimit] = useState(8);
   const [registeredEventIds, setRegisteredEventIds] = useState<Set<number>>(new Set());
+  const [userSignedIn, setUserSignedIn] = useState(false);
 
-  const faculties = ['All', 'Science', 'Music', 'Business', 'Arts', 'General'];
+  const faculties = ['All', 'Registered Events', 'Science', 'Music', 'Business', 'Arts', 'General'];
 
   useEffect(() => {
     const fetchEvents = async () => {
       setIsLoading(true);
       const token = localStorage.getItem('accessToken');
+      setUserSignedIn(!!token);
 
       try {
         // Fetch all events from events table
@@ -71,13 +73,18 @@ const Events = () => {
       const matchesSearch = event.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            event.club_name?.toLowerCase().includes(searchQuery.toLowerCase());
       
+      // Handle "Registered Events" filter
+      if (selectedFaculty === 'Registered Events') {
+        return matchesSearch && registeredEventIds.has(event.id);
+      }
+      
       const matchesFaculty = selectedFaculty === 'All' || event.department === selectedFaculty;
       
       return matchesSearch && matchesFaculty;
     });
 
     setDisplayedEvents(filtered.slice(0, currentLimit));
-  }, [searchQuery, selectedFaculty, allEvents, currentLimit]);
+  }, [searchQuery, selectedFaculty, allEvents, currentLimit, registeredEventIds]);
 
   const loadMoreEvents = () => {
     setIsLoadingMore(true);
@@ -92,6 +99,11 @@ const Events = () => {
     const matchesSearch = event.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          event.club_name?.toLowerCase().includes(searchQuery.toLowerCase());
     
+    // Handle "Registered Events" filter
+    if (selectedFaculty === 'Registered Events') {
+      return matchesSearch && registeredEventIds.has(event.id);
+    }
+    
     const matchesFaculty = selectedFaculty === 'All' || event.department === selectedFaculty;
     
     return matchesSearch && matchesFaculty;
@@ -99,6 +111,16 @@ const Events = () => {
 
   const hasMore = displayedEvents.length < filteredEvents.length;
   const remainingCount = filteredEvents.length - displayedEvents.length;
+
+  const handleFacultyClick = (faculty: string) => {
+    // If user clicks "Registered Events" but isn't signed in, redirect to login
+    if (faculty === 'Registered Events' && !userSignedIn) {
+      alert('Please sign in to view your registered events');
+      return;
+    }
+    setSelectedFaculty(faculty);
+    setCurrentLimit(8);
+  };
 
   return (
     <div className="min-h-screen bg-purple-50">
@@ -144,14 +166,11 @@ const Events = () => {
               {faculties.map((faculty) => (
                 <button
                   key={faculty}
-                  onClick={() => {
-                    setSelectedFaculty(faculty);
-                    setCurrentLimit(8);
-                  }}
+                  onClick={() => handleFacultyClick(faculty)}
                   className={`px-4 py-2 rounded-full font-medium transition ${
                     selectedFaculty === faculty
-                      ? 'bg-purple-500 text-white cursor-pointer'
-                      : 'bg-white text-gray-700 border cursor-pointer border-gray-300 hover:border-purple-600 hover:text-purple-600'
+                        ? 'bg-purple-500 text-white cursor-pointer'
+                        : 'bg-white text-gray-700 border cursor-pointer border-gray-300 hover:border-purple-600 hover:text-purple-600'
                   }`}
                 >
                   {faculty}
@@ -203,10 +222,14 @@ const Events = () => {
                 </>
               ) : (
                 <div className="text-center py-16 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                  <span className="text-6xl mb-4 block">📅</span>
+                  <span className="text-6xl mb-4 block">
+                    {selectedFaculty === 'Registered Events' ? '📋' : '📅'}
+                  </span>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">No events found</h3>
                   <p className="text-gray-600">
-                    {searchQuery || selectedFaculty !== 'All'
+                    {selectedFaculty === 'Registered Events'
+                      ? "You haven't registered for any events yet"
+                      : searchQuery || selectedFaculty !== 'All'
                       ? 'Try adjusting your search or filters'
                       : 'Check back soon for upcoming events!'}
                   </p>
