@@ -214,7 +214,7 @@ router.delete('/:username/follow', authenticateToken, async (req, res) => {
 });
 
 // Get user's followers
-router.get('/:username/followers', authenticateToken, async (req, res) => {
+router.get('/:username/followers', async (req, res) => {
   try {
     const db = getDB();
     const username = req.params.username;
@@ -251,7 +251,7 @@ router.get('/:username/followers', authenticateToken, async (req, res) => {
 });
 
 // Get users that this user is following
-router.get('/:username/following', authenticateToken, async (req, res) => {
+router.get('/:username/following', async (req, res) => {
   try {
     const db = getDB();
     const username = req.params.username;
