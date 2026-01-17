@@ -194,12 +194,12 @@ return (
       {/* Navigation Bar */}
 
       {/* Main Content */}
-      <div className="pt-20 pb-12">
-        <div className="max-w-3xl mx-auto px-4">
+      <div className="pt-20 pb-8">
+        <div className="max-w-2xl mx-auto px-4">
           {/* Back Button */}
           <button
             onClick={() => navigate('/events')}
-            className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 font-semibold mb-4"
+            className="flex items-center space-x-1.5 text-purple-600 hover:text-purple-700 font-semibold mb-3 text-sm hover:cursor-pointer"
           >
             <span>←</span>
             <span>Back to Club Events</span>
@@ -209,7 +209,7 @@ return (
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             {/* Event Image */}
             {event.image_url ? (
-              <div className="w-full h-64 bg-gray-200 overflow-hidden">
+              <div className="w-full h-52 bg-gray-200 overflow-hidden">
                 <img 
                   src={event.image_url} 
                   alt="Event" 
@@ -217,38 +217,38 @@ return (
                 />
               </div>
             ) : (
-              <div className="w-full h-64 bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
-                <span className="text-8xl">{faculty.emoji}</span>
+              <div className="w-full h-52 bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center">
+                <span className="text-7xl">{faculty.emoji}</span>
               </div>
             )}
 
             {/* Event Content */}
-            <div className="p-6">
+            <div className="p-5">
               {/* Department Badge */}
-              <div className="mb-4">
-                <span className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${faculty.color}`}>
+              <div className="mb-3">
+                <span className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium ${faculty.color}`}>
                   <span>{faculty.emoji}</span>
                   <span>{faculty.name}</span>
                 </span>
               </div>
 
               {/* Event Title */}
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              <h1 className="text-xl font-bold text-gray-900 mb-3">
                 {event.content.split('.')[0]}
               </h1>
 
               {/* Event Details Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
                 {/* Date & Time */}
-                <div className="flex items-start space-x-3">
+                <div className="flex items-start space-x-2.5">
                   <div className="flex-shrink-0">
-                    <div className="bg-purple-600 text-white rounded-lg p-2 text-center min-w-[60px]">
-                      <div className="text-xs font-semibold uppercase">{dateInfo.month}</div>
-                      <div className="text-2xl font-bold">{dateInfo.day}</div>
+                    <div className="bg-purple-600 text-white rounded-lg p-2 text-center min-w-[52px]">
+                      <div className="text-[10px] font-semibold uppercase">{dateInfo.month}</div>
+                      <div className="text-xl font-bold">{dateInfo.day}</div>
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 font-semibold uppercase">Date & Time</p>
+                    <p className="text-[11px] text-gray-500 font-semibold uppercase">Date & Time</p>
                     <p className="text-sm font-semibold text-gray-900">
                       {dateInfo.fullDate}
                     </p>
@@ -260,25 +260,23 @@ return (
 
                 {/* Location */}
                 {event.location && (
-                  <div className="flex items-start space-x-3">
+                  <div className="flex items-start space-x-2.5">
                     <span className="text-2xl">📍</span>
                     <div>
-                      <p className="text-xs text-gray-500 font-semibold uppercase">Location</p>
+                      <p className="text-[11px] text-gray-500 font-semibold uppercase">Location</p>
                       <p className="text-sm text-gray-900">{event.location}</p>
                     </div>
                   </div>
                 )}
 
                 {/* Host Info */}
-                <div className="flex items-start space-x-3">
-                  <span className="text-2xl"></span>
+                <div className="flex items-start space-x-2.5">
                   <div>
-                    <p className="text-xs text-gray-500 font-semibold uppercase">Hosted by</p>
+                    <p className="text-[11px] text-gray-500 font-semibold uppercase">Hosted by</p>
                     <div 
-                      onClick={() => navigate(`/profile/${event.club_name}`)}
-                      className="flex items-center space-x-2 mt-1 cursor-pointer hover:opacity-70 transition"
+                      className="flex items-center space-x-2 mt-1 transition"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gray-300 overflow-hidden">
+                      <div className="w-7 h-7 rounded-full bg-gray-300 overflow-hidden">
                         {event.profile_picture_url ? (
                           <img 
                             src={event.profile_picture_url} 
@@ -291,7 +289,7 @@ return (
                           </div>
                         )}
                       </div>
-                      <span className="text-sm text-purple-600 font-semibold hover:underline">
+                      <span className="text-sm text-black font-semibold">
                         {event.club_name}
                       </span>
                     </div>
@@ -300,19 +298,19 @@ return (
               </div>
 
               {/* Description */}
-              <div className="mb-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-2">About this event</h2>
+              <div className="mb-4">
+                <h2 className="text-base font-bold text-gray-900 mb-2">About this event</h2>
                 <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
                   {event.content}
                 </p>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col sm:flex-row gap-2.5">
                 <button 
                   onClick={handleRegistrationToggle}
                   disabled={isRegistrationLoading}
-                  className={`flex-1 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                  className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${
                     isRegistered 
                       ? 'bg-green-600 text-white hover:bg-green-700' 
                       : 'bg-purple-600 text-white hover:bg-purple-700'
