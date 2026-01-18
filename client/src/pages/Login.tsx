@@ -6,54 +6,70 @@ import { useAuth } from '../context/AuthContext';  // ← Add this
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | React.ReactNode>('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   
   // ← Add this
   const { refreshUser } = useAuth();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "username": username,
-          "password": password,
-        }),
-      });
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "username": username,
+        "password": password,
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
+    if (!response.ok) {
+      // Check if email needs verification
+      if (data.needsVerification) {
+        setError(
+          <div>
+            {data.error}
+            <br />
+            <button
+              onClick={() => navigate('/resend-verification')}
+              className="underline font-semibold mt-2 hover:text-red-800"
+            >
+              Resend verification email
+            </button>
+          </div>
+        );
+      } else {
         setError(data.error || 'Login failed');
-        setLoading(false);
-        return;
       }
-
-      // Store tokens in localStorage
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      console.log("user signed in");
-
-      // ← Add this: Refresh user data in AuthContext
-      await refreshUser();
-
-      // Redirect to home page
-      navigate('/');
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('Failed to connect to server');
       setLoading(false);
+      return;
     }
-  };
+
+    // Store tokens in localStorage
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    console.log("user signed in");
+
+    // Refresh user data in AuthContext
+    await refreshUser();
+
+    // Redirect to home page
+    navigate('/');
+  } catch (err) {
+    console.error('Login error:', err);
+    setError('Failed to connect to server');
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-purple-50 flex items-center justify-center px-4">

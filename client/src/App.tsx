@@ -9,6 +9,8 @@ import EditProfile from './pages/EditProfile';
 import StudyGroups from './pages/GroupStudy'
 import NavBar from './components/NavBar';
 import FollowList from './pages/FollowList';
+import VerifyEmail from './pages/VerifyEmail';
+import ResendVerification from './pages/ResendVerification'
 
 import { AuthProvider } from './context/AuthContext'; // global user data
 
@@ -36,6 +38,8 @@ function AppContent() {
         <Route path="/events/:eventId" element={<EventInfo />} />
         <Route path="/study-groups" element={<StudyGroups />} />
         <Route path="/profile/:username/connections" element={<FollowList />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/resend-verification" element={<ResendVerification />} /> 
       </Routes>
     </>
   );
