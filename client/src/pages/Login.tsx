@@ -41,7 +41,7 @@ const handleLogin = async (e: React.FormEvent) => {
             <br />
             <button
               onClick={() => navigate('/resend-verification')}
-              className="underline font-semibold mt-2 hover:text-red-800"
+              className="underline font-semibold mt-2 hover:text-red-800 cursor-pointer "
             >
               Resend verification email
             </button>

@@ -38,7 +38,7 @@ function AppContent() {
         <Route path="/events/:eventId" element={<EventInfo />} />
         <Route path="/study-groups" element={<StudyGroups />} />
         <Route path="/profile/:username/connections" element={<FollowList />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/resend-verification" element={<ResendVerification />} /> 
       </Routes>
     </>
