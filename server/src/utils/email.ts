@@ -1,14 +1,8 @@
-// server/utils/email.ts
-import nodemailer from 'nodemailer';
+// server/src/utils/email.ts
+import sgMail from '@sendgrid/mail';
 
-// Create reusable transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+// Initialize SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 // Send verification email
 export async function sendVerificationEmail(
@@ -18,9 +12,9 @@ export async function sendVerificationEmail(
 ): Promise<void> {
   const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
   
-  const mailOptions = {
-    from: `"WLU Connect" <${process.env.EMAIL_USER}>`,
+  const msg = {
     to: email,
+    from: process.env.EMAIL_USER!, // Must be verified in SendGrid
     subject: 'Verify Your WLU Connect Account',
     html: `
       <!DOCTYPE html>
@@ -44,27 +38,10 @@ export async function sendVerificationEmail(
               <p>Hi <strong>${username}</strong>,</p>
               <p>Thank you for signing up! Please verify your email address to activate your account.</p>
               <p style="text-align: center;">
-              <a
-                href="${verificationUrl}"
-                style="
-                  display: inline-block;
-                  padding: 14px 32px;
-                  background-color: #7c3aed;
-                  color: #ffffff !important;
-                  font-weight: 600;
-                  border-radius: 6px;
-                  text-decoration: none !important;
-                  mso-line-height-rule: exactly;
-                  -webkit-text-size-adjust: none;
-                "
-              >
-                <span style="color:#ffffff !important;">
-                  Verify Email Address
-                </span>
-              </a>
+                <a href="${verificationUrl}" class="button">Verify Email Address</a>
               </p>
               <p>Or copy and paste this link into your browser:</p>
-              <p style="word-break: break-all; color: #FFFFFF">${verificationUrl}</p>
+              <p style="word-break: break-all; color: #7c3aed;">${verificationUrl}</p>
               <p><strong>This link will expire in 24 hours.</strong></p>
               <p>If you didn't create this account, you can safely ignore this email.</p>
             </div>
@@ -91,10 +68,10 @@ export async function sendVerificationEmail(
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    await sgMail.send(msg);
     console.log(`Verification email sent to ${email}`);
   } catch (error) {
-    console.error('Error sending verification email:', error);
+    console.error('SendGrid error:', error);
     throw new Error('Failed to send verification email');
   }
 }
@@ -107,9 +84,9 @@ export async function sendPasswordResetEmail(
 ): Promise<void> {
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
   
-  const mailOptions = {
-    from: `"WLU Connect" <${process.env.EMAIL_USER}>`,
+  const msg = {
     to: email,
+    from: process.env.EMAIL_USER!,
     subject: 'Reset Your WLU Connect Password',
     html: `
       <!DOCTYPE html>
@@ -145,5 +122,5 @@ export async function sendPasswordResetEmail(
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  await sgMail.send(msg);
 }
