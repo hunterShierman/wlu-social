@@ -1,5 +1,7 @@
+// pages/Login.tsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';  // ← Add this
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -7,6 +9,9 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
+  // ← Add this
+  const { refreshUser } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +33,6 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle error from backend
         setError(data.error || 'Login failed');
         setLoading(false);
         return;
@@ -38,6 +42,9 @@ const Login = () => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       console.log("user signed in");
+
+      // ← Add this: Refresh user data in AuthContext
+      await refreshUser();
 
       // Redirect to home page
       navigate('/');
@@ -58,8 +65,6 @@ const Login = () => {
           <span>←</span>
           <span>Back to Home</span>
         </button>
-
-
 
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h1 className="text-3xl font-bold text-purple-800 text-center mb-2">WLU Connect</h1>
@@ -103,7 +108,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>

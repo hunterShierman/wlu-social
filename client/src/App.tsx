@@ -10,6 +10,9 @@ import StudyGroups from './pages/GroupStudy'
 import NavBar from './components/NavBar';
 import FollowList from './pages/FollowList';
 
+import { AuthProvider } from './context/AuthContext'; // global user data
+
+
 
 
 function AppContent() {
@@ -41,7 +44,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 }

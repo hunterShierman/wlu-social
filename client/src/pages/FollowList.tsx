@@ -26,17 +26,10 @@ const FollowList = () => {
     const fetchUsers = async () => {
       setIsLoading(true);
       setError('');
-      const token = localStorage.getItem('accessToken');
 
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${username}/${type}`,
-          {
-            headers: token ? {
-              'Authorization': `Bearer ${token}`,
-            } : {},
-          }
-        );
+          `${import.meta.env.VITE_API_URL}/users/${username}/${type}`);
 
         if (response.ok) {
           const data = await response.json();

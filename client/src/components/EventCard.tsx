@@ -7,7 +7,7 @@ interface EventCardProps {
   isRegistered?: boolean;  // Add this
 }
 
-const EventCard = ({ event, isRegistered = false }: EventCardProps) => {  // Add isRegistered
+const EventCard = ({ event, isRegistered = false }: EventCardProps) => {
   const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {

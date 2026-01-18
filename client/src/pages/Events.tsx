@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import type { Event } from '../types/event';
 import EventCard from '../components/EventCard';
+import { useAuth } from '../context/AuthContext';
 
 const Events = () => {
   const [allEvents, setAllEvents] = useState<Event[]>([]);
@@ -12,15 +13,17 @@ const Events = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [currentLimit, setCurrentLimit] = useState(8);
   const [registeredEventIds, setRegisteredEventIds] = useState<Set<number>>(new Set());
-  const [userSignedIn, setUserSignedIn] = useState(false);
 
   const faculties = ['All', 'Registered Events', 'Science', 'Music', 'Business', 'Arts', 'General'];
+
+  // fetch global user information from auth context
+  const { userSignedIn } = useAuth();
+
 
   useEffect(() => {
     const fetchEvents = async () => {
       setIsLoading(true);
       const token = localStorage.getItem('accessToken');
-      setUserSignedIn(!!token);
 
       try {
         // Fetch all events from events table

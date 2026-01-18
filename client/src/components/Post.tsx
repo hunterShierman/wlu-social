@@ -3,6 +3,7 @@ import { useState, useEffect, useRef} from 'react';
 import Comment from './Comment';
 import type { Comment as CommentType } from '../types/comment';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface PostProps {
   post: PostType;
@@ -32,12 +33,14 @@ const Post = ({ post, onPostDeleted  }: PostProps) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentUsername, setCurrentUsername] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
   const navigate = useNavigate();
+
+  const { userData } = useAuth();
+  const currentUsername = userData?.username || '';
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -144,34 +147,6 @@ useEffect(() => {
 
   fetchComments();
 }, [post.id]);
-
-// Get current user - ONLY runs if user is signed in
-useEffect(() => {
-  const fetchCurrentUser = async () => {
-    const token = localStorage.getItem('accessToken');
-    
-    if (!token) {
-      return; // Exit early if no token
-    }
-
-    try {
-      const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      
-      if (userResponse.ok) {
-        const userData = await userResponse.json();
-        setCurrentUsername(userData.username);
-      }
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  fetchCurrentUser();
-}, []); // Only runs once on mount
 
   const handleLike = async () => {
     if (isLoading) return;

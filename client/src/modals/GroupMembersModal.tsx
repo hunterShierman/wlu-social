@@ -28,14 +28,8 @@ const GroupMembersModal = ({ groupId, groupName, onClose }: GroupMembersModalPro
       setIsLoading(true);
       setError('');
       
-      const token = localStorage.getItem('accessToken');
-
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/study-groups/${groupId}/members`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/study-groups/${groupId}/members`);
 
         if (response.ok) {
           const data = await response.json();

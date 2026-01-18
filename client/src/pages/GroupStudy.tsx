@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CreateGroupModal from '../modals/CreateGroupModal';
 import GroupMembersModal from '../modals/GroupMembersModal';
+import { useAuth } from '../context/AuthContext';
 
 interface StudyGroup {
   group_id: number;
@@ -29,12 +30,16 @@ const StudyGroups = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [loadingGroupId, setLoadingGroupId] = useState<number | null>(null);
-  const [currentUsername, setCurrentUsername] = useState('');
   const [showDropdown, setShowDropdown] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showMembersModal, setShowMembersModal] = useState<number | null>(null);
   const [selectedGroupName, setSelectedGroupName] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // fetch global user data from auth context
+    const { userData } = useAuth();
+    const currentUsername = userData?.username || '';
+
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -50,33 +55,6 @@ const StudyGroups = () => {
     };
   }, []);
 
-  // Get current user
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const token = localStorage.getItem('accessToken');
-      
-      if (!token) {
-        return;
-      }
-
-      try {
-        const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          setCurrentUsername(userData.username);
-        }
-      } catch (error) {
-        console.error('Error fetching current user:', error);
-      }
-    };
-
-    fetchCurrentUser();
-  }, []);
 
   // Fetch data on mount
   useEffect(() => {

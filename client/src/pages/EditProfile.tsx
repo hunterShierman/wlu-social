@@ -1,9 +1,9 @@
 // pages/EditProfile.tsx
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { User } from '../types/user';
 import Cropper from 'react-easy-crop';
 import { getCroppedImg } from '../utils/cropImage';
+import { useAuth } from '../context/AuthContext';  // ← Add this
 
 interface CropArea {
   x: number;
@@ -14,13 +14,16 @@ interface CropArea {
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  
+  // ← Replace the entire useEffect with this
+  const { userData, isLoading: authLoading, userSignedIn, refreshUser } = useAuth();
+  
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   
-  // Form fields
+  // Form fields - Initialize with userData
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
@@ -38,49 +41,24 @@ const EditProfile = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // get global user information from auth context 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('accessToken');
-      
-      if (!token) {
-        navigate('/login');
-        return;
-      }
+    // Redirect if not signed in
+    if (!authLoading && !userSignedIn) {
+      navigate('/login');
+      return;
+    }
 
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/users/me/profile`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            localStorage.removeItem('accessToken');
-            navigate('/login');
-            return;
-          }
-          setError('Failed to load profile');
-          return;
-        }
-
-        const userData: User = await response.json();
-        setUsername(userData.username);
-        setEmail(userData.email || '');
-        setBio(userData.bio || '');
-        setProgram(userData.program || '');
-        setProfilePictureUrl(userData.profile_picture_url || '');
-        setImagePreview(userData.profile_picture_url || null);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError('Failed to load profile');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, [navigate]);
+    // Populate form fields when userData is available
+    if (userData) {
+      setUsername(userData.username);
+      setEmail(userData.email || '');
+      setBio(userData.bio || '');
+      setProgram(userData.program || '');
+      setProfilePictureUrl(userData.profile_picture_url || '');
+      setImagePreview(userData.profile_picture_url || null);
+    }
+  }, [userData, userSignedIn, authLoading, navigate]);
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -150,8 +128,6 @@ const EditProfile = () => {
       fileInputRef.current.value = '';
     }
   };
-
-  
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -223,10 +199,12 @@ const EditProfile = () => {
 
       setSuccessMessage('Profile updated successfully!');
       
+      // ← Refresh user data in AuthContext so navbar updates
+      await refreshUser();
+      
       // Redirect to profile after 1.5 seconds
       setTimeout(() => {
         navigate(`/profile/${username}`);
-        window.location.href = `/profile/${username}`;
       }, 1500);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -241,7 +219,8 @@ const EditProfile = () => {
     navigate(`/profile/${username}`);
   };
 
-  if (isLoading) {
+  // ← Use authLoading instead of local isLoading
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -439,7 +418,7 @@ const EditProfile = () => {
                 </div>
               </div>
               <p className="text-xs text-gray-500">
-                Max size: 5MB. Supported formats: JPG, PNG, GIF, WebP
+                Max size: 5MB. Supported formats: JPG, PNG, PNG, GIF, WebP
               </p>
               
               {/* Hidden file input */}
