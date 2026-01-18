@@ -25,7 +25,16 @@ export async function sendVerificationEmail(
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
             .header { background: #7c3aed; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 5px 5px; }
-            .button { display: inline-block; padding: 12px 30px; background: #7c3aed; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+            .button { 
+              display: inline-block; 
+              padding: 12px 30px; 
+              background: #7c3aed !important; 
+              color: white !important; 
+              text-decoration: none; 
+              border-radius: 5px; 
+              margin: 20px 0;
+              font-weight: bold;
+            }
             .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
           </style>
         </head>
@@ -38,7 +47,7 @@ export async function sendVerificationEmail(
               <p>Hi <strong>${username}</strong>,</p>
               <p>Thank you for signing up! Please verify your email address to activate your account.</p>
               <p style="text-align: center;">
-                <a href="${verificationUrl}" class="button">Verify Email Address</a>
+                <a href="${verificationUrl}" class="button" style="background: #7c3aed !important; color: white !important;">Verify Email Address</a>
               </p>
               <p>Or copy and paste this link into your browser:</p>
               <p style="word-break: break-all; color: #7c3aed;">${verificationUrl}</p>
@@ -97,7 +106,16 @@ export async function sendPasswordResetEmail(
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
             .header { background: #7c3aed; color: white; padding: 20px; text-align: center; }
             .content { background: #f9f9f9; padding: 30px; }
-            .button { display: inline-block; padding: 12px 30px; background: #7c3aed; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+            .button { 
+              display: inline-block; 
+              padding: 12px 30px; 
+              background: #7c3aed !important; 
+              color: white !important; 
+              text-decoration: none; 
+              border-radius: 5px; 
+              margin: 20px 0;
+              font-weight: bold;
+            }
           </style>
         </head>
         <body>
@@ -109,7 +127,7 @@ export async function sendPasswordResetEmail(
               <p>Hi <strong>${username}</strong>,</p>
               <p>We received a request to reset your password. Click the button below to create a new password:</p>
               <p style="text-align: center;">
-                <a href="${resetUrl}" class="button">Reset Password</a>
+                <a href="${resetUrl}" class="button" style="background: #7c3aed !important; color: white !important;">Reset Password</a>
               </p>
               <p>Or copy and paste this link:</p>
               <p style="word-break: break-all; color: #7c3aed;">${resetUrl}</p>
