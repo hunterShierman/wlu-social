@@ -216,7 +216,7 @@ const Events = () => {
                       <button
                         onClick={loadMoreEvents}
                         disabled={isLoadingMore}
-                        className="bg-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="bg-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
                       >
                         {isLoadingMore ? 'Loading...' : `Load More Events (${remainingCount} remaining)`}
                       </button>

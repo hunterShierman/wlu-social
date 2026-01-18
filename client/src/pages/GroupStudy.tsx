@@ -244,7 +244,7 @@ const StudyGroups = () => {
             <div className="flex space-x-2">
               <button
                 onClick={() => setActiveTab('all')}
-                className={`px-6 py-2 rounded-full font-semibold transition ${
+                className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
                   activeTab === 'all'
                     ? 'bg-purple-600 text-white'
                     : 'bg-white text-gray-700 border border-gray-300 hover:border-purple-600'
@@ -254,7 +254,7 @@ const StudyGroups = () => {
               </button>
               <button
                 onClick={() => setActiveTab('my')}
-                className={`px-6 py-2 rounded-full font-semibold transition ${
+                className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
                   activeTab === 'my'
                     ? 'bg-purple-600 text-white'
                     : 'bg-white text-gray-700 border border-gray-300 hover:border-purple-600'
@@ -313,7 +313,7 @@ const StudyGroups = () => {
                               e.stopPropagation();
                               setShowDropdown(showDropdown === group.group_id ? null : group.group_id);
                             }}
-                            className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg"
+                            className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg cursor-pointer"
                           >
                             ⋮
                           </button>

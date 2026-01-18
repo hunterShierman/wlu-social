@@ -93,7 +93,7 @@ const FollowList = () => {
           {/* Back Button */}
           <button
             onClick={handleBackClick}
-            className="flex items-center text-purple-600 hover:text-purple-700 mb-4 font-medium"
+            className="flex items-center text-purple-600 hover:text-purple-700 mb-4 font-medium cursor-pointer"
           >
             <svg
               className="w-5 h-5 mr-1"
@@ -209,7 +209,7 @@ const FollowList = () => {
                           e.stopPropagation();
                           handleUserClick(user.username);
                         }}
-                        className="px-6 py-2 border border-purple-600 text-purple-600 rounded-full font-semibold hover:bg-purple-50 transition shrink-0"
+                        className="px-6 py-2 border border-purple-600 text-purple-600 rounded-full font-semibold hover:bg-purple-50 transition shrink-0 cursor-pointer"
                       >
                         View Profile
                       </button>

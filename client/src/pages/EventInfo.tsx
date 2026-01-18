@@ -310,7 +310,7 @@ return (
                 <button 
                   onClick={handleRegistrationToggle}
                   disabled={isRegistrationLoading}
-                  className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${
+                  className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 cursor-pointer ${
                     isRegistered 
                       ? 'bg-green-600 text-white hover:bg-green-700' 
                       : 'bg-purple-600 text-white hover:bg-purple-700'

@@ -364,7 +364,7 @@ useEffect(() => {
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setShowDropdown(!showDropdown)}
-              className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg"
+              className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg cursor-pointer"
             >
               ⋮
             </button>
