@@ -235,285 +235,285 @@ const StudyGroups = () => {
     };
   };
 
-  return (
-    <div className="min-h-screen bg-purple-50">
-      {/* Main Content */}
-      <div className="pt-24 pb-12">
-        <div className="max-w-6xl mx-auto px-4">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Study Groups</h1>
-            <p className="text-gray-600 text-lg">Find or create study groups for your courses</p>
+return (
+  <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
+    {/* Main Content */}
+    <div className="pt-24 pb-12">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-black bg-gradient-to-r from-[#330072] to-[#F2A900] bg-clip-text text-transparent mb-2 leading-tight pb-1">Study Groups</h1>
+          <p className="text-gray-700 text-lg font-normal">Find or create study groups for your courses</p>
+        </div>
+
+        {/* Tabs and Search */}
+        <div className="mb-6 space-y-4">
+          {/* Tabs */}
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`px-6 py-2 transition cursor-pointer ${
+                activeTab === 'all'
+                  ? 'font-bold'
+                  : 'text-gray-700 font-semibold hover:text-[#F2A900]'
+              }`}
+            >
+              All Groups ({allGroups.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('my')}
+              className={`px-6 py-2 transition cursor-pointer ${
+                activeTab === 'my'
+                  ? 'font-bold'
+                  : 'text-gray-700 font-semibold hover:text-[#F2A900]'
+              }`}
+            >
+              My Groups ({myGroups.length})
+            </button>
           </div>
 
-          {/* Tabs and Search */}
-          <div className="mb-6 space-y-4">
-            {/* Tabs */}
-            <div className="flex space-x-2">
-                <button
-                  onClick={() => setActiveTab('all')}
-                  className={`px-6 py-2 transition font-semibold cursor-pointer ${
-                    activeTab === 'all'
-                      ? 'text-[#F2A900]'
-                      : 'text-gray-700 hover:text-[#F2A900]'
-                  }`}
-                >
-                  All Groups ({allGroups.length})
-                </button>
-                <button
-                  onClick={() => setActiveTab('my')}
-                  className={`px-6 py-2 font-semibold transition cursor-pointer ${
-                    activeTab === 'my'
-                      ? 'text-[#F2A900]'
-                      : 'text-gray-700 hover:text-[#F2A900]'
-                  }`}
-                >
-                  My Groups ({myGroups.length})
-                </button>
-              </div>
-
-            {/* Search Bar */}
-            <div className="flex space-x-3">
-              <div className="relative flex-1">
-                <input
-                  type="text"
-                  placeholder="Search by course code, group name, or creator..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white cursor-text"
-                />
-                <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <button
-                onClick={handleCreateGroupClick}
-                className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer whitespace-nowrap"
-              >
-                + Create Group
-              </button>
+          {/* Search Bar */}
+          <div className="flex space-x-3">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                placeholder="Search by course code, group name, or creator..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 pl-12 border border-[#330072]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#330072]/50 bg-white/60 backdrop-blur-sm cursor-text font-normal"
+              />
+              <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
+            <button
+              onClick={handleCreateGroupClick}
+              className="bg-purple-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition cursor-pointer whitespace-nowrap"
+            >
+              + Create Group
+            </button>
           </div>
+        </div>
 
-          {/* Loading State */}
-          {isLoading ? (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-              <p className="text-gray-600 mt-4">Loading study groups...</p>
-            </div>
-          ) : (
-            <>
-              {/* Study Groups Grid */}
-              {displayedGroups.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {displayedGroups.map((group) => {
-                    const isMember = isInGroup(group.group_id);
-                    const isFull = isGroupFull(group);
-                    const isOwner = isOwnGroup(group);
-                    const dateTime = formatDateTime(group.date_time);
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#330072]"></div>
+            <p className="text-gray-700 mt-4 font-normal">Loading study groups...</p>
+          </div>
+        ) : (
+          <>
+            {/* Study Groups Grid */}
+            {displayedGroups.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayedGroups.map((group) => {
+                  const isMember = isInGroup(group.group_id);
+                  const isFull = isGroupFull(group);
+                  const isOwner = isOwnGroup(group);
+                  const dateTime = formatDateTime(group.date_time);
 
-                    return (
-                      <div key={group.group_id} className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition relative">
-                        {/* Three dots menu - Top right corner */}
-                        <div className="absolute top-3 right-3 z-10" ref={showDropdown === group.group_id ? dropdownRef : null}>
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowDropdown(showDropdown === group.group_id ? null : group.group_id);
-                            }}
-                            className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg cursor-pointer"
-                          >
-                            ⋮
-                          </button>
-                          
-                          {/* Dropdown overlay */}
-                          {showDropdown === group.group_id && (
-                            <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-2 min-w-[150px] z-10">
-                              {isOwner ? (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteGroup(group.group_id);
-                                  }}
-                                  disabled={isDeleting}
-                                  className="w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold text-left"
-                                >
-                                  {isDeleting ? 'Deleting...' : 'Delete Group'}
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    alert("Group Reported");
-                                    setShowDropdown(null);
-                                  }}
-                                  className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold text-left"
-                                >
-                                  Report Group
-                                </button>
-                              )}
+                  return (
+                    <div key={group.group_id} className="bg-white/40 backdrop-blur-xl rounded-lg border border-[#330072]/20 hover:border-[#330072]/50 hover:shadow-lg transition relative">
+                      {/* Three dots menu - Top right corner */}
+                      <div className="absolute top-3 right-3 z-10" ref={showDropdown === group.group_id ? dropdownRef : null}>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowDropdown(showDropdown === group.group_id ? null : group.group_id);
+                          }}
+                          className="bg-white/50 text-[#330072] hover:bg-[#330072]/10 p-2 rounded-full text-lg cursor-pointer transition"
+                        >
+                          ⋮
+                        </button>
+                        
+                        {/* Dropdown overlay */}
+                        {showDropdown === group.group_id && (
+                          <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-xl border border-[#330072]/20 p-2 min-w-[150px] z-10">
+                            {isOwner ? (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
+                                  handleDeleteGroup(group.group_id);
+                                }}
+                                disabled={isDeleting}
+                                className="w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold text-left"
+                              >
+                                {isDeleting ? 'Deleting...' : 'Delete Group'}
+                              </button>
+                            ) : (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  alert("Group Reported");
                                   setShowDropdown(null);
                                 }}
-                                className="w-full px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 rounded-lg transition mt-1"
+                                className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold text-left"
                               >
-                                Cancel
+                                Report Group
                               </button>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Clickable card content */}
-                        <button
-                          onClick={() => {
-                            setShowMembersModal(group.group_id);
-                            setSelectedGroupName(group.name);
-                          }}
-                          className="w-full p-5 text-left cursor-pointer"
-                        >
-                          {/* Course Code Badge */}
-                          <div className="mb-3">
-                            <span className="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">
-                              📘 {group.course_code}
-                            </span>
-                          </div>
-
-                          {/* Group Name */}
-                          <h3 className="text-lg font-bold text-gray-900 mb-2 pr-8">{group.name}</h3>
-
-                          {/* Description */}
-                          {group.description && (
-                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">{group.description}</p>
-                          )}
-
-                          {/* Date/Time or Recurring */}
-                          {group.is_recurring ? (
-                            <div className="flex items-center text-sm text-gray-600 mb-2">
-                              <span className="mr-2">🔁</span>
-                              <span className="font-medium">{group.recurrence_pattern}</span>
-                            </div>
-                          ) : dateTime ? (
-                            <div className="flex items-center text-sm text-gray-600 mb-2">
-                              <span className="mr-2">📅</span>
-                              <span>{dateTime.date} • {dateTime.time}</span>
-                            </div>
-                          ) : null}
-
-                          {/* Location */}
-                          {group.location && (
-                            <div className="flex items-center text-sm text-gray-600 mb-3">
-                              <span className="mr-2">📍</span>
-                              <span className="truncate">{group.location}</span>
-                            </div>
-                          )}
-
-                          {/* Creator */}
-                          <p className="text-xs text-gray-500 mb-3">
-                            Created by <span className="font-semibold text-gray-700">{group.created_by_username}</span>
-                          </p>
-
-                          {/* Members Count */}
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="text-sm text-gray-600">
-                              👥 {group.current_members}
-                              {group.max_members ? `/${group.max_members}` : ''} members
-                            </span>
-                            <span className="text-sm text-purple-600 font-semibold">
-                              View Members →
-                            </span>
-                          </div>
-                        </button>
-
-                        {/* Action Button - Outside clickable area */}
-                        <div className="px-5 pb-5">
-                          {isMember ? (
+                            )}
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleLeaveGroup(group.group_id);
+                                setShowDropdown(null);
                               }}
-                              className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition cursor-pointer flex items-center justify-center"
+                              className="w-full px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 rounded-lg transition mt-1 font-normal"
                             >
-                              {loadingGroupId === group.group_id ? (
-                                <>
-                                  <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                  Leaving...
-                                </>
-                              ) : (
-                                <>
-                                  <span className="mr-2">✓</span>
-                                  Member of Group
-                                </>
-                              )}
+                              Cancel
                             </button>
-                          ) : isFull ? (
-                            <button
-                              disabled
-                              className="w-full bg-gray-300 text-gray-500 py-2 rounded-lg font-semibold cursor-not-allowed"
-                            >
-                              Full
-                            </button>
-                          ) : (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleJoinGroup(group.group_id);
-                              }}
-                              disabled={loadingGroupId === group.group_id}
-                              className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer disabled:bg-purple-400 disabled:cursor-not-allowed flex items-center justify-center"
-                            >
-                              {loadingGroupId === group.group_id ? (
-                                <>
-                                  <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                  Joining...
-                                </>
-                              ) : (
-                                'Join Group'
-                              )}
-                            </button>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-16 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                  <span className="text-6xl mb-4 block">📚</span>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No study groups found</h3>
-                  <p className="text-gray-600">
-                    {searchQuery ? 'Try adjusting your search' : activeTab === 'my' ? "You haven't joined any groups yet" : 'Be the first to create a study group!'}
-                  </p>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+
+                      {/* Clickable card content */}
+                      <button
+                        onClick={() => {
+                          setShowMembersModal(group.group_id);
+                          setSelectedGroupName(group.name);
+                        }}
+                        className="w-full p-5 text-left cursor-pointer"
+                      >
+                        {/* Course Code Badge */}
+                        <div className="mb-3">
+                          <span className="inline-block bg-[#330072]/10 text-[#330072] px-3 py-1 rounded-full text-sm font-semibold">
+                            📘 {group.course_code}
+                          </span>
+                        </div>
+
+                        {/* Group Name */}
+                        <h3 className="text-lg font-bold text-[#330072] mb-2 pr-8">{group.name}</h3>
+
+                        {/* Description */}
+                        {group.description && (
+                          <p className="text-sm text-gray-700 mb-3 line-clamp-2 font-normal">{group.description}</p>
+                        )}
+
+                        {/* Date/Time or Recurring */}
+                        {group.is_recurring ? (
+                          <div className="flex items-center text-sm text-gray-700 mb-2 font-normal">
+                            <span className="mr-2">🔁</span>
+                            <span className="font-semibold">{group.recurrence_pattern}</span>
+                          </div>
+                        ) : dateTime ? (
+                          <div className="flex items-center text-sm text-gray-700 mb-2 font-normal">
+                            <span className="mr-2">📅</span>
+                            <span>{dateTime.date} • {dateTime.time}</span>
+                          </div>
+                        ) : null}
+
+                        {/* Location */}
+                        {group.location && (
+                          <div className="flex items-center text-sm text-gray-700 mb-3 font-normal">
+                            <span className="mr-2">📍</span>
+                            <span className="truncate">{group.location}</span>
+                          </div>
+                        )}
+
+                        {/* Creator */}
+                        <p className="text-xs text-gray-600 mb-3 font-normal">
+                          Created by <span className="font-semibold text-[#330072]">{group.created_by_username}</span>
+                        </p>
+
+                        {/* Members Count */}
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-sm text-gray-700 font-normal">
+                            👥 {group.current_members}
+                            {group.max_members ? `/${group.max_members}` : ''} members
+                          </span>
+                          <span className="text-sm text-[#330072] font-semibold">
+                            View Members →
+                          </span>
+                        </div>
+                      </button>
+
+                      {/* Action Button - Outside clickable area */}
+                      <div className="px-5 pb-5">
+                        {isMember ? (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleLeaveGroup(group.group_id);
+                            }}
+                            className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition cursor-pointer flex items-center justify-center"
+                          >
+                            {loadingGroupId === group.group_id ? (
+                              <>
+                                <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                Leaving...
+                              </>
+                            ) : (
+                              <>
+                                <span className="mr-2">✓</span>
+                                Member of Group
+                              </>
+                            )}
+                          </button>
+                        ) : isFull ? (
+                          <button
+                            disabled
+                            className="w-full bg-gray-300 text-gray-500 py-2 rounded-lg font-semibold cursor-not-allowed"
+                          >
+                            Full
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleJoinGroup(group.group_id);
+                            }}
+                            disabled={loadingGroupId === group.group_id}
+                            className="w-full bg-purple-800 text-white py-2 rounded-lg font-semibold hover:bg-[#F2A900] transition cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
+                          >
+                            {loadingGroupId === group.group_id ? (
+                              <>
+                                <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                Joining...
+                              </>
+                            ) : (
+                              'Join Group'
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-16 bg-white/40 backdrop-blur-xl rounded-lg border border-[#330072]/20">
+                <span className="text-6xl mb-4 block">📚</span>
+                <h3 className="text-xl font-semibold text-[#330072] mb-2">No study groups found</h3>
+                <p className="text-gray-700 font-normal">
+                  {searchQuery ? 'Try adjusting your search' : activeTab === 'my' ? "You haven't joined any groups yet" : 'Be the first to create a study group!'}
+                </p>
+              </div>
+            )}
+          </>
+        )}
       </div>
-
-      {/* Create Group Modal */}
-      {showCreateModal && (
-        <CreateGroupModal
-          onClose={() => setShowCreateModal(false)}
-          onSuccess={() => {
-            setShowCreateModal(false);
-            refreshGroups();
-          }}
-        />
-      )}
-
-      {/* Group Members Modal */}
-      {showMembersModal !== null && (
-        <GroupMembersModal
-          groupId={showMembersModal}
-          groupName={selectedGroupName}
-          onClose={() => setShowMembersModal(null)}
-        />
-      )}
     </div>
-  );
+
+    {/* Create Group Modal */}
+    {showCreateModal && (
+      <CreateGroupModal
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={() => {
+          setShowCreateModal(false);
+          refreshGroups();
+        }}
+      />
+    )}
+
+    {/* Group Members Modal */}
+    {showMembersModal !== null && (
+      <GroupMembersModal
+        groupId={showMembersModal}
+        groupName={selectedGroupName}
+        onClose={() => setShowMembersModal(null)}
+      />
+    )}
+  </div>
+);
 };
 
 export default StudyGroups;

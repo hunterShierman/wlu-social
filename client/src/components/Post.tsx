@@ -333,197 +333,197 @@ useEffect(() => {
   const hasMoreComments = displayedComments < allComments.length;
   const isOwnPost = currentUsername === post.username;
 
-  return (
-    <div className="bg-white rounded-lg border border-gray-300 mb-4">
-      {/* Post Header */}
-      <div className="p-4 flex items-start justify-between">
-        <div className="flex items-start">
-          <div 
-             onClick={() => navigate(`/profile/${post.username}`)}
-            className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer">
-            {post.profile_picture_url ? (
-              <img src={post.profile_picture_url} alt={post.username} className="w-full h-full object-cover" />
-            ) : (
-              <span className="text-gray-700 font-semibold text-lg">{post.username[0].toUpperCase()}</span>
-            )}
-          </div>
-          <div className="ml-3">
-            <div className="flex items-center">
-              <p 
-                onClick={() => navigate(`/profile/${post.username}`)}
-                className="font-semibold text-sm text-gray-900 hover:underline cursor-pointer hover:text-[#F2A900]">{post.username}</p>
-              <span className="ml-1 text-purple-600 text-sm">✓</span>
-            </div>
-            <p className="text-xs text-gray-600">{post.program} @ Wilfrid Laurier University</p>
-            <p className="text-xs text-gray-500">{formatDate(post.created_at)} • 🌎</p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-
-          {/* Three dots menu */}
-          <div className="relative" ref={dropdownRef}>
-            <button 
-              onClick={() => setShowDropdown(!showDropdown)}
-              className="bg-white text-black hover:bg-gray-100 p-2 rounded-full text-lg cursor-pointer"
-            >
-              ⋮
-            </button>
-            
-            {/* Popup overlay */}
-            {showDropdown && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 rounded-lg">
-                <div className="bg-white rounded-lg shadow-xl p-4 min-w-[200px]">
-                  {isOwnPost ? (
-                    <button
-                      onClick={handleDeletePost}
-                      disabled={isDeleting}
-                      className="w-full px-3 py-2 text-xs text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold"
-                    >
-                      {isDeleting ? 'Deleting...' : 'Delete Post'}
-                    </button>
-                  ) : (
-                    <button
-                    onClick={() => {
-                      alert("Post Reported");
-                      setShowDropdown(false);
-                    }}
-                    className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold"
-                    >
-                      Report Post
-                    </button>
-                  )}
-                  <button
-                    onClick={() => setShowDropdown(false)}
-                    className="w-full px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 rounded-lg transition mt-2"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Post Content */}
-      <div className="px-4 pb-3">
-        <p className="text-sm text-gray-900 whitespace-pre-wrap leading-5">
-          {post.content.length > 200 ? (
-            <>
-              {post.content.substring(0, 200)}...
-              <button className="bg-white text-black font-semibold ml-1">more</button>
-            </>
+return (
+  <div className="bg-white/40 backdrop-blur-xl rounded-lg border border-[#330072]/20 mb-4 hover:border-[#F2A900]/50 transition-all duration-300 shadow-lg">
+    {/* Post Header */}
+    <div className="p-4 flex items-start justify-between">
+      <div className="flex items-start">
+        <div 
+           onClick={() => navigate(`/profile/${post.username}`)}
+          className="w-12 h-12 rounded-full bg-gradient-to-br from-[#330072] to-[#F2A900] flex items-center justify-center overflow-hidden shrink-0 cursor-pointer ring-2 ring-[#F2A900]/30">
+          {post.profile_picture_url ? (
+            <img src={post.profile_picture_url} alt={post.username} className="w-full h-full object-cover" />
           ) : (
-            post.content
+            <span className="text-white font-semibold text-lg">{post.username[0].toUpperCase()}</span>
           )}
-        </p>
-      </div>
-
-      {/* Post Image */}
-      {post.image_url && (
-        <div className="w-full bg-gray-100">
-          <img src={post.image_url} alt="Post content" className="w-full object-cover max-h-64" />
         </div>
-      )}
+        <div className="ml-3">
+          <div className="flex items-center">
+            <p 
+              onClick={() => navigate(`/profile/${post.username}`)}
+              className="font-semibold text-sm text-[#330072] hover:underline cursor-pointer hover:text-[#F2A900]">{post.username}</p>
+            <span className="ml-1 text-[#F2A900] text-sm">✓</span>
+          </div>
+          <p className="text-xs text-gray-600 font-normal">{post.program} @ Wilfrid Laurier University</p>
+          <p className="text-xs text-gray-500 font-normal">{formatDate(post.created_at)} • 🌎</p>
+        </div>
+      </div>
+      <div className="flex items-center space-x-2">
 
-      {/* Engagement Stats */}
-      <div className="px-4 py-2 flex items-center justify-between text-xs text-gray-600">
-        <div className="flex items-center space-x-2">
-          {postTypeInfo && (
-            <div className={`flex items-center space-x-1 px-3 py-1 rounded-full ${postTypeInfo.color}`}>
-              <span className="text-sm">{postTypeInfo.emoji}</span>
-              <span className="text-xs font-medium">{postTypeInfo.display}</span>
+        {/* Three dots menu */}
+        <div className="relative" ref={dropdownRef}>
+          <button 
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="bg-white/50 text-[#330072] hover:bg-[#F2A900]/10 p-2 rounded-full text-lg cursor-pointer transition"
+          >
+            ⋮
+          </button>
+          
+          {/* Popup overlay */}
+          {showDropdown && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 rounded-lg">
+              <div className="bg-white rounded-lg shadow-xl p-4 min-w-[200px]">
+                {isOwnPost ? (
+                  <button
+                    onClick={handleDeletePost}
+                    disabled={isDeleting}
+                    className="w-full px-3 py-2 text-xs text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold"
+                  >
+                    {isDeleting ? 'Deleting...' : 'Delete Post'}
+                  </button>
+                ) : (
+                  <button
+                  onClick={() => {
+                    alert("Post Reported");
+                    setShowDropdown(false);
+                  }}
+                  className="w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold"
+                  >
+                    Report Post
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowDropdown(false)}
+                  className="w-full px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 rounded-lg transition mt-2 font-normal"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           )}
-          <div className="flex items-center">
-            <span key="love" className="text-red-500">❤️</span>
-          </div>
-          <span className="hover:text-purple-600">
-            {likeCount} reactions
-          </span>
-        </div>
-        <div className="flex items-center space-x-3">
-          <span className="hover:text-purple-600">
-            {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
-          </span>
         </div>
       </div>
+    </div>
 
-      {/* Action Buttons */}
-      <div className="border-t border-gray-300 px-2 py-2 flex items-center justify-around">
-        <button 
-          onClick={handleLike}
-          disabled={isLoading}
-          className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition cursor-pointer ${
+    {/* Post Content */}
+    <div className="px-4 pb-3">
+      <p className="text-sm text-gray-900 whitespace-pre-wrap leading-5 font-normal">
+        {post.content.length > 200 ? (
+          <>
+            {post.content.substring(0, 200)}...
+            <button className="bg-transparent text-[#330072] font-semibold ml-1 hover:text-[#F2A900] transition">more</button>
+          </>
+        ) : (
+          post.content
+        )}
+      </p>
+    </div>
+
+    {/* Post Image */}
+    {post.image_url && (
+      <div className="w-full bg-gray-100">
+        <img src={post.image_url} alt="Post content" className="w-full object-cover max-h-64" />
+      </div>
+    )}
+
+    {/* Engagement Stats */}
+    <div className="px-4 py-2 flex items-center justify-between text-xs text-gray-600 font-normal">
+      <div className="flex items-center space-x-2">
+        {postTypeInfo && (
+          <div className={`flex items-center space-x-1 px-3 py-1 rounded-full ${postTypeInfo.color}`}>
+            <span className="text-sm">{postTypeInfo.emoji}</span>
+            <span className="text-xs font-semibold">{postTypeInfo.display}</span>
+          </div>
+        )}
+        <div className="flex items-center">
+          <span key="love" className="text-red-500">❤️</span>
+        </div>
+        <span className="hover:text-[#F2A900] transition cursor-pointer">
+          {likeCount} reactions
+        </span>
+      </div>
+      <div className="flex items-center space-x-3">
+        <span className="hover:text-[#F2A900] transition cursor-pointer">
+          {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+        </span>
+      </div>
+    </div>
+
+    {/* Action Buttons */}
+    <div className="border-t border-[#330072]/10 px-2 py-2 flex items-center justify-around">
+      <button 
+        onClick={handleLike}
+        disabled={isLoading}
+        className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition cursor-pointer ${
             isLiked 
               ? 'bg-white-50 text-red-600' 
-              : 'bg-white text-black hover:bg-gray-100'
-          } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          <span className="text-xl">{isLiked ? '❤️' : '♡'}</span>
-          <span className="text-sm font-semibold">{isLiked ? 'Liked' : 'Like'}</span>
-        </button>
-        <button 
-          onClick={handleCommentClick}
+              : 'bg-white text-black hover:bg-gray-100' 
+        } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+      >
+        <span className="text-xl">{isLiked ? '❤️' : '♡'}</span>
+        <span className="text-sm font-semibold">{isLiked ? 'Liked' : 'Like'}</span>
+      </button>
+      <button 
+        onClick={handleCommentClick}
           className={`flex items-center space-x-2 px-4 py-2 rounded flex-1 justify-center transition cursor-pointer ${
             showCommentInput ? 'bg-gray-100' : 'bg-white hover:bg-gray-100'
           } text-black`}
-        >
-          <span className="text-xl">🗨</span>
-          <span className="text-sm font-semibold">Comment</span>
-        </button>
-      </div>
-
-      {/* Comments Section */}
-      {allComments.length > 0 && (
-        <div className="px-4 pb-3 border-t border-gray-200">
-          <div className="space-y-3 mt-3">
-            {visibleComments.map((comment) => (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                currentUsername={currentUsername}
-                onDelete={handleDeleteComment}
-              />
-            ))}
-          </div>
-
-          {/* Load More Comments Button */}
-          {hasMoreComments && (
-            <button 
-              onClick={handleLoadMoreComments}
-              className="text-sm text-purple-600 hover:underline font-semibold mt-3 cursor-pointer"
-            >
-              Load more comments
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* Comment Input */}
-      {showCommentInput && (
-        <div className="px-4 pb-4 border-t border-gray-200">
-          <form onSubmit={handleSubmitComment} className="flex items-center space-x-2 mt-3">
-            <input
-              type="text"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
-              className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-              disabled={isSubmitting}
-            />
-            <button
-              type="submit"
-              disabled={isSubmitting || !newComment.trim()}
-              className="bg-purple-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-            >
-              {isSubmitting ? 'Posting...' : 'Post'}
-            </button>
-          </form>
-        </div>
-      )}
+      >
+        <span className="text-xl">🗨</span>
+        <span className="text-sm font-semibold">Comment</span>
+      </button>
     </div>
-  );
+
+    {/* Comments Section */}
+    {allComments.length > 0 && (
+      <div className="px-4 pb-3 border-t border-[#330072]/10">
+        <div className="space-y-3 mt-3">
+          {visibleComments.map((comment) => (
+            <Comment
+              key={comment.id}
+              comment={comment}
+              currentUsername={currentUsername}
+              onDelete={handleDeleteComment}
+            />
+          ))}
+        </div>
+
+        {/* Load More Comments Button */}
+        {hasMoreComments && (
+          <button 
+            onClick={handleLoadMoreComments}
+            className="text-sm text-[#330072] hover:text-[#F2A900] font-semibold mt-3 cursor-pointer transition"
+          >
+            Load more comments
+          </button>
+        )}
+      </div>
+    )}
+
+    {/* Comment Input */}
+    {showCommentInput && (
+      <div className="px-4 pb-4 border-t border-[#330072]/10">
+        <form onSubmit={handleSubmitComment} className="flex items-center space-x-2 mt-3">
+          <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            className="flex-1 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-normal focus:outline-none focus:ring-2 focus:ring-[#330072]/50 border border-[#330072]/10"
+            disabled={isSubmitting}
+          />
+          <button
+            type="submit"
+            disabled={isSubmitting || !newComment.trim()}
+            className="bg-[#330072] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#F2A900] transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed text-sm"
+          >
+            {isSubmitting ? 'Posting...' : 'Post'}
+          </button>
+        </form>
+      </div>
+    )}
+  </div>
+);
 };
 
 export default Post;

@@ -241,7 +241,7 @@ return (
                 {/* Date & Time */}
                 <div className="flex items-start space-x-2.5">
                   <div className="flex-shrink-0">
-                    <div className="bg-purple-600 text-white rounded-lg p-2 text-center min-w-[52px]">
+                    <div className="bg-purple-800 text-white rounded-lg p-2 text-center min-w-[52px]">
                       <div className="text-[10px] font-semibold uppercase">{dateInfo.month}</div>
                       <div className="text-xl font-bold">{dateInfo.day}</div>
                     </div>
@@ -312,7 +312,7 @@ return (
                   className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 cursor-pointer ${
                     isRegistered 
                       ? 'bg-green-600 text-white hover:bg-green-700' 
-                      : 'bg-purple-600 text-white hover:bg-purple-700'
+                      : 'bg-purple-800 text-white hover:bg-purple-700'
                   } ${isRegistrationLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {isRegistrationLoading 

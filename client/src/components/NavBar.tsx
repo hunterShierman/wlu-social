@@ -86,7 +86,7 @@ const NavBar = () => {
   const hasResults = searchResults.users.length > 0 || searchResults.events.length > 0;
 
 return (
-  <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl bg-purple-300/60 border-b border-purple-300/50">
+  <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl bg-[#330072]/60 border-b border-purple-300/50">
     <div className="max-w-7xl mx-auto px-4">
       <div className="flex items-center justify-between h-16">
         {/* Logo and Title */}
@@ -94,7 +94,7 @@ return (
           <Icon className="h-12 w-10 text-gray-900 transition" />
           <button
             onClick={() => navigate('/')}
-            className="text-2xl font-bold text-gray-800 hover:text-gray-900 transition-all duration-300 cursor-pointer"
+            className="text-2xl font-black text-white hover:text-gray-900 transition-all duration-300 cursor-pointer"
           >
             WLU Connect
           </button>
@@ -104,19 +104,19 @@ return (
           {/* Navigation buttons - Text only, no background */}
           <button
             onClick={() => navigate('/')}
-            className="text-gray-800 px-4 py-2 rounded-lg font-medium hover:text-gray-900 transition-colors duration-200 cursor-pointer"
+            className="text-white px-4 py-2 rounded-lg font-semibold hover:text-[#330072] transition-colors duration-200 cursor-pointer"
           >
-            Home
+            Home  
           </button>
           <button
             onClick={() => navigate('/events')}
-            className="text-gray-800 px-4 py-2 rounded-lg font-medium hover:text-gray-900 transition-colors duration-200 cursor-pointer"
+            className="text-white px-4 py-2 rounded-lg font-semibold hover:text-[#330072] transition-colors duration-200 cursor-pointer"
           >
             Club Events
           </button>
           <button
             onClick={() => navigate('/study-groups')}
-            className="text-gray-800 px-4 py-2 rounded-lg font-medium hover:text-gray-900 transition-colors duration-200 cursor-pointer"
+            className="text-white px-4 py-2 rounded-lg font-semibold hover:text-[#330072] transition-colors duration-200 cursor-pointer"
           >
             Study Groups
           </button>
@@ -124,7 +124,7 @@ return (
           {!userSignedIn && (
             <button
               onClick={handleSignIn}
-              className="text-gray-800 px-4 py-2 rounded-lg font-medium hover:text-gray-900 transition-colors duration-200 cursor-pointer ml-2"
+              className="text-white px-4 py-2 rounded-lg font-semibold hover:text-[#330072] transition-colors duration-200 cursor-pointer ml-2"
             >
               Sign In
             </button>
@@ -137,14 +137,14 @@ return (
               placeholder="Search users, events..."
               value={searchQuery}
               onChange={handleSearchInputChange}
-              className="bg-white backdrop-blur-xl border border-purple-300/50 rounded-full px-4 py-2 w-64 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 cursor-text"
+              className="bg-white backdrop-blur-xl border border-purple-300/50 rounded-full px-4 py-2 w-64 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 cursor-text font-normal"
             />
             
             {/* Search Results Dropdown */}
             {showSearchDropdown && (
               <div className="absolute top-full mt-2 w-96 bg-white/90 backdrop-blur-2xl rounded-xl shadow-2xl border border-purple-300/50 max-h-96 overflow-y-auto z-50">
                 {isSearching ? (
-                  <div className="p-4 text-center text-gray-600">
+                  <div className="p-4 text-center text-gray-600 font-normal">
                     Searching...
                   </div>
                 ) : hasResults ? (
@@ -152,7 +152,7 @@ return (
                     {/* Users Section */}
                     {searchResults.users.length > 0 && (
                       <div className="p-2">
-                        <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">
+                        <div className="px-3 py-2 text-xs font-bold text-gray-500 uppercase">
                           People
                         </div>
                         {searchResults.users.map((user) => (
@@ -176,7 +176,7 @@ return (
                               <div className="font-semibold text-gray-900 truncate">
                                 {user.username}
                               </div>
-                              <div className="text-sm text-gray-600 truncate">
+                              <div className="text-sm text-gray-600 truncate font-normal">
                                 {user.program || 'Student'}
                               </div>
                             </div>
@@ -188,7 +188,7 @@ return (
                     {/* Events Section */}
                     {searchResults.events.length > 0 && (
                       <div className="p-2 border-t border-purple-200/50">
-                        <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase">
+                        <div className="px-3 py-2 text-xs font-bold text-gray-500 uppercase">
                           Events
                         </div>
                         {searchResults.events.map((event) => (
@@ -212,7 +212,7 @@ return (
                               <div className="font-semibold text-gray-900 truncate">
                                 {event.content}
                               </div>
-                              <div className="text-sm text-gray-600 truncate">
+                              <div className="text-sm text-gray-600 truncate font-normal">
                                 {event.club_name} • {new Date(event.event_date).toLocaleDateString()}
                               </div>
                             </div>
@@ -222,7 +222,7 @@ return (
                     )}
                   </>
                 ) : (
-                  <div className="p-4 text-center text-gray-600">
+                  <div className="p-4 text-center text-gray-600 font-normal">
                     No results found
                   </div>
                 )}

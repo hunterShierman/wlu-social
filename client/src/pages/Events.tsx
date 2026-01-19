@@ -131,8 +131,8 @@ return (
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#330072] to-[#F2A900] bg-clip-text text-transparent leading-tight mb-2">Upcoming Events</h1>
-          <p className="text-gray-700 text-lg">Discover what's happening at WLU</p>
+          <h1 className="text-4xl font-black bg-gradient-to-r from-[#330072] to-[#F2A900] bg-clip-text text-transparent leading-tight pb-1 mb-2">Upcoming Events</h1>
+          <p className="text-gray-700 text-lg font-normal">Discover what's happening at WLU</p>
         </div>
 
         {/* Search and Filters */}
@@ -147,7 +147,7 @@ return (
                 setSearchQuery(e.target.value);
                 setCurrentLimit(8);
               }}
-              className="w-full px-4 py-3 pl-12 border border-[#330072]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#330072]/50 focus:border-transparent bg-white/60 backdrop-blur-sm shadow-sm"
+              className="w-full px-4 py-3 pl-12 border border-[#330072]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#330072]/50 focus:border-transparent bg-white/60 backdrop-blur-sm shadow-sm font-normal"
             />
             <svg
               className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
@@ -170,10 +170,10 @@ return (
               <button
                 key={faculty}
                 onClick={() => handleFacultyClick(faculty)}
-                className={`px-4 py-2 font-medium transition ${
+                className={`px-4 py-2 transition ${
                   selectedFaculty === faculty
-                      ? 'text-[#F2A900] cursor-pointer'
-                      : 'text-gray-700 cursor-pointer hover:text-[#F2A900]'
+                      ? 'text-[#330072] cursor-pointer font-bold'
+                      : 'text-gray-700 cursor-pointer font-semibold hover:text-[#330072]'
                 }`}
               >
                 {faculty}
@@ -184,7 +184,7 @@ return (
 
         {/* Results Count */}
         <div className="mb-6">
-          <p className="text-gray-700">
+          <p className="text-gray-700 font-normal">
             Showing {displayedEvents.length} of {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
           </p>
         </div>
@@ -192,8 +192,8 @@ return (
         {/* Loading State */}
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#F2A900]"></div>
-            <p className="text-gray-700 mt-4">Loading events...</p>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#330072]"></div>
+            <p className="text-gray-700 mt-4 font-normal">Loading events...</p>
           </div>
         ) : (
           <>
@@ -216,7 +216,7 @@ return (
                     <button
                       onClick={loadMoreEvents}
                       disabled={isLoadingMore}
-                      className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                      className="bg-purple-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {isLoadingMore ? 'Loading...' : `Load More Events (${remainingCount} remaining)`}
                     </button>
@@ -229,7 +229,7 @@ return (
                   {selectedFaculty === 'Registered Events' ? '📋' : '📅'}
                 </span>
                 <h3 className="text-xl font-semibold text-[#330072] mb-2">No events found</h3>
-                <p className="text-gray-700">
+                <p className="text-gray-700 font-normal">
                   {selectedFaculty === 'Registered Events'
                     ? "You haven't registered for any events yet"
                     : searchQuery || selectedFaculty !== 'All'

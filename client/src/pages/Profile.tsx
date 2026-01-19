@@ -293,7 +293,7 @@ const Profile = () => {
                       <div className="flex space-x-3">
                         <button 
                           onClick={() => navigate('/profile/edit')}
-                          className="cursor-pointer px-6 py-2 bg-[#330072] text-white hover:bg-[#F2A900] transition-colors rounded-lg font-semibold"
+                          className="cursor-pointer px-6 py-2 bg-purple-800 text-white hover:bg-[#F2A900] transition-colors rounded-lg font-semibold"
                         >
                           Edit Profile
                         </button>

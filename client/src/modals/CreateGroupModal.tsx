@@ -224,7 +224,7 @@ const CreateGroupModal = ({ onClose, onSuccess }: CreateGroupModalProps) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+              className="flex-1 bg-purple-800 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
             >
               {isSubmitting ? 'Creating...' : 'Create Group'}
             </button>

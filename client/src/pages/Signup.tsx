@@ -98,7 +98,7 @@ const Signup = () => {
                 </p>
                 <button
                   onClick={() => navigate('/resend-verification')}
-                  className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+                  className="w-full bg-purple-800 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
                 >
                   Resend Verification Email
                 </button>
@@ -190,7 +190,7 @@ const Signup = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full bg-purple-800 text-white py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? 'Creating Account...' : 'Sign Up'}
                 </button>

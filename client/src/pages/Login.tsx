@@ -124,7 +124,7 @@ const handleLogin = async (e: React.FormEvent) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+              className="w-full bg-purple-800 text-white py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
