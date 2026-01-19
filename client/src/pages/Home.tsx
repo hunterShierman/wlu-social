@@ -42,7 +42,7 @@ const Home = () => {
   };
 
 return (
-  <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
+  <div className="min-h-screen bg-purple-50">
     <div className="pt-20 pb-8 justify-center">
       <div className="max-w-xl mx-auto px-4">
         {/* Optional: Show loading state while fetching user */}

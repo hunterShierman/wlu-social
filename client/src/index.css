@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Source Sans 3', sans-serif;
+}
+
 html {
     overflow-y: auto;
     scrollbar-gutter: stable;
