@@ -39,7 +39,7 @@ return (
   <div className="flex items-start space-x-2">
     <div 
       onClick={() => navigate(`/profile/${comment.username}`)}
-      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#330072] to-[#F2A900] flex items-center justify-center overflow-hidden shrink-0 cursor-pointer ring-2 ring-[#F2A900]/20">
+      className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer ring-2 ring-[#F2A900]/20">
       {comment.profile_picture_url ? (
         <img 
           src={comment.profile_picture_url} 

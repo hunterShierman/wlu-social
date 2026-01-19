@@ -250,27 +250,27 @@ const StudyGroups = () => {
           <div className="mb-6 space-y-4">
             {/* Tabs */}
             <div className="flex space-x-2">
-              <button
-                onClick={() => setActiveTab('all')}
-                className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
-                  activeTab === 'all'
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:border-purple-600'
-                }`}
-              >
-                All Groups ({allGroups.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('my')}
-                className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
-                  activeTab === 'my'
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:border-purple-600'
-                }`}
-              >
-                My Groups ({myGroups.length})
-              </button>
-            </div>
+                <button
+                  onClick={() => setActiveTab('all')}
+                  className={`px-6 py-2 transition font-semibold cursor-pointer ${
+                    activeTab === 'all'
+                      ? 'text-[#F2A900]'
+                      : 'text-gray-700 hover:text-[#F2A900]'
+                  }`}
+                >
+                  All Groups ({allGroups.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('my')}
+                  className={`px-6 py-2 font-semibold transition cursor-pointer ${
+                    activeTab === 'my'
+                      ? 'text-[#F2A900]'
+                      : 'text-gray-700 hover:text-[#F2A900]'
+                  }`}
+                >
+                  My Groups ({myGroups.length})
+                </button>
+              </div>
 
             {/* Search Bar */}
             <div className="flex space-x-3">

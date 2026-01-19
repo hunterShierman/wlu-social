@@ -290,16 +290,16 @@ const Profile = () => {
                     </div>
 
                     {isOwnProfile ? (
-                      <div className="flex space-x-3">  {/* ✅ Changed to flex container */}
+                      <div className="flex space-x-3">
                         <button 
                           onClick={() => navigate('/profile/edit')}
-                          className="cursor-pointer px-6 py-2 bg-purple-600 text-white border-purple-600 hover:bg-purple-700 transition-colors rounded-full"
+                          className="cursor-pointer px-6 py-2 bg-purple-600 text-white hover:bg-[#F2A900] transition-colors rounded-lg font-semibold"
                         >
                           Edit Profile
                         </button>
                         <button 
                           onClick={handleLogout}
-                          className="cursor-pointer px-6 py-2 bg-purple-600 text-white border-purple-600 hover:bg-purple-700 transition-colors rounded-full"
+                          className="cursor-pointer px-6 py-2 bg-white/60 backdrop-blur-sm text-[#330072] border border-[#330072]/20 hover:border-[#330072] transition-colors rounded-lg font-semibold"
                         >
                           Log Out
                         </button>
@@ -308,10 +308,10 @@ const Profile = () => {
                       <button 
                         onClick={handleFollowClick}
                         disabled={isFollowLoading}
-                        className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer ${
+                        className={`px-6 py-2 rounded-lg font-semibold transition cursor-pointer ${
                           isFollowing 
-                            ? 'bg-purple-600 text-white border border-purple-600 hover:bg-purple-700 transition-colors' 
-                            : 'bg-white text-purple-700 border border-purple-600 hover:bg-purple-50 transition-colors'
+                            ? 'bg-[#330072] text-white hover:bg-[#F2A900]' 
+                            : 'bg-white/60 backdrop-blur-sm text-[#330072] border border-[#330072]/20 hover:border-[#330072] hover:text-[#F2A900]'
                         } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         {isFollowLoading ? '...' : isFollowing ? 'Following' : 'Follow'}
