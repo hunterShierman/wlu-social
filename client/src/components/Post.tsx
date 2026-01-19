@@ -351,7 +351,7 @@ useEffect(() => {
             <div className="flex items-center">
               <p 
                 onClick={() => navigate(`/profile/${post.username}`)}
-                className="font-semibold text-sm text-gray-900 hover:underline cursor-pointer">{post.username}</p>
+                className="font-semibold text-sm text-gray-900 hover:underline cursor-pointer hover:text-[#F2A900]">{post.username}</p>
               <span className="ml-1 text-purple-600 text-sm">✓</span>
             </div>
             <p className="text-xs text-gray-600">{post.program} @ Wilfrid Laurier University</p>

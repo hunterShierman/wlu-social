@@ -125,125 +125,125 @@ const Events = () => {
     setCurrentLimit(8);
   };
 
-  return (
-    <div className="min-h-screen bg-purple-50">
-      <div className="pt-24 pb-12">
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Upcoming Events</h1>
-            <p className="text-gray-600 text-lg">Discover what's happening at WLU</p>
-          </div>
-
-          {/* Search and Filters */}
-          <div className="mb-8 space-y-4">
-            {/* Search Bar */}
-            <div className="relative max-w-2xl">
-              <input
-                type="text"
-                placeholder="Search events..."
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentLimit(8);
-                }}
-                className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white shadow-sm"
-              />
-              <svg
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-
-            {/* Faculty Filter Pills */}
-            <div className="flex flex-wrap gap-2">
-              {faculties.map((faculty) => (
-                <button
-                  key={faculty}
-                  onClick={() => handleFacultyClick(faculty)}
-                  className={`px-4 py-2 rounded-full font-medium transition ${
-                    selectedFaculty === faculty
-                        ? 'bg-purple-500 text-white cursor-pointer'
-                        : 'bg-white text-gray-700 border cursor-pointer border-gray-300 hover:border-purple-600 hover:text-purple-600'
-                  }`}
-                >
-                  {faculty}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Results Count */}
-          <div className="mb-6">
-            <p className="text-gray-600">
-              Showing {displayedEvents.length} of {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
-            </p>
-          </div>
-
-          {/* Loading State */}
-          {isLoading ? (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-              <p className="text-gray-600 mt-4">Loading events...</p>
-            </div>
-          ) : (
-            <>
-              {/* Events Grid */}
-              {displayedEvents.length > 0 ? (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {displayedEvents.map((event) => (
-                      <EventCard 
-                        key={event.id} 
-                        event={event} 
-                        isRegistered={registeredEventIds.has(event.id)}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Load More Button */}
-                  {hasMore && (
-                    <div className="mt-8 text-center">
-                      <button
-                        onClick={loadMoreEvents}
-                        disabled={isLoadingMore}
-                        className="bg-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
-                      >
-                        {isLoadingMore ? 'Loading...' : `Load More Events (${remainingCount} remaining)`}
-                      </button>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center py-16 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                  <span className="text-6xl mb-4 block">
-                    {selectedFaculty === 'Registered Events' ? '📋' : '📅'}
-                  </span>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No events found</h3>
-                  <p className="text-gray-600">
-                    {selectedFaculty === 'Registered Events'
-                      ? "You haven't registered for any events yet"
-                      : searchQuery || selectedFaculty !== 'All'
-                      ? 'Try adjusting your search or filters'
-                      : 'Check back soon for upcoming events!'}
-                  </p>
-                </div>
-              )}
-            </>
-          )}
+return (
+  <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
+    <div className="pt-24 pb-12">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#330072] to-[#F2A900] bg-clip-text text-transparent leading-tight mb-2">Upcoming Events</h1>
+          <p className="text-gray-700 text-lg">Discover what's happening at WLU</p>
         </div>
+
+        {/* Search and Filters */}
+        <div className="mb-8 space-y-4">
+          {/* Search Bar */}
+          <div className="relative max-w-2xl">
+            <input
+              type="text"
+              placeholder="Search events..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentLimit(8);
+              }}
+              className="w-full px-4 py-3 pl-12 border border-[#330072]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#330072]/50 focus:border-transparent bg-white/60 backdrop-blur-sm shadow-sm"
+            />
+            <svg
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+
+          {/* Faculty Filter Pills */}
+          <div className="flex flex-wrap gap-2">
+            {faculties.map((faculty) => (
+              <button
+                key={faculty}
+                onClick={() => handleFacultyClick(faculty)}
+                className={`px-4 py-2 font-medium transition ${
+                  selectedFaculty === faculty
+                      ? 'text-[#F2A900] cursor-pointer'
+                      : 'text-gray-700 cursor-pointer hover:text-[#F2A900]'
+                }`}
+              >
+                {faculty}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Results Count */}
+        <div className="mb-6">
+          <p className="text-gray-700">
+            Showing {displayedEvents.length} of {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
+          </p>
+        </div>
+
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#F2A900]"></div>
+            <p className="text-gray-700 mt-4">Loading events...</p>
+          </div>
+        ) : (
+          <>
+            {/* Events Grid */}
+            {displayedEvents.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {displayedEvents.map((event) => (
+                    <EventCard 
+                      key={event.id} 
+                      event={event} 
+                      isRegistered={registeredEventIds.has(event.id)}
+                    />
+                  ))}
+                </div>
+
+                {/* Load More Button */}
+                {hasMore && (
+                  <div className="mt-8 text-center">
+                    <button
+                      onClick={loadMoreEvents}
+                      disabled={isLoadingMore}
+                      className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      {isLoadingMore ? 'Loading...' : `Load More Events (${remainingCount} remaining)`}
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-16 bg-white/40 backdrop-blur-xl rounded-lg border border-[#330072]/20">
+                <span className="text-6xl mb-4 block">
+                  {selectedFaculty === 'Registered Events' ? '📋' : '📅'}
+                </span>
+                <h3 className="text-xl font-semibold text-[#330072] mb-2">No events found</h3>
+                <p className="text-gray-700">
+                  {selectedFaculty === 'Registered Events'
+                    ? "You haven't registered for any events yet"
+                    : searchQuery || selectedFaculty !== 'All'
+                    ? 'Try adjusting your search or filters'
+                    : 'Check back soon for upcoming events!'}
+                </p>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default Events;
