@@ -22,8 +22,13 @@ const Profile = () => {
   const [isFollowLoading, setIsFollowLoading] = useState(false);
 
   // fetch global user information
-  const { userData, userSignedIn } = useAuth();
+  const { userData, userSignedIn, logout } = useAuth();
   const currentUsername = userData?.username || '';
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
 
   // load in all the necessary data to populate the page for specific user
@@ -247,10 +252,10 @@ const Profile = () => {
   const isOwnProfile = userSignedIn && currentUsername === username;
 
   return (
-    <div className="min-h-screen bg-purple-50">
+     <div className="min-h-screen bg-purple-50">
       {/* Navigation Bar */}
 
-          {/* Main Content */}
+      {/* Main Content */}
       <div className="pt-20 pb-8">
         <div className="max-w-2xl mx-auto px-4">
           {/* Profile Top Card */}
@@ -285,12 +290,20 @@ const Profile = () => {
                     </div>
 
                     {isOwnProfile ? (
-                      <button 
-                        onClick={() => navigate('/profile/edit')}
-                        className="cursor-pointer px-6 py-2 bg-purple-600 text-white border-purple-600 hover:bg-purple-700 transition-colors rounded-full"
-                      >
-                        Edit Profile
-                      </button>
+                      <div className="flex space-x-3">  {/* ✅ Changed to flex container */}
+                        <button 
+                          onClick={() => navigate('/profile/edit')}
+                          className="cursor-pointer px-6 py-2 bg-purple-600 text-white border-purple-600 hover:bg-purple-700 transition-colors rounded-full"
+                        >
+                          Edit Profile
+                        </button>
+                        <button 
+                          onClick={handleLogout}
+                          className="cursor-pointer px-6 py-2 bg-purple-600 text-white border-purple-600 hover:bg-purple-700 transition-colors rounded-full"
+                        >
+                          Log Out
+                        </button>
+                      </div>
                     ) : (
                       <button 
                         onClick={handleFollowClick}

@@ -9,7 +9,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   
   // ← Replace userSignedIn and userData state with this
-  const { userData, userSignedIn, logout: authLogout } = useAuth();
+  const { userData, userSignedIn} = useAuth();
   
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,12 +80,6 @@ const NavBar = () => {
     setShowSearchDropdown(false);
   };
 
-  // ← Use authLogout from context
-  const handleLogout = () => {
-    authLogout();
-    navigate('/login');
-  };
-
   const handleSignIn = () => {
     navigate('/login');
   };
@@ -128,24 +122,13 @@ const NavBar = () => {
               Study Groups
             </button>
 
-            {userSignedIn && userData ? (
-              <>
-                <button
-                  onClick={handleLogout}
-                  className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
+            {!userSignedIn && (
                 <button
                   onClick={handleSignIn}
                   className="bg-purple-400 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-500 transition cursor-pointer"
                 >
                   Sign In
                 </button>
-              </>
             )}
 
             {/* Search Bar with Dropdown */}
