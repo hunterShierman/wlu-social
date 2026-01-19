@@ -93,7 +93,13 @@ return (
         <div className="flex items-center space-x-3">
           <Icon className="h-12 w-10 text-gray-900 transition" />
           <button
-            onClick={() => navigate('/')}
+            onClick={() => {
+            if (window.location.pathname === '/') {
+              window.location.reload();
+            } else {
+              navigate('/');
+            }
+            }}
             className="text-2xl font-black text-white hover:text-gray-900 transition-all duration-300 cursor-pointer"
           >
             WLU Connect
