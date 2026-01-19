@@ -116,7 +116,6 @@ const Profile = () => {
   const handleFollowClick = async () => {
     if (!userSignedIn) {
       alert('Please sign in to follow users');
-      navigate('/login');
       return;
     }
 

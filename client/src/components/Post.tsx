@@ -156,7 +156,7 @@ useEffect(() => {
 
     if (!token) {
       alert('Sign in to like this post');
-      navigate('/login');
+      return;
     }
     
     try {
@@ -204,7 +204,7 @@ useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       alert('Sign in to join the conversation');
-      navigate('/login');
+      return;
     }
     setShowCommentInput(!showCommentInput);
   };

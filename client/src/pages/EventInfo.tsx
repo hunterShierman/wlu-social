@@ -65,7 +65,6 @@ const EventInfo = () => {
     // Check if user is signed in
     if (!token) {
       alert('Please sign in to register for events');
-      navigate('/login');
       return;
     }
 

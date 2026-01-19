@@ -1,6 +1,5 @@
 // pages/StudyGroups.tsx
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import CreateGroupModal from '../modals/CreateGroupModal';
 import GroupMembersModal from '../modals/GroupMembersModal';
 import { useAuth } from '../context/AuthContext';
@@ -21,7 +20,6 @@ interface StudyGroup {
 }
 
 const StudyGroups = () => {
-  const navigate = useNavigate();
   const [allGroups, setAllGroups] = useState<StudyGroup[]>([]);
   const [myGroups, setMyGroups] = useState<StudyGroup[]>([]);
   const [displayedGroups, setDisplayedGroups] = useState<StudyGroup[]>([]);
@@ -123,7 +121,6 @@ const StudyGroups = () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       alert('Please sign in to join study groups');
-      navigate('/login');
       return;
     }
 
@@ -172,6 +169,17 @@ const StudyGroups = () => {
     } finally {
       setLoadingGroupId(null);
     }
+  };
+
+  const handleCreateGroupClick = () => {
+    const token = localStorage.getItem('accessToken');
+    
+    if (!token) {
+      alert('Please sign in to create a study group');
+      return;
+    }
+    
+    setShowCreateModal(true);
   };
 
   const handleDeleteGroup = async (groupId: number) => {
@@ -279,7 +287,7 @@ const StudyGroups = () => {
                 </svg>
               </div>
               <button
-                onClick={() => setShowCreateModal(true)}
+                onClick={handleCreateGroupClick}
                 className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer whitespace-nowrap"
               >
                 + Create Group
