@@ -443,7 +443,7 @@ return (
         </span>
       </div>
       <div className="flex items-center space-x-3">
-        <span className="hover:text-[#F2A900] transition cursor-pointer">
+        <span className="transition">
           {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
         </span>
       </div>
