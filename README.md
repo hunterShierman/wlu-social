@@ -10,9 +10,9 @@ A modern social networking platform designed specifically for Wilfrid Laurier Un
 - [Overview](#overview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
+- [Deployment & Hosting](#deployment-hosting)
 
 ## 🎯 Overview
 
@@ -85,37 +85,10 @@ WLU Connect is a university-focused social media platform that enables students 
 **Backend**
 - `jsonwebtoken`: JWT token generation and verification
 - `bcrypt`: Password hashing and comparison
-- `multer`: Multipart form data handling for file uploads
 - `pg`: PostgreSQL client for Node.js
 - `cors`: Cross-origin resource sharing
 - `dotenv`: Environment variable management
 - `express-rate-limit`: API rate limiting for security
-
-## 🏗 Architecture
-
-### System Architecture
-```
-┌─────────────────┐
-│   React SPA     │
-│  (TailwindCSS)  │
-└────────┬────────┘
-         │ HTTP/REST
-         ↓
-┌─────────────────┐
-│  Express Server │
-│   (Node.js)     │
-└────┬───────┬────┘
-     │       │
-     │       └─────→ ┌──────────────┐
-     │               │  Cloudinary  │
-     │               │ (Image CDN)  │
-     │               └──────────────┘
-     ↓
-┌─────────────────┐
-│   PostgreSQL    │
-│    Database     │
-└─────────────────┘
-```
 
 ### Database Schema
 
@@ -147,7 +120,7 @@ User selects image → Image cropped in browser
                     ↓
                 Cropped file sent to backend
                     ↓
-                Backend receives file (multer)
+                Backend receives file
                     ↓
                 Upload to Cloudinary
                     ↓
@@ -163,44 +136,76 @@ User selects image → Image cropped in browser
 wlu-connect/
 ├── client/                   # Frontend React application
 │   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   │   ├── NavBar.tsx
-│   │   │   ├── Post.tsx
+│   │   ├── assets/          # Static assets (images, icons)
+│   │   ├── components/      # Reusable UI components
 │   │   │   ├── Comment.tsx
-│   │   │   └── EventCard.tsx
+│   │   │   ├── CreatePost.tsx
+│   │   │   ├── EventCard.tsx
+│   │   │   ├── NavBar.tsx
+│   │   │   └── Post.tsx
+│   │   ├── context/         # React Context providers
+│   │   │   └── AuthContext.tsx
+│   │   ├── modals/          # Modal components
+│   │   │   ├── CreateGroupModal.tsx
+│   │   │   └── GroupMembersModal.tsx
 │   │   ├── pages/           # Page components
-│   │   │   ├── Home.tsx
-│   │   │   ├── Profile.tsx
+│   │   │   ├── EditProfile.tsx
+│   │   │   ├── EventInfo.tsx
 │   │   │   ├── Events.tsx
-│   │   │   ├── StudyGroups.tsx
-│   │   │   └── Login.tsx
+│   │   │   ├── FollowList.tsx
+│   │   │   ├── GroupStudy.tsx
+│   │   │   ├── Home.tsx
+│   │   │   ├── Login.tsx
+│   │   │   ├── Profile.tsx
+│   │   │   ├── ResendVerification.tsx
+│   │   │   ├── Signup.tsx
+│   │   │   └── VerifyEmail.tsx
 │   │   ├── types/           # TypeScript type definitions
+│   │   │   ├── comment.ts
+│   │   │   ├── event.ts
+│   │   │   ├── post.ts
+│   │   │   ├── profile.ts
+│   │   │   ├── search.ts
+│   │   │   └── user.ts
 │   │   ├── utils/           # Utility functions
-│   │   │   └── cropImage.ts
 │   │   ├── App.tsx          # Main app component
-│   │   └── main.tsx         # Entry point
+│   │   ├── index.css        # Global styles
+│   │   ├── main.tsx         # Entry point
+│   │   └── svg.d.ts         # SVG type declarations
 │   ├── public/              # Static assets
+│   ├── .env.development     # Development environment variables
+│   ├── index.html           # HTML template
 │   └── package.json
 │
 ├── server/                  # Backend Express application
-│   ├── config/              # Configuration files
-│   │   ├── database.ts
-│   │   └── cloudinary.ts
-│   ├── middleware/          # Express middleware
-│   │   └── auth.ts
-│   ├── routes/              # API route handlers
-│   │   ├── auth.ts
-│   │   ├── users.ts
-│   │   ├── posts.ts
-│   │   ├── comments.ts
-│   │   ├── likes.ts
-│   │   ├── events.ts
-│   │   ├── studyGroups.ts
-│   │   └── upload.ts
-│   ├── database/            # Database schemas
-│   │   └── schema.sql
-│   ├── index.ts             # Server entry point
-│   └── package.json
+│   ├── src/
+│   │   ├── config/          # Configuration files
+│   │   │   ├── cloudinary.ts
+│   │   │   ├── database.ts
+│   │   │   └── env.ts
+│   │   ├── middleware/      # Express middleware
+│   │   │   ├── auth.ts
+│   │   │   └── rateLimit.ts
+│   │   ├── routes/          # API route handlers
+│   │   │   ├── auth.ts
+│   │   │   ├── clubs.ts
+│   │   │   ├── comments.ts
+│   │   │   ├── events.ts
+│   │   │   ├── likes.ts
+│   │   │   ├── posts.ts
+│   │   │   ├── search.ts
+│   │   │   ├── studyGroups.ts
+│   │   │   ├── upload.ts
+│   │   │   └── users.ts
+│   │   ├── types/           # TypeScript type definitions
+│   │   │   └── express.d.ts
+│   │   ├── utils/           # Utility functions
+│   │   │   └── email.ts
+│   │   └── index.ts         # Server entry point
+│   ├── requests/            # API request examples/tests
+│   ├── .env                 # Environment variables
+│   ├── package.json
+│   └── tsconfig.json
 │
 └── README.md
 ```
@@ -278,6 +283,25 @@ POST   /upload/image                    Upload image to Cloudinary
 - **File Size Limits**: 5MB maximum for uploads
 - **Protected Routes**: Middleware ensures authentication for sensitive operations
 
+## 🚀 Deployment
+
+### Frontend (Vercel)
+The React frontend is deployed on **Vercel** with automatic deployments from the main branch. Vercel handles the build process (`npm run build`) and serves the static assets through their global CDN.
+
+**Configuration:**
+- Build command: `npm run build`
+- Output directory: `dist`
+- Environment variables configured for API URL pointing to the Railway backend
+
+### Backend & Database (Railway)
+The Express server and PostgreSQL database are both hosted on **Railway**, providing a unified backend infrastructure.
+
+**Setup:**
+- Node.js server deployed from the `/server` directory
+- PostgreSQL database provisioned through Railway's managed database service
+- Environment variables configured for database connection, JWT secrets, and Cloudinary credentials
+- Automatic deployments triggered on push to main branch
+
 ---
 
 ## Disclaimer
@@ -287,6 +311,7 @@ It is not affiliated with, endorsed by, or associated with Wilfrid Laurier
 University. Any reference to "WLU" or "Wilfrid Laurier University" is for 
 descriptive purposes only to indicate the target audience and inspiration 
 for the platform.
+
 
 
 
