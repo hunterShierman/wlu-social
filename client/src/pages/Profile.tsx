@@ -311,7 +311,7 @@ const Profile = () => {
                         disabled={isFollowLoading}
                         className={`px-6 py-2 rounded-lg font-semibold transition cursor-pointer ${
                           isFollowing 
-                            ? 'bg-[#330072] text-white hover:bg-[#F2A900]' 
+                            ? 'bg-purple-700 text-white hover:bg-[#F2A900]' 
                             : 'bg-white/60 backdrop-blur-sm text-[#330072] border border-[#330072]/20 hover:border-[#330072]'
                         } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >

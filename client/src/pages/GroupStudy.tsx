@@ -336,7 +336,7 @@ return (
                                   handleDeleteGroup(group.group_id);
                                 }}
                                 disabled={isDeleting}
-                                className="w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold text-left"
+                                className="w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50 font-semibold text-center"
                               >
                                 {isDeleting ? 'Deleting...' : 'Delete Group'}
                               </button>
@@ -347,7 +347,7 @@ return (
                                   alert("Group Reported");
                                   setShowDropdown(null);
                                 }}
-                                className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold text-left"
+                                className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition font-semibold text-center"
                               >
                                 Report Group
                               </button>

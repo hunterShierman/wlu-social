@@ -78,7 +78,7 @@ const FollowList = () => {
         <div className="pt-20 pb-8">
           <div className="max-w-4xl mx-auto px-4">
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F2A900]"></div>
             </div>
           </div>
         </div>
