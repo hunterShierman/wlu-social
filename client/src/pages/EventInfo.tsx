@@ -157,7 +157,7 @@ const EventInfo = () => {
 
         <div className="pt-24 flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#F2A900]"></div>
             <p className="text-gray-600 mt-4">Loading event...</p>
           </div>
         </div>

@@ -436,7 +436,7 @@ const EditProfile = () => {
               <button
                 type="submit"
                 disabled={isSaving || isUploading}
-                className="flex-1 bg-purple-700 text-white py-3 rounded-lg font-semibold hover:bg-[#F2A900]  transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                className="flex-1 bg-purple-700 text-white py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isUploading ? 'Uploading Image...' : isSaving ? 'Saving...' : 'Save Changes'}
               </button>
