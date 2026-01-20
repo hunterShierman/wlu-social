@@ -232,7 +232,7 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
       {/* Crop Modal */}
       {showCropModal && imageToCrop && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">

@@ -72,7 +72,7 @@ const handleLogin = async (e: React.FormEvent) => {
 };
 
   return (
-    <div className="min-h-screen bg-purple-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         {/* Back to Home Button */}
         <button

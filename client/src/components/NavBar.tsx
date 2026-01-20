@@ -174,7 +174,7 @@ return (
                                 className="w-10 h-10 rounded-full object-cover"
                               />
                             ) : (
-                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold">
+                              <div className="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center text-white font-semibold">
                                 {user.username[0].toUpperCase()}
                               </div>
                             )}
@@ -239,7 +239,7 @@ return (
           {userSignedIn && userData && (
             <button
               onClick={() => navigate(`/profile/${userData.username}`)}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 ml-2"
+              className="w-9 h-9 rounded-full bg-purple-700 flex items-center justify-center text-white font-semibold overflow-hidden cursor-pointer hover:opacity-80 transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 ml-2"
             >
               {userData.profile_picture_url ? (
                 <img

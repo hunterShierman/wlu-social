@@ -74,7 +74,7 @@ const FollowList = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
         <div className="pt-20 pb-8">
           <div className="max-w-4xl mx-auto px-4">
             <div className="flex items-center justify-center py-12">
@@ -87,7 +87,7 @@ const FollowList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
       <div className="pt-20 pb-8">
         <div className="max-w-4xl mx-auto px-4">
           {/* Back Button */}

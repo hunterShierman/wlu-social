@@ -298,7 +298,7 @@ return (
         {/* Loading State */}
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#330072]"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#F2A900]"></div>
             <p className="text-gray-700 mt-4 font-normal">Loading study groups...</p>
           </div>
         ) : (

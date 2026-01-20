@@ -65,7 +65,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <button
           onClick={() => navigate('/')}
@@ -143,7 +143,7 @@ const Signup = () => {
                   </label>
                   <input
                     type="email"
-                    placeholder="your.email@mylaurier.ca"
+                    placeholder="your.email@gmail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -168,7 +168,7 @@ const Signup = () => {
                     required
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Must be at least 8 characters
+                    Must be at least 6 characters
                   </p>
                 </div>
 

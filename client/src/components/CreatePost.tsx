@@ -321,7 +321,7 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
             className="w-10 h-10 rounded-full object-cover shrink-0"
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold shrink-0">
+          <div className="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center text-white font-semibold shrink-0">
             {userInitial}
           </div>
         )}

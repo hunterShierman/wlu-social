@@ -175,7 +175,7 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
         {/* Navigation */}
   
         {/* Skeleton Loader */}
@@ -230,7 +230,7 @@ const Profile = () => {
 
   if (error || !user) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{error || 'User not found'}</h2>
           <button
@@ -252,7 +252,7 @@ const Profile = () => {
   const isOwnProfile = userSignedIn && currentUsername === username;
 
   return (
-     <div className="min-h-screen bg-purple-50">
+     <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
       {/* Navigation Bar */}
 
       {/* Main Content */}
@@ -265,7 +265,7 @@ const Profile = () => {
               <div className="flex gap-6">
                 {/* Left Side - Profile Picture */}
                 <div className="shrink-0">
-                  <div className="w-32 h-32 rounded-full border-4 border-purple-200 bg-gray-300 flex items-center justify-center overflow-hidden">
+                  <div className="w-32 h-32 rounded-full border-4 border-purple-200 bg-purple-700 flex items-center justify-center overflow-hidden">
                     {user.profile_picture_url ? (
                       <img
                         src={user.profile_picture_url}
@@ -273,7 +273,7 @@ const Profile = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <span className="text-gray-700 font-bold text-4xl">
+                      <span className="text-white font-bold text-4xl">
                         {user.username[0].toUpperCase()}
                       </span>
                     )}

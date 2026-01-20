@@ -334,13 +334,13 @@ useEffect(() => {
   const isOwnPost = currentUsername === post.username;
 
 return (
-  <div className="bg-white/40 backdrop-blur-xl rounded-lg border border-[#330072]/20 mb-4 hover:border-[#F2A900]/50 transition-all duration-300 shadow-lg">
+  <div className="bg-white backdrop-blur-xl rounded-lg border border-[#330072]/20 mb-4 hover:border-[#F2A900]/50 transition-all duration-300 shadow-lg">
     {/* Post Header */}
     <div className="p-4 flex items-start justify-between">
       <div className="flex items-start">
         <div 
            onClick={() => navigate(`/profile/${post.username}`)}
-          className="w-12 h-12 rounded-full bg-gradient-to-br from-[#330072] to-[#F2A900] flex items-center justify-center overflow-hidden shrink-0 cursor-pointer ring-2 ring-[#F2A900]/30">
+          className="w-12 h-12 rounded-full bg-purple-700 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer ring-2 ring-[#F2A900]/30">
           {post.profile_picture_url ? (
             <img src={post.profile_picture_url} alt={post.username} className="w-full h-full object-cover" />
           ) : (

@@ -189,7 +189,7 @@ const EventInfo = () => {
   const faculty = getFacultyInfo(event.department);
 
 return (
-    <div className="min-h-screen bg-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
       {/* Navigation Bar */}
 
       {/* Main Content */}

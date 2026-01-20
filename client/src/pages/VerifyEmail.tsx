@@ -68,7 +68,7 @@ const VerifyEmail = () => {
             <p className="text-gray-600 mb-6">{message}</p>
             <button
               onClick={() => navigate('/login')}
-              className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+              className="bg-purple-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition cursor-pointer"
             >
               Go to Login
             </button>
@@ -85,7 +85,7 @@ const VerifyEmail = () => {
             <div className="space-y-3">
               <button
                 onClick={() => navigate('/resend-verification')}
-                className="w-full bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+                className="w-full bg-purple-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
               >
                 Resend Verification Email
               </button>

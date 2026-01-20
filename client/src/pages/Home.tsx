@@ -42,7 +42,7 @@ const Home = () => {
   };
 
 return (
-  <div className="min-h-screen bg-purple-50">
+  <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
     <div className="pt-20 pb-8 justify-center">
       <div className="max-w-xl mx-auto px-4">
         {/* Optional: Show loading state while fetching user */}
@@ -53,7 +53,7 @@ return (
         ) : (
           <>
             {userSignedIn && userData && (
-              <div key="welcome" className="backdrop-blur-xl bg-white/40 border-l-4 border-[#F2A900] rounded-xl shadow-lg mb-4 p-6 hover:shadow-xl transition-all duration-300">
+              <div key="welcome" className="backdrop-blur-xl bg-white border-l-4 border-[#F2A900] rounded-xl shadow-lg mb-4 p-6 hover:shadow-xl transition-all duration-300">
                 <h2 className="text-xl font-semibold text-[#330072]">
                   Welcome back, {userData.username}! 👋
                 </h2>
