@@ -61,7 +61,13 @@ const VerifyEmail = () => {
 
         {status === 'success' && (
           <>
-            <div className="text-6xl mb-4">✅</div>
+            <div className="text-6xl mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-200 rounded-full">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Email Verified!
             </h2>
