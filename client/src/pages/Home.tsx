@@ -55,7 +55,7 @@ return (
             {userSignedIn && userData && (
               <div key="welcome" className="backdrop-blur-xl bg-white border-l-4 border-[#F2A900] rounded-xl shadow-lg mb-4 p-6 hover:shadow-xl transition-all duration-300">
                 <h2 className="text-xl font-semibold text-[#330072]">
-                  Welcome back, {userData.username}! 👋
+                  Welcome back, {userData.username}!
                 </h2>
               </div>
             )}

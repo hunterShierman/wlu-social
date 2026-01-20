@@ -96,7 +96,7 @@ const GroupMembersModal = ({ groupId, groupName, onClose }: GroupMembersModalPro
         <div className="flex-1 overflow-y-auto p-6">
           {isLoading ? (
             <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#F2A900]"></div>
               <p className="text-gray-600 mt-4">Loading members...</p>
             </div>
           ) : error ? (

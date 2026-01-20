@@ -231,229 +231,239 @@ const EditProfile = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
-      {/* Crop Modal */}
-      {showCropModal && imageToCrop && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Crop Your Photo</h2>
-            
-            {/* Cropper Container */}
-            <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden mb-4">
-              <Cropper
-                image={imageToCrop}
-                crop={crop}
-                zoom={zoom}
-                aspect={1}
-                cropShape="round"
-                showGrid={false}
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
-                onCropComplete={onCropComplete}
-              />
-            </div>
-
-            {/* Zoom Slider */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Zoom
-              </label>
-              <input
-                type="range"
-                min={1}
-                max={3}
-                step={0.1}
-                value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
-                className="w-full"
-              />
-            </div>
-
-            {/* Buttons */}
-            <div className="flex space-x-3">
-              <button
-                onClick={handleCropConfirm}
-                className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
-              >
-                Crop & Continue
-              </button>
-              <button
-                onClick={handleCropCancel}
-                className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="pt-24 pb-12">
-        <div className="max-w-2xl mx-auto px-4">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h1>
-            <p className="text-gray-600">Update your profile information</p>
+return (
+  <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20">
+    {/* Crop Modal */}
+    {showCropModal && imageToCrop && (
+      <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Crop Your Photo</h2>
+          
+          {/* Cropper Container */}
+          <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden mb-4">
+            <Cropper
+              image={imageToCrop}
+              crop={crop}
+              zoom={zoom}
+              aspect={1}
+              cropShape="round"
+              showGrid={false}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+            />
           </div>
 
-          {/* Success Message */}
-          {successMessage && (
-            <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-              {successMessage}
-            </div>
-          )}
+          {/* Zoom Slider */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Zoom
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={3}
+              step={0.1}
+              value={zoom}
+              onChange={(e) => setZoom(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              {error}
-            </div>
-          )}
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6">
-            {/* Username (Read-only) */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                value={username}
-                disabled
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
-              />
-              <p className="text-xs text-gray-500 mt-1">Username cannot be changed</p>
-            </div>
-
-            {/* Email */}
-            <div className="mb-6">
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your.email@example.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent cursor-text"
-                required
-              />
-            </div>
-
-            {/* Program */}
-            <div className="mb-6">
-              <label htmlFor="program" className="block text-sm font-semibold text-gray-700 mb-2">
-                Program
-              </label>
-              <input
-                type="text"
-                id="program"
-                value={program}
-                onChange={(e) => setProgram(e.target.value)}
-                placeholder="e.g., Computer Science, Business Administration"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent cursor-text"
-              />
-            </div>
-
-            {/* Bio */}
-            <div className="mb-6">
-              <label htmlFor="bio" className="block text-sm font-semibold text-gray-700 mb-2">
-                Bio
-              </label>
-              <textarea
-                id="bio"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                placeholder="Tell us about yourself..."
-                rows={4}
-                maxLength={500}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none cursor-text"
-              />
-              <p className="text-xs text-gray-500 mt-1">{bio.length}/500 characters</p>
-            </div>
-
-            {/* Profile Picture Upload */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Profile Picture
-              </label>
-              
-              {/* Preview */}
-              <div className="flex items-center space-x-4 mb-3">
-                <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-4 border-purple-200 flex items-center justify-center">
-                  {imagePreview ? (
-                    <img
-                      src={imagePreview}
-                      alt="Profile preview"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  ) : (
-                    <span className="text-gray-400 text-3xl">{username[0]?.toUpperCase()}</span>
-                  )}
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <button
-                    type="button"
-                    onClick={handleUploadClick}
-                    className="bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#F2A900] transition cursor-pointer"
-                  >
-                    {isUploading ? 'Uploading...' : 'Upload Photo'}
-                  </button>
-                  {imagePreview && (
-                    <button
-                      type="button"
-                      onClick={handleRemoveImage}
-                      className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer"
-                    >
-                      Remove Photo
-                    </button>
-                  )}
-                </div>
-              </div>
-              <p className="text-xs text-gray-500">
-                Max size: 5MB. Supported formats: JPG, PNG, PNG, GIF, WebP
-              </p>
-              
-              {/* Hidden file input */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageSelect}
-                className="hidden"
-              />
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex space-x-4">
-              <button
-                type="submit"
-                disabled={isSaving || isUploading}
-                className="flex-1 bg-purple-700 text-white py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
-              >
-                {isUploading ? 'Uploading Image...' : isSaving ? 'Saving...' : 'Save Changes'}
-              </button>
-              <button
-                type="button"
-                onClick={handleCancel}
-                disabled={isSaving || isUploading}
-                className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+          {/* Buttons */}
+          <div className="flex space-x-3">
+            <button
+              onClick={handleCropConfirm}
+              className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+            >
+              Crop & Continue
+            </button>
+            <button
+              onClick={handleCropCancel}
+              className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
+    )}
+
+    {/* Main Content */}
+    <div className="pt-24 pb-12">
+      <div className="max-w-2xl mx-auto px-4">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h1>
+          <p className="text-gray-600">Update your profile information</p>
+        </div>
+
+        {/* Success Message - Full screen when successful */}
+        {successMessage ? (
+          <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+            <div className="mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Profile Updated!</h2>
+            <p className="text-gray-600">{successMessage}</p>
+          </div>
+        ) : (
+          <>
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6">
+              {/* Username (Read-only) */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  disabled
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
+                />
+                <p className="text-xs text-gray-500 mt-1">Username cannot be changed</p>
+              </div>
+
+              {/* Email */}
+              <div className="mb-6">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent cursor-text"
+                  required
+                />
+              </div>
+
+              {/* Program */}
+              <div className="mb-6">
+                <label htmlFor="program" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Program
+                </label>
+                <input
+                  type="text"
+                  id="program"
+                  value={program}
+                  onChange={(e) => setProgram(e.target.value)}
+                  placeholder="e.g., Computer Science, Business Administration"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent cursor-text"
+                />
+              </div>
+
+              {/* Bio */}
+              <div className="mb-6">
+                <label htmlFor="bio" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Bio
+                </label>
+                <textarea
+                  id="bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  placeholder="Tell us about yourself..."
+                  rows={4}
+                  maxLength={500}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none cursor-text"
+                />
+                <p className="text-xs text-gray-500 mt-1">{bio.length}/500 characters</p>
+              </div>
+
+              {/* Profile Picture Upload */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Profile Picture
+                </label>
+                
+                {/* Preview */}
+                <div className="flex items-center space-x-4 mb-3">
+                  <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-4 border-purple-200 flex items-center justify-center">
+                    {imagePreview ? (
+                      <img
+                        src={imagePreview}
+                        alt="Profile preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <span className="text-gray-400 text-3xl">{username[0]?.toUpperCase()}</span>
+                    )}
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <button
+                      type="button"
+                      onClick={handleUploadClick}
+                      className="bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#F2A900] transition cursor-pointer"
+                    >
+                      {isUploading ? 'Uploading...' : 'Upload Photo'}
+                    </button>
+                    {imagePreview && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition cursor-pointer"
+                      >
+                        Remove Photo
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Max size: 5MB. Supported formats: JPG, PNG, GIF, WebP
+                </p>
+                
+                {/* Hidden file input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="hidden"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex space-x-4">
+                <button
+                  type="submit"
+                  disabled={isSaving || isUploading}
+                  className="flex-1 bg-purple-700 text-white py-3 rounded-lg font-semibold hover:bg-[#F2A900] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  {isUploading ? 'Uploading Image...' : isSaving ? 'Saving...' : 'Save Changes'}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  disabled={isSaving || isUploading}
+                  className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </>
+        )}
+      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default EditProfile;

@@ -403,17 +403,48 @@ return (
             onClick={handlePhotoClick}
             className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
           >
-            <span className="text-2xl">📷</span>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              strokeWidth="1.5" 
+              stroke="currentColor" 
+              className="w-5 h-5 text-gray-600"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" 
+              />
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" 
+              />
+            </svg>
             <span className="text-gray-600 font-medium">Photo</span>
           </button>
           
           <div className="relative">
             <button 
               onClick={handlepostTypeClick}
-              className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition"
+              className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
             >
-              <span className="text-2xl">📄</span>
-              <span className="text-gray-600 font-medium cursor-pointer">Post Type</span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth="1.5" 
+                stroke="currentColor" 
+                className="w-5 h-5 text-gray-600"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" 
+                />
+              </svg>
+              <span className="text-gray-600 font-medium">Post Type</span>
             </button>
 
             {/* postType Dropdown */}
