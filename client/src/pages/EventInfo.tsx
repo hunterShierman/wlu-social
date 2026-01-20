@@ -312,7 +312,7 @@ return (
                   className={`flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 cursor-pointer ${
                     isRegistered 
                       ? 'bg-green-600 text-white hover:bg-green-700' 
-                      : 'bg-purple-800 text-white hover:bg-purple-700'
+                      : 'bg-purple-800 text-white hover:bg-[#F2A900]'
                   } ${isRegistrationLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {isRegistrationLoading 
