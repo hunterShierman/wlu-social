@@ -255,149 +255,149 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
 
   const isPostButtonDisabled = (!postContent.trim() && !selectedImage) || isPosting;
 
-  return (
-    <div className="bg-white rounded-lg shadow mb-4 p-4">
-      {/* Crop Modal */}
-      {showCropModal && imageToCrop && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Crop Your Photo</h2>
-            
-            {/* Cropper Container */}
-            <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden mb-4">
-              <Cropper
-                image={imageToCrop}
-                crop={crop}
-                zoom={zoom}
-                aspect={16 / 9}
-                cropShape="rect"
-                showGrid={true}
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
-                onCropComplete={onCropComplete}
-              />
-            </div>
-
-            {/* Zoom Slider */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Zoom
-              </label>
-              <input
-                type="range"
-                min={1}
-                max={3}
-                step={0.1}
-                value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
-                className="w-full"
-              />
-            </div>
-
-            {/* Buttons */}
-            <div className="flex space-x-3">
-              <button
-                onClick={handleCropConfirm}
-                className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
-              >
-                Crop & Continue
-              </button>
-              <button
-                onClick={handleCropCancel}
-                className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="flex items-start space-x-3">
-        {profilePictureUrl ? (
-          <img 
-            src={profilePictureUrl} 
-            alt={username}
-            className="w-10 h-10 rounded-full object-cover shrink-0"
-          />
-        ) : (
-          <div className="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center text-white font-semibold shrink-0">
-            {userInitial}
-          </div>
-        )}
-        <div className="flex-1">
-          {!isExpanded ? (
-            <input
-              type="text"
-              placeholder={`What's on your mind, ${username}?`}
-              className="w-full bg-gray-100 rounded-full px-4 cursor-text py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              onClick={handleExpand}
-              readOnly
+return (
+  <div className="bg-white rounded-lg shadow mb-4 p-4">
+    {/* Crop Modal */}
+    {showCropModal && imageToCrop && (
+      <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Crop Your Photo</h2>
+          
+          {/* Cropper Container */}
+          <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden mb-4">
+            <Cropper
+              image={imageToCrop}
+              crop={crop}
+              zoom={zoom}
+              aspect={16 / 9}
+              cropShape="rect"
+              showGrid={true}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
             />
-          ) : (
-            <div>
-              <textarea
-                ref={textareaRef}
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value.slice(0, MAX_CHARS))}
-                onKeyDown={handleKeyDown}
-                placeholder={`What's on your mind, ${username}?`}
-                className="w-full bg-gray-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-                rows={5}
-                maxLength={MAX_CHARS}
-              />
-              <div className="text-right text-sm text-gray-500 mt-1">
-                {postContent.length}/{MAX_CHARS}
-              </div>
-            </div>
-          )}
+          </div>
+
+          {/* Zoom Slider */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Zoom
+            </label>
+            <input
+              type="range"
+              min={1}
+              max={3}
+              step={0.1}
+              value={zoom}
+              onChange={(e) => setZoom(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="flex space-x-3">
+            <button
+              onClick={handleCropConfirm}
+              className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+            >
+              Crop & Continue
+            </button>
+            <button
+              onClick={handleCropCancel}
+              className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
+    )}
+
+    <div className="flex items-start space-x-3">
+      {profilePictureUrl ? (
+        <img 
+          src={profilePictureUrl} 
+          alt={username}
+          className="w-10 h-10 rounded-full object-cover shrink-0"
+        />
+      ) : (
+        <div className="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center text-white font-semibold shrink-0">
+          {userInitial}
+        </div>
+      )}
+      <div className="flex-1">
+        {!isExpanded ? (
+          <input
+            type="text"
+            placeholder={`What's on your mind, ${username}?`}
+            className="w-full bg-gray-100 rounded-full px-4 cursor-text py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onClick={handleExpand}
+            readOnly
+          />
+        ) : (
+          <div>
+            <textarea
+              ref={textareaRef}
+              value={postContent}
+              onChange={(e) => setPostContent(e.target.value.slice(0, MAX_CHARS))}
+              onKeyDown={handleKeyDown}
+              placeholder={`What's on your mind, ${username}?`}
+              className="w-full bg-gray-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+              rows={5}
+              maxLength={MAX_CHARS}
+            />
+            <div className="text-right text-sm text-gray-500 mt-1">
+              {postContent.length}/{MAX_CHARS}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Image Preview */}
+    {imagePreview && (
+      <div className="mt-3 relative">
+        <img
+          src={imagePreview}
+          alt="Preview"
+          className="w-full rounded-lg max-h-96 object-cover"
+        />
+        <button
+          onClick={handleRemoveImage}
+          className="absolute top-2 right-2 bg-gray-800 bg-opacity-75 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-90 transition"
+        >
+          ✕
+        </button>
+      </div>
+    )}
 
     {/* Selected postType Display */}
     {isExpanded && selectedpostType && (
-    <div className="mt-3 flex items-center space-x-2">
+      <div className="mt-3 flex items-center space-x-2">
         <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${postTypes.find(f => f.label === selectedpostType)?.color}`}>
-        <span className="text-lg">{postTypes.find(f => f.label === selectedpostType)?.emoji}</span>
-        <span className="text-sm font-medium capitalize">
+          <span className="text-lg">{postTypes.find(f => f.label === selectedpostType)?.emoji}</span>
+          <span className="text-sm font-medium capitalize">
             {postTypes.find(f => f.label === selectedpostType)?.display || selectedpostType}
-        </span>
+          </span>
         </div>
         <button
-        onClick={handleRemovepostType}
-        className="text-gray-500 hover:text-gray-700 transition"
+          onClick={handleRemovepostType}
+          className="text-gray-500 hover:text-gray-700 transition"
         >
-        ✕
+          ✕
         </button>
-    </div>
+      </div>
     )}
 
+    {/* Error Message */}
+    {error && (
+      <div className="mt-3 text-red-600 text-sm">
+        {error}
+      </div>
+    )}
 
-      {/* Image Preview */}
-      {imagePreview && (
-        <div className="mt-3 relative">
-          <img
-            src={imagePreview}
-            alt="Preview"
-            className="w-full rounded-lg max-h-96 object-cover"
-          />
-          <button
-            onClick={handleRemoveImage}
-            className="absolute top-2 right-2 bg-gray-800 bg-opacity-75 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-90 transition"
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
-      {/* Error Message */}
-      {error && (
-        <div className="mt-3 text-red-600 text-sm">
-          {error}
-        </div>
-      )}
-
-      <div className="border-t mt-3 pt-3 flex items-center justify-between">
+    <div className="border-t mt-3 pt-3 flex items-center justify-between">
+      {isExpanded && (
         <div className="flex items-center space-x-2">
           <button 
             onClick={handlePhotoClick}
@@ -435,41 +435,42 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
             )}
           </div>
         </div>
+      )}
 
-        {/* Post/Cancel Buttons */}
-        {isExpanded && (
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={handleCancel}
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handlePost}
-              disabled={isPostButtonDisabled}
-              className={`px-6 py-2 rounded-lg font-medium transition ${
-                isPostButtonDisabled
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-purple-600 text-white hover:bg-purple-700'
-              }`}
-            >
-              {isPosting ? 'Posting...' : 'Post'}
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Hidden File Input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="hidden"
-      />
+      {/* Post/Cancel Buttons */}
+      {isExpanded && (
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={handleCancel}
+            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition font-medium cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handlePost}
+            disabled={isPostButtonDisabled}
+            className={`px-6 py-2 rounded-lg font-medium transition cursor-pointer ${
+              isPostButtonDisabled
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-purple-700 text-white hover:bg-[#F2A900]'
+            }`}
+          >
+            {isPosting ? 'Posting...' : 'Post'}
+          </button>
+        </div>
+      )}
     </div>
-  );
+
+    {/* Hidden File Input */}
+    <input
+      ref={fileInputRef}
+      type="file"
+      accept="image/*"
+      onChange={handleFileChange}
+      className="hidden"
+    />
+  </div>
+);
 };
 
 export default CreatePost;
