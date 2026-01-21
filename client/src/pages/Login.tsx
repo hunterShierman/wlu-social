@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';  // ← Add this
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | React.ReactNode>('');
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ const handleLogin = async (e: React.FormEvent) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "username": username,
+        "email": email,
         "password": password,
       }),
     });
@@ -95,13 +95,13 @@ const handleLogin = async (e: React.FormEvent) => {
           <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Username
+                Email
               </label>
               <input
                 type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 required
               />

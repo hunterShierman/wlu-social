@@ -95,14 +95,14 @@ router.delete('/logout', async (req, res) => {
 
 // POST /auth/login - Login user
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   const db = getDB();
 
   try {
     // Find user
     const result = await db.query(
-      'SELECT user_id, username, email, password, email_verified FROM users WHERE username = $1',
-      [username]
+      'SELECT user_id, username, email, password, email_verified FROM users WHERE email = $1',
+      [email]
     );
 
     if (result.rows.length === 0) {
@@ -117,7 +117,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // ✅ Check if email is verified
+    // Check if email is verified
     if (!user.email_verified) {
       return res.status(403).json({ 
         error: 'Please verify your email before logging in. Check your inbox for the verification link.',
