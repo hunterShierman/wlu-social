@@ -136,7 +136,7 @@ const Signup = () => {
                     required
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    We'll send a verification link to this email
+                    We'll send a verification link to this email (Check your spam)
                   </p>
                 </div>
 
