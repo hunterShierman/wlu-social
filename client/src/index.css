@@ -8,3 +8,11 @@ html {
     overflow-y: auto;
     scrollbar-gutter: stable;
   }
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

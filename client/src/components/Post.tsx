@@ -25,7 +25,7 @@ const postTypes = [
 const Post = ({ post, onPostDeleted  }: PostProps) => {
 
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(46); // You'll want to get this from the post data
+  const [likeCount, setLikeCount] = useState(46);
   const [isLoading, setIsLoading] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [allComments, setAllComments] = useState<CommentType[]>([]);
@@ -148,56 +148,53 @@ useEffect(() => {
   fetchComments();
 }, [post.id]);
 
-  const handleLike = async () => {
-    if (isLoading) return;
-    
-    setIsLoading(true);
-    const token = localStorage.getItem('accessToken');
+const handleLike = async () => {
+  if (isLoading) return;
+  
+  setIsLoading(true);
+  const token = localStorage.getItem('accessToken');
 
-    if (!token) {
-      alert('Sign in to like this post');
-      return;
-    }
-    
-    try {
-      if (isLiked) {
-        // Unlike the post
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/likes/posts/${post.id}/like`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        
-        if (response.ok) {
-          setIsLiked(false);
-          setLikeCount(prev => prev - 1);
-        } else {
-          console.error('Failed to unlike post');
-        }
-      } else {
-        // Like the post
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/likes/posts/${post.id}/like`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        
-        if (response.ok) {
-          setIsLiked(true);
-          setLikeCount(prev => prev + 1);
-        } else {
-          console.error('Failed to like post');
-        }
+  if (!token) {
+    alert('Sign in to like this post');
+    setIsLoading(false);
+    return;
+  }
+  
+  // Store previous state for rollback
+  const previousIsLiked = isLiked;
+  const previousLikeCount = likeCount;
+  
+  // Optimistic update (immediate UI change)
+  setIsLiked(!isLiked);
+  setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+  
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/likes/posts/${post.id}/like`,
+      {
+        method: isLiked ? 'DELETE' : 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       }
-    } catch (error) {
-      console.error('Error toggling like:', error);
-    } finally {
-      setIsLoading(false);
+    );
+    
+    if (!response.ok) {
+      // Rollback on failure
+      setIsLiked(previousIsLiked);
+      setLikeCount(previousLikeCount);
+      console.error('Failed to toggle like');
     }
-  };
+  } catch (error) {
+    // Rollback on error
+    setIsLiked(previousIsLiked);
+    setLikeCount(previousLikeCount);
+    console.error('Error toggling like:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
 
   const handleCommentClick = () => {
