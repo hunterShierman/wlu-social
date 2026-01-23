@@ -256,15 +256,15 @@ const CreatePost = ({ onPostCreated, username, userInitial, profilePictureUrl, p
   const isPostButtonDisabled = (!postContent.trim() && !selectedImage) || isPosting;
 
 return (
-  <div className="bg-white rounded-lg shadow mb-4 p-4">
-    {/* Crop Modal */}
+  <div className="bg-white rounded-lg shadow mb-4 p-3 sm:p-4">
+    {/* Crop Modal - Mobile optimized */}
     {showCropModal && imageToCrop && (
-      <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Crop Your Photo</h2>
+      <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-2 sm:p-4">
+        <div className="bg-white rounded-lg max-w-2xl w-full p-4 sm:p-6 max-h-[95vh] overflow-y-auto">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Crop Your Photo</h2>
           
-          {/* Cropper Container */}
-          <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden mb-4">
+          {/* Cropper Container - Responsive height */}
+          <div className="relative w-full h-64 sm:h-80 md:h-96 bg-gray-100 rounded-lg overflow-hidden mb-3 sm:mb-4">
             <Cropper
               image={imageToCrop}
               crop={crop}
@@ -279,8 +279,8 @@ return (
           </div>
 
           {/* Zoom Slider */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <div className="mb-4 sm:mb-6">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
               Zoom
             </label>
             <input
@@ -294,17 +294,17 @@ return (
             />
           </div>
 
-          {/* Buttons */}
-          <div className="flex space-x-3">
+          {/* Buttons - Stack on mobile */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <button
               onClick={handleCropConfirm}
-              className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer"
+              className="flex-1 bg-purple-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-purple-700 transition cursor-pointer text-sm sm:text-base"
             >
               Crop & Continue
             </button>
             <button
               onClick={handleCropCancel}
-              className="px-8 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer"
+              className="flex-1 sm:flex-none sm:px-8 py-2.5 sm:py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition cursor-pointer text-sm sm:text-base"
             >
               Cancel
             </button>
@@ -313,24 +313,25 @@ return (
       </div>
     )}
 
-    <div className="flex items-start space-x-3">
+    {/* Profile Picture and Input - Responsive spacing */}
+    <div className="flex items-start space-x-2 sm:space-x-3">
       {profilePictureUrl ? (
         <img 
           src={profilePictureUrl} 
           alt={username}
-          className="w-10 h-10 rounded-full object-cover shrink-0"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover shrink-0"
         />
       ) : (
-        <div className="w-10 h-10 rounded-full bg-purple-700 flex items-center justify-center text-white font-semibold shrink-0">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-purple-700 flex items-center justify-center text-white font-semibold shrink-0 text-sm sm:text-base">
           {userInitial}
         </div>
       )}
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         {!isExpanded ? (
           <input
             type="text"
             placeholder={`What's on your mind, ${username}?`}
-            className="w-full bg-gray-100 rounded-full px-4 cursor-text py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full bg-gray-100 rounded-full px-3 sm:px-4 cursor-text py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base"
             onClick={handleExpand}
             readOnly
           />
@@ -342,11 +343,11 @@ return (
               onChange={(e) => setPostContent(e.target.value.slice(0, MAX_CHARS))}
               onKeyDown={handleKeyDown}
               placeholder={`What's on your mind, ${username}?`}
-              className="w-full bg-gray-100 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-              rows={5}
+              className="w-full bg-gray-100 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none text-sm sm:text-base"
+              rows={4}
               maxLength={MAX_CHARS}
             />
-            <div className="text-right text-sm text-gray-500 mt-1">
+            <div className="text-right text-xs sm:text-sm text-gray-500 mt-1">
               {postContent.length}/{MAX_CHARS}
             </div>
           </div>
@@ -354,35 +355,35 @@ return (
       </div>
     </div>
 
-    {/* Image Preview */}
+    {/* Image Preview - Responsive height */}
     {imagePreview && (
-      <div className="mt-3 relative">
+      <div className="mt-2 sm:mt-3 relative">
         <img
           src={imagePreview}
           alt="Preview"
-          className="w-full rounded-lg max-h-96 object-cover"
+          className="w-full rounded-lg max-h-64 sm:max-h-80 md:max-h-96 object-cover"
         />
         <button
           onClick={handleRemoveImage}
-          className="absolute top-2 right-2 bg-gray-800 bg-opacity-75 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-90 transition"
+          className="absolute top-2 right-2 bg-gray-800 bg-opacity-75 text-white rounded-full w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-opacity-90 transition text-sm sm:text-base"
         >
           ✕
         </button>
       </div>
     )}
 
-    {/* Selected postType Display */}
+    {/* Selected postType Display - Responsive sizing */}
     {isExpanded && selectedpostType && (
-      <div className="mt-3 flex items-center space-x-2">
-        <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${postTypes.find(f => f.label === selectedpostType)?.color}`}>
-          <span className="text-lg">{postTypes.find(f => f.label === selectedpostType)?.emoji}</span>
-          <span className="text-sm font-medium capitalize">
+      <div className="mt-2 sm:mt-3 flex items-center space-x-2">
+        <div className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full ${postTypes.find(f => f.label === selectedpostType)?.color}`}>
+          <span className="text-base sm:text-lg">{postTypes.find(f => f.label === selectedpostType)?.emoji}</span>
+          <span className="text-xs sm:text-sm font-medium capitalize">
             {postTypes.find(f => f.label === selectedpostType)?.display || selectedpostType}
           </span>
         </div>
         <button
           onClick={handleRemovepostType}
-          className="text-gray-500 hover:text-gray-700 transition"
+          className="text-gray-500 hover:text-gray-700 transition text-sm sm:text-base"
         >
           ✕
         </button>
@@ -391,39 +392,20 @@ return (
 
     {/* Error Message */}
     {error && (
-      <div className="mt-3 text-red-600 text-sm">
+      <div className="mt-2 sm:mt-3 text-red-600 text-xs sm:text-sm">
         {error}
       </div>
     )}
 
-    <div className="border-t mt-3 pt-3 flex items-center justify-between">
+    {/* Action Buttons Section */}
+    <div className="border-t mt-2 sm:mt-3 pt-2 sm:pt-3">
       {isExpanded && (
-        <div className="flex items-center space-x-2">
-          <button 
-            onClick={handlePhotoClick}
-            className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
-          >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            strokeWidth="1.5" 
-            stroke="currentColor" 
-            className="w-5 h-5 text-gray-600"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" 
-            />
-          </svg>
-            <span className="text-gray-600 font-medium">Photo</span>
-          </button>
-          
-          <div className="relative">
+        <>
+          {/* Photo and Post Type buttons - Stack on very small screens */}
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-2 sm:mb-3">
             <button 
-              onClick={handlepostTypeClick}
-              className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
+              onClick={handlePhotoClick}
+              className="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -431,59 +413,80 @@ return (
                 viewBox="0 0 24 24" 
                 strokeWidth="1.5" 
                 stroke="currentColor" 
-                className="w-5 h-5 text-gray-600"
+                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600"
               >
                 <path 
                   strokeLinecap="round" 
                   strokeLinejoin="round" 
-                  d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" 
+                  d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" 
                 />
               </svg>
-              <span className="text-gray-600 font-medium">Post Type</span>
+              <span className="text-gray-600 font-medium text-xs sm:text-sm">Photo</span>
             </button>
+            
+            <div className="relative">
+              <button 
+                onClick={handlepostTypeClick}
+                className="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-100 rounded-lg transition cursor-pointer"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  strokeWidth="1.5" 
+                  stroke="currentColor" 
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" 
+                  />
+                </svg>
+                <span className="text-gray-600 font-medium text-xs sm:text-sm">Post Type</span>
+              </button>
 
-            {/* postType Dropdown */}
-            {showpostTypeDropdown && (
-              <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-3 z-20 w-90">
-                <div className="grid grid-cols-2 gap-2">
-                  {postTypes.map((postType) => (
-                    <button
-                      key={postType.label}
-                      onClick={() => handlepostTypeSelect(postType)}
-                      className="flex items-center space-x-2 px-3 py-2 hover:bg-gray-100 rounded-lg transition text-left"
-                    >
-                      <span className="text-xl">{postType.emoji}</span>
-                      <span className="text-gray-700 capitalize">{postType.label}</span>
-                    </button>
-                  ))}
+              {/* postType Dropdown - Mobile optimized */}
+              {showpostTypeDropdown && (
+                <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 sm:p-3 z-20 w-72 sm:w-90 max-w-[calc(100vw-2rem)]">
+                  <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+                    {postTypes.map((postType) => (
+                      <button
+                        key={postType.label}
+                        onClick={() => handlepostTypeSelect(postType)}
+                        className="flex items-center space-x-1.5 sm:space-x-2 px-2 sm:px-3 py-1.5 sm:py-2 hover:bg-gray-100 rounded-lg transition text-left"
+                      >
+                        <span className="text-lg sm:text-xl">{postType.emoji}</span>
+                        <span className="text-gray-700 capitalize text-xs sm:text-sm">{postType.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      )}
 
-      {/* Post/Cancel Buttons */}
-      {isExpanded && (
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={handleCancel}
-            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition font-medium cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handlePost}
-            disabled={isPostButtonDisabled}
-            className={`px-6 py-2 rounded-lg font-medium transition cursor-pointer ${
-              isPostButtonDisabled
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-purple-700 text-white hover:bg-[#F2A900]'
-            }`}
-          >
-            {isPosting ? 'Posting...' : 'Post'}
-          </button>
-        </div>
+          {/* Post/Cancel Buttons - Full width on mobile */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCancel}
+              className="flex-1 sm:flex-none sm:px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition font-medium cursor-pointer text-sm sm:text-base"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handlePost}
+              disabled={isPostButtonDisabled}
+              className={`flex-1 sm:flex-none sm:px-6 py-2 rounded-lg font-medium transition cursor-pointer text-sm sm:text-base ${
+                isPostButtonDisabled
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-purple-700 text-white hover:bg-[#F2A900]'
+              }`}
+            >
+              {isPosting ? 'Posting...' : 'Post'}
+            </button>
+          </div>
+        </>
       )}
     </div>
 
