@@ -1,7 +1,7 @@
 // pages/Login.tsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';  // ← Add this
+import { useAuth } from '../context/AuthContext'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,66 +10,40 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   
-  // ← Add this
-  const { refreshUser } = useAuth();
+  const { login } = useAuth();
 
-const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError('');
-  setLoading(true);
+    const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-  try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "email": email,
-        "password": password,
-      }),
-    });
+    const result = await login(email, password);
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      // Check if email needs verification
-      if (data.needsVerification) {
+    if (result.success) {
+      // Login successful - navigate to home
+      navigate('/');
+    } else {
+      // Handle errors
+      if (result.needsVerification) {
         setError(
           <div>
-            {data.error}
+            {result.error}
             <br />
             <button
               onClick={() => navigate('/resend-verification')}
-              className="underline font-semibold mt-2 hover:text-red-800 cursor-pointer "
+              className="underline font-semibold mt-2 hover:text-red-800 cursor-pointer"
             >
               Resend verification email
             </button>
           </div>
         );
       } else {
-        setError(data.error || 'Login failed');
+        setError(result.error || 'Login failed');
       }
-      setLoading(false);
-      return;
     }
 
-    // Store tokens in localStorage
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    console.log("user signed in");
-
-    // Refresh user data in AuthContext
-    await refreshUser();
-
-    // Redirect to home page
-    navigate('/');
-  } catch (err) {
-    console.error('Login error:', err);
-    setError('Failed to connect to server');
     setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EBE0F5] via-white to-[#924DA7]/20 flex items-center justify-center px-4">
